@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/marginMedium"
+    tools:context="pl.gotowanko.android.CreateTrainingCardActivity" >
+
+    <include
+        android:id="@+id/cardsNavWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/create_cards_nav" />
+
+    <ScrollView
+        android:id="@+id/cardScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cardsNavWrapper" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/titleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/marginSmall"
+                android:hint="@string/card_title_dots"
+                android:inputType="text"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+            </EditText>
+
+            <View style="@style/Divider" />
+
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/marginSmall"
+                android:gravity="top"
+                android:hint="@string/card_descrption"
+                android:inputType="textMultiLine"
+                android:minLines="3" >
+            </EditText>
+
+            <View
+                style="@style/Divider"
+                android:layout_marginBottom="@dimen/marginSmall" />
+
+            <LinearLayout
+                android:id="@+id/ingredientsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/marginSmall"
+                android:layout_marginLeft="@dimen/marginExtraLarge"
+                android:layout_marginRight="@dimen/marginSmall"
+                android:layout_marginTop="@dimen/marginSmall"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <View
+                style="@style/Divider"
+                android:layout_marginBottom="@dimen/marginSmall" />
+
+            <Button
+                android:id="@+id/addIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="@dimen/noMargin"
+                android:clickable="false"
+                android:contentDescription="@string/add_ingredients"
+                android:drawableLeft="@drawable/ingredients"
+                android:gravity="left|center_vertical"
+                android:text="@string/set_ingredients"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

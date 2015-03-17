@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredientsMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <pl.gotowanko.android.layouts.FlowLayout
+        android:id="@+id/possibleIngredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/marginMedium" >
+    </pl.gotowanko.android.layouts.FlowLayout>
+
+    <pl.gotowanko.android.layouts.FlowLayout
+        android:id="@+id/choosenIngredients"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightgrey"
+        android:padding="@dimen/marginMedium" >
+    </pl.gotowanko.android.layouts.FlowLayout>
+
+</LinearLayout>
