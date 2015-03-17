@@ -28,6 +28,7 @@
 **/.classpath
 **/.project
 **/proguard
+**/.metadata
 
 #Android 
 gotowanko-android/bin/*
