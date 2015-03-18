@@ -1,0 +1,103 @@
+package entities;
+
+import javax.persistence.*;
+import java.util.Collection;
+
+/**
+ * Created by alanhawrot on 18.03.15.
+ */
+@Entity
+public class RecipeStep {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column
+    private String title;
+
+    @Column
+    private String description;
+
+    @Column
+    private String videoUrl;
+
+    @Column
+    private String photoUrl;
+
+    @Column
+    private int realizationTimeInMinutes;
+
+    @ManyToMany(targetEntity = Ingredient.class, mappedBy = "recipeSteps")
+    private Collection<Ingredient> ingredients;
+
+    @ManyToOne
+    private Recipe recipe;
+
+    public RecipeStep() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public int getRealizationTimeInMinutes() {
+        return realizationTimeInMinutes;
+    }
+
+    public void setRealizationTimeInMinutes(int realizationTimeInMinutes) {
+        this.realizationTimeInMinutes = realizationTimeInMinutes;
+    }
+
+    public Collection<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Collection<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+}
