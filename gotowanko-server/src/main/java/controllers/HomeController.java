@@ -2,6 +2,7 @@ package controllers;
 
 import entities.TestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import repositories.TestRepository;
@@ -27,5 +28,8 @@ public class HomeController {
     public TestEntity getFirstTestEntity() {
         return testRepository.getOne((long) 1);
     }
-
+    @RequestMapping(value = "/byid/{id}")
+    public String getFirstTestEntity(@PathVariable("id") Long id) {
+        return testRepository.getByIdUsingQueryAnnotation(id).toString();
+    }
 }
