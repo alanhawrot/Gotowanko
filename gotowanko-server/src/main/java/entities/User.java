@@ -14,14 +14,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private String username;
-
-    @Column
-    private String password;
-
-    @Column
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     @OneToMany(mappedBy = "user")
     private Collection<Recipe> recipes;
@@ -29,11 +26,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Collection<Comment> comments;
 
-    @Column
+    @Column(nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Calendar registrationDate;
 
-    @Column
+    @Column(nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastLogged;
 
@@ -46,14 +43,6 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

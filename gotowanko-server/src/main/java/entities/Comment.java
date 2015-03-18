@@ -13,21 +13,21 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
-    @Column
+    @Column(nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Calendar dateAdded;
 
-    @Column
+    @Column(nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastEdited;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Recipe recipe;
 
     public Comment() {

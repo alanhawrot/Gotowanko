@@ -1,29 +1,26 @@
 package entities;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
-import java.util.Collection;
 
 /**
- * Created by alanhawrot on 18.03.15.
+ * Created by michal on 18.03.15.
  */
+
 @Entity
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    long id;
 
-    @Column
-    private String name;
+    @Column(nullable = false)
+    String name;
 
-    @ManyToMany(targetEntity = Recipe.class)
-    private Collection<Recipe> recipes;
-
-    @ManyToMany(targetEntity = RecipeStep.class)
-    private Collection<RecipeStep> recipeSteps;
-
-    public Ingredient() {
-    }
+    @Column(nullable = false)
+    @ColumnDefault("'/images/ingredients/noImage.png'")
+    String iconUrl;
 
     public long getId() {
         return id;
@@ -41,19 +38,11 @@ public class Ingredient {
         this.name = name;
     }
 
-    public Collection<Recipe> getRecipes() {
-        return recipes;
+    public String getIconUrl() {
+        return iconUrl;
     }
 
-    public void setRecipes(Collection<Recipe> recipes) {
-        this.recipes = recipes;
-    }
-
-    public Collection<RecipeStep> getRecipeSteps() {
-        return recipeSteps;
-    }
-
-    public void setRecipeSteps(Collection<RecipeStep> recipeSteps) {
-        this.recipeSteps = recipeSteps;
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 }

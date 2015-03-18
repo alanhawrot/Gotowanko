@@ -13,10 +13,10 @@ public class RecipeStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
     @Column
@@ -28,10 +28,13 @@ public class RecipeStep {
     @Column
     private int realizationTimeInMinutes;
 
-    @ManyToMany(targetEntity = Ingredient.class, mappedBy = "recipeSteps")
-    private Collection<Ingredient> ingredients;
+    @Column
+    private int timerDurationInMinutes;
 
-    @ManyToOne
+    @OneToMany(targetEntity = IngredientAmount.class, mappedBy = "recipeStep", cascade = CascadeType.ALL)
+    private Collection<IngredientAmount> ingredients;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Recipe recipe;
 
     public RecipeStep() {
@@ -85,11 +88,11 @@ public class RecipeStep {
         this.realizationTimeInMinutes = realizationTimeInMinutes;
     }
 
-    public Collection<Ingredient> getIngredients() {
+    public Collection<IngredientAmount> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Collection<Ingredient> ingredients) {
+    public void setIngredients(Collection<IngredientAmount> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -99,5 +102,13 @@ public class RecipeStep {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public int getTimerDurationInMinutes() {
+        return timerDurationInMinutes;
+    }
+
+    public void setTimerDurationInMinutes(int timerDurationInMinutes) {
+        this.timerDurationInMinutes = timerDurationInMinutes;
     }
 }

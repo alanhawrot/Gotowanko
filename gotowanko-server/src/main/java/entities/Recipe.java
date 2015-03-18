@@ -1,5 +1,7 @@
 package entities;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Collection;
@@ -14,13 +16,11 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
-    private String description;
-
-    @Column
+    @Column(nullable = false)
+    @ColumnDefault(value = "'/images/recipe/noImage.png'")
     private String photoUrl;
 
     @Column
@@ -40,17 +40,15 @@ public class Recipe {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastEdited;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<RecipeStep> recipeSteps;
 
-    @ManyToMany(targetEntity = Ingredient.class, mappedBy = "recipes")
-    private Collection<Ingredient> ingredients;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
+
 
     public Recipe() {
     }
@@ -69,14 +67,6 @@ public class Recipe {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getPhotoUrl() {
@@ -135,14 +125,6 @@ public class Recipe {
         this.recipeSteps = recipeSteps;
     }
 
-    public Collection<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(Collection<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public User getUser() {
         return user;
     }
@@ -158,4 +140,5 @@ public class Recipe {
     public void setComments(Collection<Comment> comments) {
         this.comments = comments;
     }
+
 }
