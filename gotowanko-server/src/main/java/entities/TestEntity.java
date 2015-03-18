@@ -8,6 +8,7 @@ import javax.persistence.*;
  */
 @Entity
 public class TestEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long key;
@@ -19,7 +20,6 @@ public class TestEntity {
     public void setKey(Long key) {
         this.key = key;
     }
-
 
     @Override
     public String toString() {

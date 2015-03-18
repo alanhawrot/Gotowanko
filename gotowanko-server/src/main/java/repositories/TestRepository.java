@@ -1,6 +1,11 @@
 package repositories;
 
 import entities.TestEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,19 +16,6 @@ import java.util.List;
 /**
  * Created by michal on 17.03.15.
  */
+public interface TestRepository extends JpaRepository<TestEntity, Long>, TestRepositoryCustom {
 
-@Repository
-@Transactional
-public class TestRepository /*extends SimpleJpaRepository<TestEntity, Long> */{
-
-    @PersistenceContext
-    EntityManager entityManager;
-
-    public List<TestEntity> all() {
-        return entityManager.createQuery("FROM TestEntity").getResultList();
-    }
-
-    public void create(TestEntity testEntity) {
-        entityManager.persist(testEntity);
-    }
 }
