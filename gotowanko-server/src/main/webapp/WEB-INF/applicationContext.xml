@@ -4,10 +4,11 @@
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/data/jpa
-        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <jpa:repositories base-package="repositories"/>
+
     <bean id="dbUrl" class="java.net.URI">
         <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
     </bean>
@@ -31,6 +32,7 @@
     <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="database" value="POSTGRESQL"/>
         <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+        <property name="showSql" value="true"/>
     </bean>
 
     <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
@@ -41,14 +43,14 @@
         <property name="jpaDialect" ref="jpaDialect"/>
     </bean>
 
-<!--    <bean id="sharedEntityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
-        <property name="persistenceUnitName" value="persistenceUnit"/>
-    </bean>-->
-<!--    <bean id="testRepository" class="repositories.TestRepository">
-        <constructor-arg index="0">
-            <value type="java.lang.Class">entities.TestEntity</value>
-        </constructor-arg>
-        <constructor-arg index="1" ref="sharedEntityManager"/>
-    </bean>-->
+    <!--    <bean id="sharedEntityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+            <property name="persistenceUnitName" value="persistenceUnit"/>
+        </bean>-->
+    <!--    <bean id="testRepository" class="repositories.TestRepository">
+            <constructor-arg index="0">
+                <value type="java.lang.Class">entities.TestEntity</value>
+            </constructor-arg>
+            <constructor-arg index="1" ref="sharedEntityManager"/>
+        </bean>-->
 
 </beans>
