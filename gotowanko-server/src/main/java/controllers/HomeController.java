@@ -23,4 +23,9 @@ public class HomeController {
         return "OK";
     }
 
+    @RequestMapping(value = "/test")
+    public TestEntity getFirstTestEntity() {
+        return testRepository.getOne((long) 1);
+    }
+
 }

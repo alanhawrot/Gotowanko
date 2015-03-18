@@ -8,7 +8,6 @@ import javax.persistence.*;
  */
 @Entity
 public class TestEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long key;
