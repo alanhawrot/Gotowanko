@@ -13,7 +13,10 @@ import java.util.Collection;
 public class IngredientCategory extends Ingredient {
 
     @OneToMany
-    Collection<Ingredient> ingredients;
+    private Collection<Ingredient> ingredients;
+
+    public IngredientCategory() {
+    }
 
     public Collection<Ingredient> getIngredients() {
         return ingredients;

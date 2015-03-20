@@ -7,20 +7,22 @@ import javax.persistence.*;
 /**
  * Created by michal on 18.03.15.
  */
-
 @Entity
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     @Column(nullable = false)
     @ColumnDefault("'/images/ingredients/noImage.png'")
-    String iconUrl;
+    private String iconUrl;
+
+    public Ingredient() {
+    }
 
     public long getId() {
         return id;

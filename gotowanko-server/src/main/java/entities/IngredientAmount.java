@@ -7,7 +7,7 @@ import java.util.Collection;
  * Created by alanhawrot on 18.03.15.
  */
 @Entity
-public class IngredientAmount { // jakoś lepsza nazwa nigdy mi do głowy nie przyszła
+public class IngredientAmount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

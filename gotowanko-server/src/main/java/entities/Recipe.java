@@ -49,7 +49,6 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
 
-
     public Recipe() {
     }
 

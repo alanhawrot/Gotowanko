@@ -13,10 +13,13 @@ public class IngredientUnit {
     private long id;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     @Column(nullable = false)
-    String shortName;
+    private String shortName;
+
+    public IngredientUnit() {
+    }
 
     public long getId() {
         return id;
