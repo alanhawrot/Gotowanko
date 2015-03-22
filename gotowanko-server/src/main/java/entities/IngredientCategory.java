@@ -9,7 +9,7 @@ import java.util.Collection;
  * Created by michal on 18.03.15.
  */
 
-@Entity
+@Entity(name = "IngredientCategories")
 public class IngredientCategory extends Ingredient {
 
     @OneToMany

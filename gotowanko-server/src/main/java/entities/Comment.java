@@ -6,7 +6,7 @@ import java.util.Calendar;
 /**
  * Created by alanhawrot on 18.03.15.
  */
-@Entity
+@Entity(name = "Comments")
 public class Comment {
 
     @Id
