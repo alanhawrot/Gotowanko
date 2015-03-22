@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * Created by michal on 18.03.15.
  */
-@Entity
+@Entity(name = "IngredientUnits")
 public class IngredientUnit {
 
     @Id

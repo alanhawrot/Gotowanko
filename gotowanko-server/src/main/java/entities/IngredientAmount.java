@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * Created by alanhawrot on 18.03.15.
  */
-@Entity
+@Entity(name = "IngredientAmounts")
 public class IngredientAmount {
 
     @Id

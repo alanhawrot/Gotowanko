@@ -7,7 +7,7 @@ import javax.persistence.*;
 /**
  * Created by michal on 18.03.15.
  */
-@Entity
+@Entity(name = "Ingredients")
 public class Ingredient {
 
     @Id

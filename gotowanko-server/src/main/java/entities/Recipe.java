@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * Created by alanhawrot on 18.03.15.
  */
-@Entity
+@Entity(name = "Recipes")
 public class Recipe {
 
     @Id
