@@ -61,14 +61,17 @@ public class LogRequestFilter implements Filter {
                         }
                     });
 
+            String requestContentType = httpRequest.getHeader("content-type");
+            String responseContentType = httpResponse.getContentType();
+
             logger.info("Request URL: " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
-            logger.info("Request content-type: " + httpRequest.getHeader("content-type"));
+            logger.info("Request content-type: " + requestContentType);
             logger.info("Request headers:" + Collections.list(httpRequest.getHeaderNames())
                     .stream()
                     .map(x -> httpRequest.getHeader(x).toString())
                     .collect(Collectors.joining(", ")));
 
-            if (httpRequest.getHeader("content-type").startsWith("application/json")) {
+            if (requestContentType != null && requestContentType.startsWith("application/json")) {
                 logger.info("Request body:" + LINE_SEPARATOR + objectMapper
                         .writerWithDefaultPrettyPrinter()
                         .writeValueAsString(objectMapper.readValue(copyInputStream.getCopy(), Object.class)));
@@ -77,8 +80,8 @@ public class LogRequestFilter implements Filter {
             }
 
             logger.info("Response Status: " + httpResponse.getStatus());
-            logger.info("Response Content-Type: " + httpResponse.getContentType());
-            if (httpResponse.getContentType().startsWith("application/json")) {
+            logger.info("Response Content-Type: " + responseContentType);
+            if (responseContentType != null && responseContentType.startsWith("application/json")) {
                 logger.info("Response body:" + LINE_SEPARATOR + objectMapper
                         .writerWithDefaultPrettyPrinter()
                         .writeValueAsString(objectMapper.readValue(copyOutputStream.getCopy(), Object.class)));

@@ -19,7 +19,7 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split('oi:')[0] }"/>
         <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
     </bean>
 
@@ -69,5 +69,4 @@
                                         authorities-by-username-query="SELECT email, 'ROLE_USER' FROM Users WHERE email=?"/>
         </security:authentication-provider>
     </security:authentication-manager>
-
 </beans>
