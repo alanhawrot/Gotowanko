@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by alanhawrot on 18.03.15.
@@ -35,6 +36,8 @@ public class User {
     private Calendar lastLogged;
 
     public User() {
+        recipes = new HashSet<Recipe>();
+        comments = new HashSet<Comment>();
     }
 
     public long getId() {

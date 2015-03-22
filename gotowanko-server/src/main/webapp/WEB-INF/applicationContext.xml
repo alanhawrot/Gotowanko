@@ -59,14 +59,13 @@
     </bean>
 
     <security:http create-session="stateless" entry-point-ref="digestEntryPoint">
-        <security:intercept-url pattern="/secured" access="ROLE_USER"/>
         <security:custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER"/>
     </security:http>
 
     <security:authentication-manager>
         <security:authentication-provider>
             <security:jdbc-user-service id="userService" data-source-ref="dataSource"
-                                        users-by-username-query="SELECT email, password FROM Users WHERE email=?"
+                                        users-by-username-query="SELECT email, password, TRUE FROM Users WHERE email=?"
                                         authorities-by-username-query="SELECT email, 'ROLE_USER' FROM Users WHERE email=?"/>
         </security:authentication-provider>
     </security:authentication-manager>
