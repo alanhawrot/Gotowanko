@@ -1,4 +1,4 @@
-package exceptionhandlers;
+package exceptions.validation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.validation.FieldError;

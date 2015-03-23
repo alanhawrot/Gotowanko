@@ -1,5 +1,7 @@
 package controllers.home;
 
+import exceptions.businesslogic.NoSuchResourceException;
+import exceptions.businesslogic.PermissionDeniedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by alanhawrot on 17.03.15.
@@ -25,6 +26,19 @@ public class HomeController {
         HomeResponseDTO homeResponseDTO = new HomeResponseDTO();
         homeResponseDTO.setValue(dto.getValue());
         return homeResponseDTO;
+    }
+
+    @RequestMapping(value = {"/home/exception"})
+    public void home() throws NoSuchResourceException, PermissionDeniedException {
+        method();
+    }
+
+    private void method() throws NoSuchResourceException, PermissionDeniedException {
+        if ("".equals("")) {
+            throw new NoSuchResourceException("Użytkownik nieodnaleziony.");
+        } else if ("".equals("")) {
+            throw new PermissionDeniedException("Nieprawidłowe hasło");
+        }
     }
 
 

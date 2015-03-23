@@ -1,6 +1,7 @@
-package exceptionhandlers;
+package exceptions.validation;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @ControllerAdvice
 public class ValidationExceptionHandler {
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(ValidationExceptionHandler.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(ValidationExceptionHandler.class.getSimpleName());
 
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
