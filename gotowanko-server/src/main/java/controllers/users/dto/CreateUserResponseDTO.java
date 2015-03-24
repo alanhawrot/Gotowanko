@@ -1,41 +1,27 @@
-package entities;
+package controllers.users.dto;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import entities.Comment;
+import entities.Recipe;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by alanhawrot on 18.03.15.
+ * Created by alanhawrot on 23.03.15.
  */
-@Entity(name = "Users")
-public class User {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CreateUserResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @OneToMany(mappedBy = "user")
     private Collection<Recipe> recipes;
-
-    @OneToMany(mappedBy = "user")
     private Collection<Comment> comments;
-
-    @Column(nullable = false)
-    @Temporal(value = TemporalType.DATE)
     private Calendar registrationDate;
-
-    @Column(nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastLogged;
 
-    public User() {
+    public CreateUserResponseDTO() {
         recipes = new HashSet<Recipe>();
         comments = new HashSet<Comment>();
     }
@@ -46,14 +32,6 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {

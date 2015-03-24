@@ -1,14 +1,21 @@
 package controllers.users.dto;
 
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Size;
+
 /**
  * Created by alanhawrot on 22.03.15.
  */
-public class UserPOST {
+public class CreateUserRequestDTO {
 
+    @Email
     private String email;
+
+    @Size(min = 6)
     private String password;
 
-    public UserPOST() {
+    public CreateUserRequestDTO() {
     }
 
     public String getEmail() {
