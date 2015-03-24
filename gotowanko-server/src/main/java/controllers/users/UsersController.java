@@ -6,6 +6,7 @@ import entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import repositories.UsersRepository;
 
@@ -43,21 +44,21 @@ public class UsersController {
         return createUserResponseDTO;
     }
 
-    @Secured(value = "ROLE_USER")
-    @RequestMapping(value = "/{email}", method = RequestMethod.PUT)
-    public void updateUser(@PathVariable String email) {
+    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public void updateUser(@PathVariable Long id) {
 
     }
 
-    @Secured(value = "ROLE_USER")
-    @RequestMapping(value = "/{email}", method = RequestMethod.DELETE)
-    public void removeUser(@PathVariable String email) {
-        usersRepository.delete(usersRepository.findByEmail(email));
+    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void removeUser(@PathVariable Long id) {
+        usersRepository.delete(id);
     }
 
-    @Secured(value = "ROLE_USER")
-    @RequestMapping(value = "/{email}", method = RequestMethod.GET)
-    public User getUser(@PathVariable String email) {
-        return usersRepository.findByEmail(email);
+    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public User getUser(@PathVariable Long id) {
+        return usersRepository.findOne(id);
     }
 }

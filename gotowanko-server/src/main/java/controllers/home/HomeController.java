@@ -16,10 +16,16 @@ import javax.validation.Valid;
  */
 @RestController
 public class HomeController {
+
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class.getSimpleName());
 
+    @RequestMapping(value = {"/", "/home"})
+    public String home() {
+        return "OK";
+    }
+
     @RequestMapping(value = {"/home/{id}"})
-    public HomeResponseDTO home(
+    public HomeResponseDTO homeTest(
             @PathVariable("id") String id, // niestety Spring jeszcze nie wspiera walidacji na @PathVariable
             // nieraz wygodniej będzie wykorzystać body :P
             @Valid @RequestBody HomeRequestDTO dto) {
@@ -29,7 +35,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/home/exception"})
-    public void home() throws NoSuchResourceException, PermissionDeniedException {
+    public void homeExceptionTest() throws NoSuchResourceException, PermissionDeniedException {
         method();
     }
 
@@ -40,6 +46,4 @@ public class HomeController {
             throw new PermissionDeniedException("Nieprawidłowe hasło");
         }
     }
-
-
 }
