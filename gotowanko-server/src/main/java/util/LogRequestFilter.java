@@ -3,6 +3,9 @@ package util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -35,38 +39,25 @@ public class LogRequestFilter implements Filter {
             //It is only possible way to log them as they can be read only once from streams.
             //after chain has finished, request is processed, copy of request and response body is
             //available with .getCopy() methods.
-            final CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
-            final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
 
-                chain.doFilter(
-                        new HttpServletRequestWrapper(httpRequest) {
-                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(copyInputStream));
+            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
+            CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
 
-                         /*   @Override
-                            public ServletInputStream getInputStream() throws IOException {
-                                return copyInputStream;
-                            }
+            chain.doFilter( requestWrapper,  new HttpServletResponseWrapper(httpResponse) {
 
-                            @Override
-                            public BufferedReader getReader() throws IOException {
-                                return bufferedReader;
-                            }*/
+                private PrintWriter printWriter = new PrintWriter(copyOutputStream);
 
-                        }, new HttpServletResponseWrapper(httpResponse) {
+                @Override
+                public ServletOutputStream getOutputStream() throws IOException {
+                    return copyOutputStream;
+                }
 
-                            private PrintWriter printWriter = new PrintWriter(copyOutputStream);
+                @Override
+                public PrintWriter getWriter() {
+                    return printWriter;
+                }
 
-                            @Override
-                            public ServletOutputStream getOutputStream() throws IOException {
-                                return copyOutputStream;
-                            }
-
-                            @Override
-                            public PrintWriter getWriter() {
-                                return printWriter;
-                            }
-
-                        });
+            });
 
             String requestContentType = httpRequest.getHeader("content-type");
             String responseContentType = httpResponse.getContentType();
@@ -78,34 +69,32 @@ public class LogRequestFilter implements Filter {
                     .map(x -> httpRequest.getHeader(x).toString())
                     .collect(Collectors.joining(", ")));
 
-                /*if (requestContentType != null && requestContentType.startsWith("application/json")) {
+            String requestBody = new String(requestWrapper.getContentAsByteArray());
+
+            if ( requestContentType != null && requestContentType.startsWith("application/json") && !requestBody.isEmpty()) {
                     logger.info("Request body:" + LINE_SEPARATOR + objectMapper
                             .writerWithDefaultPrettyPrinter()
-                            .writeValueAsString(objectMapper.readValue(copyInputStream.getCopy(), Object.class)));
+                            .writeValueAsString(objectMapper.readValue(requestBody, Object.class)));
                 } else {
-                    logger.info("Request body:" + LINE_SEPARATOR + copyInputStream.getCopy());
-                }*/
+                    logger.info("Request body:" + LINE_SEPARATOR + requestBody);
+                }
 
             logger.info("Response Status: " + httpResponse.getStatus());
             logger.info("Response Content-Type: " + responseContentType);
-                if (responseContentType != null && responseContentType.startsWith("application/json")) {
-                    logger.info("Response body:" + LINE_SEPARATOR + objectMapper
-                            .writerWithDefaultPrettyPrinter()
-                            .writeValueAsString(objectMapper.readValue(copyOutputStream.getCopy(), Object.class)));
-                } else {
-                    logger.info("Response body:" + LINE_SEPARATOR + copyOutputStream.getCopy());
-                }
+
+
+            String responseBody = copyOutputStream.getCopy();
+            if ( responseContentType != null && responseContentType.startsWith("application/json") && !responseBody.isEmpty()) {
+                logger.info("Response body:" + LINE_SEPARATOR + objectMapper
+                        .writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(objectMapper.readValue(responseBody, Object.class)));
+            } else {
+                logger.info("Response body:" + LINE_SEPARATOR + responseBody);
+            }
         } else {
             chain.doFilter(request, response);
         }
     }
-
-
-    @Override
-    public void destroy() {
-
-    }
-
     public class CopyOutputStream extends ServletOutputStream {
 
         private ByteArrayOutputStream copy = new ByteArrayOutputStream(1024);
@@ -136,39 +125,8 @@ public class LogRequestFilter implements Filter {
         }
     }
 
-    class CopyInputStream extends ServletInputStream {
-        private ByteArrayOutputStream copy = new ByteArrayOutputStream(1024);
-        private ServletInputStream inputStream;
-
-        public CopyInputStream(ServletInputStream inputStream) {
-            this.inputStream = inputStream;
-        }
-
-        @Override
-        public int read() throws IOException {
-            int value = inputStream.read();
-            copy.write(value);
-            return value;
-        }
-
-        @Override
-        public boolean isFinished() {
-            return inputStream.isFinished();
-        }
-
-        @Override
-        public boolean isReady() {
-            return inputStream.isReady();
-        }
-
-        @Override
-        public void setReadListener(ReadListener readListener) {
-            inputStream.setReadListener(readListener);
-        }
-
-        String getCopy() {
-            return copy.toString();
-        }
+    @Override
+    public void destroy() {
 
     }
 }
