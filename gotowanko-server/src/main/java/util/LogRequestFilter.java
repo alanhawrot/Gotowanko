@@ -27,20 +27,20 @@ public class LogRequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (false && request instanceof HttpServletRequest && response instanceof HttpServletResponse && logger.isInfoEnabled()) {
-            try {
-                HttpServletRequest httpRequest = (HttpServletRequest) request;
-                HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse && logger.isInfoEnabled()) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-                //Copies input and output as they are used while request handling.
-                //It is only possible way to log them as they can be read only once from streams.
-                //after chain has finished, request is processed, copy of request and response body is
-                //available with .getCopy() methods.
-                final CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
-                final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
+            //Copies input and output as they are used while request handling.
+            //It is only possible way to log them as they can be read only once from streams.
+            //after chain has finished, request is processed, copy of request and response body is
+            //available with .getCopy() methods.
+            final CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
+            final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
 
                 chain.doFilter(
-                        new HttpServletRequestWrapper(httpRequest) {
+                        request
+                        /*new HttpServletRequestWrapper(httpRequest) {
                             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(copyInputStream));
 
                             @Override
@@ -53,7 +53,7 @@ public class LogRequestFilter implements Filter {
                                 return bufferedReader;
                             }
 
-                        }, new HttpServletResponseWrapper(httpResponse) {
+                        }*/, new HttpServletResponseWrapper(httpResponse) {
 
                             private PrintWriter printWriter = new PrintWriter(copyOutputStream);
 
@@ -68,26 +68,27 @@ public class LogRequestFilter implements Filter {
                             }
 
                         });
-                String requestContentType = httpRequest.getHeader("content-type");
-                String responseContentType = httpResponse.getContentType();
 
-                logger.info("Request URL: " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
-                logger.info("Request content-type: " + requestContentType);
-                logger.info("Request headers:" + Collections.list(httpRequest.getHeaderNames())
-                        .stream()
-                        .map(x -> httpRequest.getHeader(x).toString())
-                        .collect(Collectors.joining(", ")));
+            String requestContentType = httpRequest.getHeader("content-type");
+            String responseContentType = httpResponse.getContentType();
 
-                if (requestContentType != null && requestContentType.startsWith("application/json")) {
+            logger.info("Request URL: " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
+            logger.info("Request content-type: " + requestContentType);
+            logger.info("Request headers:" + Collections.list(httpRequest.getHeaderNames())
+                    .stream()
+                    .map(x -> httpRequest.getHeader(x).toString())
+                    .collect(Collectors.joining(", ")));
+
+                /*if (requestContentType != null && requestContentType.startsWith("application/json")) {
                     logger.info("Request body:" + LINE_SEPARATOR + objectMapper
                             .writerWithDefaultPrettyPrinter()
                             .writeValueAsString(objectMapper.readValue(copyInputStream.getCopy(), Object.class)));
                 } else {
                     logger.info("Request body:" + LINE_SEPARATOR + copyInputStream.getCopy());
-                }
+                }*/
 
-                logger.info("Response Status: " + httpResponse.getStatus());
-                logger.info("Response Content-Type: " + responseContentType);
+            logger.info("Response Status: " + httpResponse.getStatus());
+            logger.info("Response Content-Type: " + responseContentType);
                 if (responseContentType != null && responseContentType.startsWith("application/json")) {
                     logger.info("Response body:" + LINE_SEPARATOR + objectMapper
                             .writerWithDefaultPrettyPrinter()
@@ -95,9 +96,6 @@ public class LogRequestFilter implements Filter {
                 } else {
                     logger.info("Response body:" + LINE_SEPARATOR + copyOutputStream.getCopy());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } else {
             chain.doFilter(request, response);
         }
