@@ -2,6 +2,7 @@ package controllers.users.dto;
 
 import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -9,9 +10,11 @@ import javax.validation.constraints.Size;
  */
 public class UpdateUserRequestDTO {
 
+    @NotNull
     @Email
     private String email;
 
+    @NotNull
     @Size(min = 6)
     private String password;
 

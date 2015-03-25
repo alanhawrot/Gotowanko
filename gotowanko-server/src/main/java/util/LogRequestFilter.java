@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -30,64 +27,79 @@ public class LogRequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse && logger.isInfoEnabled()) {
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if (false && request instanceof HttpServletRequest && response instanceof HttpServletResponse && logger.isInfoEnabled()) {
+            try {
+                HttpServletRequest httpRequest = (HttpServletRequest) request;
+                HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-            //Copies input and output as they are used while request handling.
-            //It is only possible way to log them as they can be read only once from streams.
-            //after chain has finished, request is processed, copy of request and response body is
-            //available with .getCopy() methods.
-            final CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
-            final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
+                //Copies input and output as they are used while request handling.
+                //It is only possible way to log them as they can be read only once from streams.
+                //after chain has finished, request is processed, copy of request and response body is
+                //available with .getCopy() methods.
+                final CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
+                final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
 
-            chain.doFilter(
-                    new HttpServletRequestWrapper(httpRequest) {
+                chain.doFilter(
+                        new HttpServletRequestWrapper(httpRequest) {
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(copyInputStream));
 
-                        @Override
-                        public ServletInputStream getInputStream() throws IOException {
-                            return copyInputStream;
-                        }
+                            @Override
+                            public ServletInputStream getInputStream() throws IOException {
+                                return copyInputStream;
+                            }
 
-                        @Override
-                        public BufferedReader getReader() throws IOException {
-                            return new BufferedReader(new InputStreamReader(copyInputStream));
-                        }
+                            @Override
+                            public BufferedReader getReader() throws IOException {
+                                return bufferedReader;
+                            }
 
-                    }, new HttpServletResponseWrapper(httpResponse) {
-                        @Override
-                        public ServletOutputStream getOutputStream() throws IOException {
-                            return copyOutputStream;
-                        }
-                    });
+                        }, new HttpServletResponseWrapper(httpResponse) {
 
-            String requestContentType = httpRequest.getHeader("content-type");
-            String responseContentType = httpResponse.getContentType();
+                            private PrintWriter printWriter = new PrintWriter(copyOutputStream);
 
-            logger.info("Request URL: " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
-            logger.info("Request content-type: " + requestContentType);
-            logger.info("Request headers:" + Collections.list(httpRequest.getHeaderNames())
-                    .stream()
-                    .map(x -> httpRequest.getHeader(x).toString())
-                    .collect(Collectors.joining(", ")));
+                            @Override
+                            public ServletOutputStream getOutputStream() throws IOException {
+                                return copyOutputStream;
+                            }
 
-            if (requestContentType != null && requestContentType.startsWith("application/json")) {
-                logger.info("Request body:" + LINE_SEPARATOR + objectMapper
-                        .writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(objectMapper.readValue(copyInputStream.getCopy(), Object.class)));
-            } else {
-                logger.info("Request body:" + LINE_SEPARATOR + copyInputStream.getCopy());
+                            @Override
+                            public PrintWriter getWriter() {
+                                return printWriter;
+                            }
+
+                        });
+                String requestContentType = httpRequest.getHeader("content-type");
+                String responseContentType = httpResponse.getContentType();
+
+                logger.info("Request URL: " + httpRequest.getMethod() + " " + httpRequest.getRequestURI());
+                logger.info("Request content-type: " + requestContentType);
+                logger.info("Request headers:" + Collections.list(httpRequest.getHeaderNames())
+                        .stream()
+                        .map(x -> httpRequest.getHeader(x).toString())
+                        .collect(Collectors.joining(", ")));
+
+                if (requestContentType != null && requestContentType.startsWith("application/json")) {
+                    logger.info("Request body:" + LINE_SEPARATOR + objectMapper
+                            .writerWithDefaultPrettyPrinter()
+                            .writeValueAsString(objectMapper.readValue(copyInputStream.getCopy(), Object.class)));
+                } else {
+                    logger.info("Request body:" + LINE_SEPARATOR + copyInputStream.getCopy());
+                }
+
+                logger.info("Response Status: " + httpResponse.getStatus());
+                logger.info("Response Content-Type: " + responseContentType);
+                if (responseContentType != null && responseContentType.startsWith("application/json")) {
+                    logger.info("Response body:" + LINE_SEPARATOR + objectMapper
+                            .writerWithDefaultPrettyPrinter()
+                            .writeValueAsString(objectMapper.readValue(copyOutputStream.getCopy(), Object.class)));
+                } else {
+                    logger.info("Response body:" + LINE_SEPARATOR + copyOutputStream.getCopy());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            logger.info("Response Status: " + httpResponse.getStatus());
-            logger.info("Response Content-Type: " + responseContentType);
-            if (responseContentType != null && responseContentType.startsWith("application/json")) {
-                logger.info("Response body:" + LINE_SEPARATOR + objectMapper
-                        .writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(objectMapper.readValue(copyOutputStream.getCopy(), Object.class)));
-            } else {
-                logger.info("Response body:" + LINE_SEPARATOR + copyOutputStream.getCopy());
-            }
+        } else {
+            chain.doFilter(request, response);
         }
     }
 
@@ -121,6 +133,7 @@ public class LogRequestFilter implements Filter {
             copy.write(b);
             outputStream.write(b);
         }
+
         String getCopy() {
             return copy.toString();
         }

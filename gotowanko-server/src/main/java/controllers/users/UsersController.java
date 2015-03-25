@@ -4,6 +4,7 @@ import controllers.users.dto.*;
 import entities.User;
 import exceptions.businesslogic.NoSuchResourceException;
 import exceptions.businesslogic.PermissionDeniedException;
+import exceptions.businesslogic.ResourceAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -26,7 +27,12 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) {
+    public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) throws ResourceAlreadyExistsException {
+
+        if (!usersRepository.findAllByEmail(createUserRequestDTO.getEmail()).isEmpty()) {
+            throw new ResourceAlreadyExistsException("User already exists.");
+        }
+
         User newUser = new User();
         newUser.setEmail(createUserRequestDTO.getEmail());
         newUser.setPassword(createUserRequestDTO.getPassword());

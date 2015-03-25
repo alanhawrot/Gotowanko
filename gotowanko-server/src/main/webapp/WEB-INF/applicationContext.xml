@@ -85,7 +85,7 @@
 
     <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
-    <security:http create-session="stateless" entry-point-ref="digestEntryPoint">
+    <security:http create-session="always" entry-point-ref="digestEntryPoint">
         <security:custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER"/>
     </security:http>
 
