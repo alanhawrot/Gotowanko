@@ -39,11 +39,10 @@ public class LogRequestFilter implements Filter {
             final CopyInputStream copyInputStream = new CopyInputStream(httpRequest.getInputStream());
 
                 chain.doFilter(
-                        request
-                        /*new HttpServletRequestWrapper(httpRequest) {
+                        new HttpServletRequestWrapper(httpRequest) {
                             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(copyInputStream));
 
-                            @Override
+                         /*   @Override
                             public ServletInputStream getInputStream() throws IOException {
                                 return copyInputStream;
                             }
@@ -51,9 +50,9 @@ public class LogRequestFilter implements Filter {
                             @Override
                             public BufferedReader getReader() throws IOException {
                                 return bufferedReader;
-                            }
+                            }*/
 
-                        }*/, new HttpServletResponseWrapper(httpResponse) {
+                        }, new HttpServletResponseWrapper(httpResponse) {
 
                             private PrintWriter printWriter = new PrintWriter(copyOutputStream);
 
