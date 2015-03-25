@@ -1,12 +1,13 @@
 package controllers.users;
 
-import controllers.users.dto.CreateUserRequestDTO;
-import controllers.users.dto.CreateUserResponseDTO;
+import controllers.users.dto.*;
 import entities.User;
+import exceptions.businesslogic.NoSuchResourceException;
+import exceptions.businesslogic.PermissionDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import repositories.UsersRepository;
 
@@ -39,26 +40,64 @@ public class UsersController {
         createUserResponseDTO.setId(newUser.getId());
         createUserResponseDTO.setEmail(newUser.getEmail());
         createUserResponseDTO.setRegistrationDate(newUser.getRegistrationDate());
-        createUserResponseDTO.setLastLogged(newUser.getLastLogged());
 
         return createUserResponseDTO;
     }
 
-    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void updateUser(@PathVariable Long id) {
+    public void updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) throws PermissionDeniedException, NoSuchResourceException {
+        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User modifiedUser = usersRepository.findOne(id);
 
+        if (modifiedUser == null) {
+            throw new NoSuchResourceException("There is no user with given id");
+        }
+
+        if (authenticatedUserEmail.compareTo(modifiedUser.getEmail()) != 0) {
+            throw new PermissionDeniedException("You are not the owner of given account");
+        }
+
+        modifiedUser.setEmail(updateUserRequestDTO.getEmail());
+        modifiedUser.setPassword(updateUserRequestDTO.getPassword());
+
+        usersRepository.save(modifiedUser);
     }
 
-    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void removeUser(@PathVariable Long id) {
-        usersRepository.delete(id);
+    public void deleteUser(@PathVariable Long id) throws PermissionDeniedException, NoSuchResourceException {
+        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        User modifiedUser = usersRepository.findOne(id);
+
+        if (modifiedUser == null) {
+            throw new NoSuchResourceException("There is no user with given id");
+        }
+
+        if (authenticatedUserEmail.compareTo(modifiedUser.getEmail()) != 0) {
+            throw new PermissionDeniedException("You are not the owner of given account");
+        }
+
+        usersRepository.delete(modifiedUser);
     }
 
-    @Secured(value = "IS_AUTHENTICATED_ANONYMOUSLY")
+    @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getUser(@PathVariable Long id) {
-        return usersRepository.findOne(id);
+    public GetUserResponseDTO getUser(@PathVariable Long id) throws NoSuchResourceException {
+        User user = usersRepository.findOne(id);
+
+        if (user != null) {
+            GetUserResponseDTO userResponseDTO = new GetUserResponseDTO();
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setEmail(user.getEmail());
+            userResponseDTO.setRegistrationDate(user.getRegistrationDate());
+            userResponseDTO.setLastLogged(user.getLastLogged());
+            userResponseDTO.setRecipes(user.getRecipes());
+            userResponseDTO.setComments(user.getComments());
+
+            return userResponseDTO;
+        } else {
+            throw new NoSuchResourceException("There is no user with given id");
+        }
     }
 }
