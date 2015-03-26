@@ -19,9 +19,9 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <jpa:repositories base-package="repositories"/>
+    <jpa:repositories base-package="pl.edu.uj.gotowanko.repositories"/>
 
-    <context:component-scan base-package="controllers, exceptions"/>
+    <context:component-scan base-package="pl.edu.uj.gotowanko.controllers, pl.edu.uj.gotowanko.exceptions"/>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
@@ -29,7 +29,7 @@
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
-                    <bean class="util.HibernateAwareObjectMapper"/>
+                    <bean class="pl.edu.uj.gotowanko.util.HibernateAwareObjectMapper"/>
                 </property>
             </bean>
         </mvc:message-converters>
@@ -85,7 +85,7 @@
 
     <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
-    <security:http create-session="always" entry-point-ref="digestEntryPoint">
+    <security:http entry-point-ref="digestEntryPoint">
         <security:custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER"/>
     </security:http>
 
