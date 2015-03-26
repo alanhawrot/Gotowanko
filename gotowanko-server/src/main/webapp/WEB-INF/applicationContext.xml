@@ -71,22 +71,10 @@
         <property name="jpaDialect" ref="jpaDialect"/>
     </bean>
 
-    <bean id="digestFilter" class=
-            "org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
-        <property name="userDetailsService" ref="userService"/>
-        <property name="authenticationEntryPoint" ref="digestEntryPoint"/>
-    </bean>
-
-    <bean id="digestEntryPoint" class=
-            "org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-        <property name="realmName" value="Gotowanko via Digest Authentication"/>
-        <property name="key" value="acegi"/>
-    </bean>
-
     <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
-    <security:http entry-point-ref="digestEntryPoint">
-        <security:custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER"/>
+    <security:http>
+        <security:http-basic/>
     </security:http>
 
     <security:authentication-manager>
