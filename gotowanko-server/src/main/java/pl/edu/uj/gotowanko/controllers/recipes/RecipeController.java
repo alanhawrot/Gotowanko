@@ -19,14 +19,15 @@ import java.util.Map;
 public class RecipeController {
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class.getSimpleName());
 
-    @Secured(value = "ROLE_USER")
+    //@Secured(value = "ROLE_USER")
     @RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/*")
     @ResponseStatus(HttpStatus.CREATED)
     public void createRecipe(
-            @RequestPart("meta-data") CreateRecipeRequestDTO dto,
-            @RequestParam("file") MultipartFile file) {
+            @RequestPart(value = "meta-data", required = false) String dto,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        //logger.debug("recipeImages" + recipeFiles);
+        logger.error("meta-data " + dto);
+        logger.error("file " + file);
 
 
     }

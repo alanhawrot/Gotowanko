@@ -1,6 +1,9 @@
 package pl.edu.uj.gotowanko.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.postgresql.jdbc2.EscapedFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -37,6 +41,10 @@ public class LogRequestFilter implements Filter {
             //It is only possible way to log them as they can be read only once from streams.
             //after chain has finished, request is processed, copy of request and response body is
             //available with .getCopy() methods.
+
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(request.getInputStream(), writer, "utf-8");
+            logger.error("boduy:"+StringEscapeUtils.escapeJava(writer.toString()));
 
             ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
             CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
@@ -66,9 +74,7 @@ public class LogRequestFilter implements Filter {
                     .stream()
                     .map(x -> httpRequest.getHeader(x).toString())
                     .collect(Collectors.joining(", ")));
-
             String requestBody = new String(requestWrapper.getContentAsByteArray());
-
             if (requestContentType != null && requestContentType.startsWith("application/json") && !requestBody.isEmpty()) {
                 logger.info("Request body:" + LINE_SEPARATOR + objectMapper
                         .writerWithDefaultPrettyPrinter()
