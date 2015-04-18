@@ -1,6 +1,7 @@
 package pl.edu.uj.gotowanko.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -26,13 +27,13 @@ public class RecipeStep {
     private String photoUrl;
 
     @Column
-    private int realizationTimeInMinutes;
+    private Integer realizationTimeInMinutes;
 
     @Column
-    private int timerDurationInMinutes;
+    private Integer timerDurationInMinutes;
 
     @OneToMany(targetEntity = IngredientAmount.class, mappedBy = "recipeStep", cascade = CascadeType.ALL)
-    private Collection<IngredientAmount> ingredients;
+    private Collection<IngredientAmount> ingredients = new ArrayList<>();
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Recipe recipe;
@@ -110,5 +111,9 @@ public class RecipeStep {
 
     public void setTimerDurationInMinutes(int timerDurationInMinutes) {
         this.timerDurationInMinutes = timerDurationInMinutes;
+    }
+
+    public void addIngredient(IngredientAmount ingredientAmount) {
+        ingredients.add(ingredientAmount);
     }
 }

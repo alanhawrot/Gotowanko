@@ -3,6 +3,7 @@ package pl.edu.uj.gotowanko.entities;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -24,13 +25,13 @@ public class Recipe {
     private String photoUrl;
 
     @Column
-    private int cookingTimeInMinutes;
+    private Integer cookingTimeInMinutes;
 
     @Column
-    private int approximateCost;
+    private Integer approximateCost;
 
     @Column
-    private int rating;
+    private Integer rating;
 
     @Column
     @Temporal(value = TemporalType.DATE)
@@ -41,7 +42,7 @@ public class Recipe {
     private Calendar lastEdited;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Collection<RecipeStep> recipeSteps;
+    private Collection<RecipeStep> recipeSteps = new ArrayList<>();
 
     @ManyToOne(optional = false)
     private User user;
@@ -140,4 +141,7 @@ public class Recipe {
         this.comments = comments;
     }
 
+    public void addRecipeStep(RecipeStep recipeStep) {
+        recipeSteps.add(recipeStep);
+    }
 }

@@ -4,16 +4,15 @@ import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserRequestDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserResponseDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.GetUserResponseDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.UpdateUserRequestDTO;
-import pl.edu.uj.gotowanko.entities.User;
+import pl.edu.uj.gotowanko.entities.*;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchResourceException;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.PermissionDeniedException;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.ResourceAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.uj.gotowanko.repositories.UsersRepository;
+import pl.edu.uj.gotowanko.repositories.*;
 
 import javax.validation.Valid;
 import java.util.Calendar;
@@ -27,6 +26,9 @@ public class UsersController {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private UsersService usersService;
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,7 +57,7 @@ public class UsersController {
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) throws PermissionDeniedException, NoSuchResourceException {
-        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        String authenticatedUserEmail = usersService.getCurrentlyLoggedUserEmail().get();
         User modifiedUser = usersRepository.findOne(id);
 
         if (modifiedUser == null) {
@@ -75,7 +77,7 @@ public class UsersController {
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id) throws PermissionDeniedException, NoSuchResourceException {
-        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        String authenticatedUserEmail = usersService.getCurrentlyLoggedUserEmail().get();
         User modifiedUser = usersRepository.findOne(id);
 
         if (modifiedUser == null) {

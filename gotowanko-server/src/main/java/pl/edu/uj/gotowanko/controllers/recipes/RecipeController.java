@@ -2,14 +2,21 @@ package pl.edu.uj.gotowanko.controllers.recipes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeIngredientRequestDTO;
 import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeRequestDTO;
+import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeStepRequestDTO;
+import pl.edu.uj.gotowanko.entities.Recipe;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredient;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientAmount;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientUnit;
+import pl.edu.uj.gotowanko.repositories.RecipesRepository;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.Map;
 
 /**
  * Created by michal on 17.04.15.
@@ -19,16 +26,46 @@ import java.util.Map;
 public class RecipeController {
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class.getSimpleName());
 
-    //@Secured(value = "ROLE_USER")
-    @RequestMapping(method = RequestMethod.POST, headers = "content-type=multipart/*")
+    @Autowired
+    private RecipesRepository recipesRepository;
+
+    @Autowired
+    private RecipeFactory recipeFactory;
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRecipe(
-            @RequestPart(value = "meta-data", required = false) String dto,
-            @RequestParam(value = "file", required = false) MultipartFile file) {
+    public void createRecipe(@Valid @RequestBody CreateRecipeRequestDTO dto)
+            throws InvalidIngredientUnit, InvalidIngredientAmount, InvalidIngredient {
 
-        logger.error("meta-data " + dto);
-        logger.error("file " + file);
+        RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
+                .withApproximateCost(dto.getApproximateCost())
+                .withCookingTimeInMinutes(dto.getCookingTimeInMinutes())
+                .withTitle(dto.getTitle())
+                .withPhotoUrl(dto.getPhotoUrl());
+        //TODO: withRating(?)
+        for (CreateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
+            RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
+                    .withTitle(stepDto.getTitle())
+                    .withDescription(stepDto.getDescription())
+                    .withPhotoUrl(stepDto.getPhotoUrl())
+                    .withVideoUrl(stepDto.getVideoUrl())
+                    .withRealizationTime(stepDto.getRealizationTime())
+                    .withTimerDurationInMinutes(stepDto.getTimerDurationInMinutes());
 
+            for (CreateRecipeIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
+                recipeStepBuilder.withIngredient(
+                        recipeFactory.builderForIngredientAmount()
+                                .withAmount(ingredientDto.getIngredientAmount())
+                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredientUnit(ingredientDto.getIngredientUnitId())
+                                .build());
+            }
+            recipeBuilder.withRecipeStep(recipeStepBuilder.build());
+        }
 
+        Recipe recipe = recipeBuilder.build();
+        recipesRepository.save(recipe);
     }
 }

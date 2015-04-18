@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
  * Created by michal on 23.03.15.
  */
 public class NoSuchResourceException extends BusinessLogicException {
+    public NoSuchResourceException(String format, Object... objects) {
+        super(String.format(format, objects), HttpStatus.NOT_FOUND, new CargoDTO());
+    }
+
     public NoSuchResourceException(String message) {
         super(message, HttpStatus.NOT_FOUND, new CargoDTO());
     }

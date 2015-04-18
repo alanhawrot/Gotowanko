@@ -3,6 +3,7 @@ package pl.edu.uj.gotowanko.controllers.recipes.dto;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -10,20 +11,27 @@ import java.util.List;
  */
 public class CreateRecipeRequestDTO {
     @NotBlank
-    private String name;
+    private String title;
 
     @NotBlank
     private String description;
 
     @NotEmpty
-    private List<CreateRecipeCardRequestDTO> cards;
+    private List<CreateRecipeStepRequestDTO> recipeSteps;
 
-    public String getName() {
-        return name;
+    private Integer approximateCost;
+
+    private Duration cookingTimeInMinutes;
+
+    private String photoUrl;
+
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -34,11 +42,35 @@ public class CreateRecipeRequestDTO {
         this.description = description;
     }
 
-    public List<CreateRecipeCardRequestDTO> getCards() {
-        return cards;
+    public List<CreateRecipeStepRequestDTO> getRecipeSteps() {
+        return recipeSteps;
     }
 
-    public void setCards(List<CreateRecipeCardRequestDTO> cards) {
-        this.cards = cards;
+    public void setRecipeSteps(List<CreateRecipeStepRequestDTO> recipeSteps) {
+        this.recipeSteps = recipeSteps;
+    }
+
+    public Integer getApproximateCost() {
+        return approximateCost;
+    }
+
+    public void setApproximateCost(Integer approximateCost) {
+        this.approximateCost = approximateCost;
+    }
+
+    public Duration getCookingTimeInMinutes() {
+        return cookingTimeInMinutes;
+    }
+
+    public void setCookingTimeInMinutes(Duration cookingTimeInMinutes) {
+        this.cookingTimeInMinutes = cookingTimeInMinutes;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
