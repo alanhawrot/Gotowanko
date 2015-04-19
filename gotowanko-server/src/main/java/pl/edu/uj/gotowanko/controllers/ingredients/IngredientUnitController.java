@@ -1,4 +1,4 @@
-package pl.edu.uj.gotowanko.controllers.units;
+package pl.edu.uj.gotowanko.controllers.ingredients;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +15,12 @@ import javax.transaction.Transactional;
  */
 
 @Controller
-public class UnitsController {
+public class IngredientUnitController {
 
     @Autowired
     private IngredientUnitRepository ingredientUnitRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(UnitsController.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(IngredientUnitController.class.getSimpleName());
 
     /**
      * Zahardcodowane jednostki
