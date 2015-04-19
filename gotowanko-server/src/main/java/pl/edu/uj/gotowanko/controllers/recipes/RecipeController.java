@@ -96,7 +96,6 @@ public class RecipeController {
         likedRecipe.setPhotoUrl(recipe.getPhotoUrl());
         likedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
         likedRecipe.setApproximateCost(recipe.getApproximateCost());
-        likedRecipe.setNumberOfLikes(recipe.getNumberOfLikes());
         likedRecipe.setDateAdded(recipe.getDateAdded());
         likedRecipe.setLastEdited(recipe.getLastEdited());
         likedRecipe.setRecipeSteps(recipe.getRecipeSteps());
@@ -131,7 +130,6 @@ public class RecipeController {
         dislikedRecipe.setPhotoUrl(recipe.getPhotoUrl());
         dislikedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
         dislikedRecipe.setApproximateCost(recipe.getApproximateCost());
-        dislikedRecipe.setNumberOfLikes(recipe.getNumberOfLikes());
         dislikedRecipe.setDateAdded(recipe.getDateAdded());
         dislikedRecipe.setLastEdited(recipe.getLastEdited());
         dislikedRecipe.setRecipeSteps(recipe.getRecipeSteps());

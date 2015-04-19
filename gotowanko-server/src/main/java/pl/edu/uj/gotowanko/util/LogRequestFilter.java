@@ -20,7 +20,7 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class LogRequestFilter implements Filter {
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final Logger logger = LoggerFactory.getLogger(LogRequestFilter.class.getSimpleName());

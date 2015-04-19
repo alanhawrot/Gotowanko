@@ -32,9 +32,6 @@ public class Recipe {
     private Integer approximateCost;
 
     @Column
-    private Integer numberOfLikes;
-
-    @Column
     @Temporal(value = TemporalType.DATE)
     private Calendar dateAdded;
 
@@ -144,14 +141,6 @@ public class Recipe {
 
     private void setUserLikes(Collection<User> userLikes) {
         this.userLikes = userLikes;
-    }
-
-    public int getNumberOfLikes() {
-        return getUserLikes().size();
-    }
-
-    private void setNumberOfLikes(Integer numberOfLikes) {
-        this.numberOfLikes = numberOfLikes;
     }
 
     public void addUserLike(User user) {
