@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeIngredientRequestDTO;
-import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeRequestDTO;
-import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeStepRequestDTO;
-import pl.edu.uj.gotowanko.controllers.recipes.dto.LikedRecipeResponseDTO;
+import pl.edu.uj.gotowanko.controllers.recipes.dto.*;
 import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.Recipe;
 import pl.edu.uj.gotowanko.entities.User;
@@ -106,5 +103,40 @@ public class RecipeController {
         likedRecipe.setUserLikes(recipe.getUserLikes());
 
         return likedRecipe;
+    }
+
+    @Secured("ROLE_USER")
+    @RequestMapping(value = "/{id}/disliked", method = RequestMethod.GET)
+    public DislikedRecipeResponseDTO dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyDislikedException {
+        Recipe recipe = recipesRepository.findOne(id);
+
+        if (recipe == null) {
+            throw new NoSuchResourceException("There is no recipe with given id");
+        }
+
+        User user = userService.getCurrentlyLoggedUser().get();
+
+        if (!user.containsRecipeLike(recipe)) {
+            throw new RecipeAlreadyDislikedException("Given user has already disliked given recipe");
+        }
+
+        recipe.removeUserLike(user);
+        user.removeRecipeLike(recipe);
+
+        DislikedRecipeResponseDTO dislikedRecipe = new DislikedRecipeResponseDTO();
+        dislikedRecipe.setId(recipe.getId());
+        dislikedRecipe.setTitle(recipe.getTitle());
+        dislikedRecipe.setPhotoUrl(recipe.getPhotoUrl());
+        dislikedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
+        dislikedRecipe.setApproximateCost(recipe.getApproximateCost());
+        dislikedRecipe.setNumberOfLikes(recipe.getNumberOfLikes());
+        dislikedRecipe.setDateAdded(recipe.getDateAdded());
+        dislikedRecipe.setLastEdited(recipe.getLastEdited());
+        dislikedRecipe.setRecipeSteps(recipe.getRecipeSteps());
+        dislikedRecipe.setUser(recipe.getUser());
+        dislikedRecipe.setComments(recipe.getComments());
+        dislikedRecipe.setUserLikes(recipe.getUserLikes());
+
+        return dislikedRecipe;
     }
 }
