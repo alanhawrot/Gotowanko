@@ -54,6 +54,7 @@ public class RecipeStepBuilder {
 
     public RecipeStepBuilder withIngredient(IngredientAmount ingredientAmount) {
         recipeStep.addIngredient(ingredientAmount);
+        ingredientAmount.setRecipeStep(recipeStep);
         return this;
     }
 

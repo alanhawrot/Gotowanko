@@ -33,7 +33,7 @@ public class IngredientAmountBuilder {
     }
 
     public IngredientAmountBuilder withIngredient(Long ingredientId) throws InvalidIngredient {
-        Ingredient ingredient = ingredientRepository.getOne(ingredientId);
+        Ingredient ingredient = ingredientRepository.findOne(ingredientId);
         if (ingredient == null)
             throw new InvalidIngredient(ingredientId);
         ingredientAmount.setIngredient(ingredient);
@@ -41,7 +41,7 @@ public class IngredientAmountBuilder {
     }
 
     public IngredientAmountBuilder withIngredientUnit(Long unitId) throws InvalidIngredientUnit {
-        IngredientUnit ingredientUnit = ingredientUnitRepository.getOne(unitId);
+        IngredientUnit ingredientUnit = ingredientUnitRepository.findOne(unitId);
         if (ingredientUnit == null)
             throw new InvalidIngredientUnit(unitId);
         ingredientAmount.setIngredientUnit(ingredientUnit);

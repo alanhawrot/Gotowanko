@@ -14,15 +14,17 @@ import java.util.HashSet;
 @Entity(name = "Recipes")
 public class Recipe {
 
+    private static final String DEFAULT_RECIPE_IMAGE = "/images/recipe/noImage.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "'/images/recipe/noImage.png'")
+    @ColumnDefault(value = "'" + DEFAULT_RECIPE_IMAGE + "'")
     private String photoUrl;
 
     @Column
@@ -51,11 +53,11 @@ public class Recipe {
     @ManyToMany(targetEntity = User.class, mappedBy = "recipeLikes")
     private Collection<User> userLikes = new HashSet<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -72,22 +74,22 @@ public class Recipe {
     }
 
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+        this.photoUrl = photoUrl == null ? Recipe.DEFAULT_RECIPE_IMAGE : photoUrl;
     }
 
-    public int getCookingTimeInMinutes() {
+    public Integer getCookingTimeInMinutes() {
         return cookingTimeInMinutes;
     }
 
-    public void setCookingTimeInMinutes(int cookingTimeInMinutes) {
+    public void setCookingTimeInMinutes(Integer cookingTimeInMinutes) {
         this.cookingTimeInMinutes = cookingTimeInMinutes;
     }
 
-    public int getApproximateCost() {
+    public Integer getApproximateCost() {
         return approximateCost;
     }
 
-    public void setApproximateCost(int approximateCost) {
+    public void setApproximateCost(Integer approximateCost) {
         this.approximateCost = approximateCost;
     }
 

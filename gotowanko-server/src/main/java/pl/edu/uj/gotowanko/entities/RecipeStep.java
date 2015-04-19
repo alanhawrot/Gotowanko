@@ -12,7 +12,7 @@ public class RecipeStep {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -38,11 +38,11 @@ public class RecipeStep {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Recipe recipe;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -78,11 +78,11 @@ public class RecipeStep {
         this.photoUrl = photoUrl;
     }
 
-    public int getRealizationTimeInMinutes() {
+    public Integer getRealizationTimeInMinutes() {
         return realizationTimeInMinutes;
     }
 
-    public void setRealizationTimeInMinutes(int realizationTimeInMinutes) {
+    public void setRealizationTimeInMinutes(Integer realizationTimeInMinutes) {
         this.realizationTimeInMinutes = realizationTimeInMinutes;
     }
 
@@ -102,11 +102,11 @@ public class RecipeStep {
         this.recipe = recipe;
     }
 
-    public int getTimerDurationInMinutes() {
+    public Integer getTimerDurationInMinutes() {
         return timerDurationInMinutes;
     }
 
-    public void setTimerDurationInMinutes(int timerDurationInMinutes) {
+    public void setTimerDurationInMinutes(Integer timerDurationInMinutes) {
         this.timerDurationInMinutes = timerDurationInMinutes;
     }
 

@@ -47,6 +47,22 @@ public class RecipeBuilder {
         return this;
     }
 
+    public RecipeBuilder withTitle(String title) {
+        recipe.setTitle(title);
+        return this;
+    }
+
+    public RecipeBuilder withPhotoUrl(String photoUrl) {
+        recipe.setPhotoUrl(photoUrl);
+        return this;
+    }
+
+    public RecipeBuilder withRecipeStep(RecipeStep recipeStep) {
+        recipe.addRecipeStep(recipeStep);
+        recipeStep.setRecipe(recipe);
+        return this;
+    }
+
     public Recipe build() {
         if (recipe == null)
             throw new IllegalStateException("RecipeBuilder may not be reused");
@@ -64,20 +80,5 @@ public class RecipeBuilder {
         Recipe result = this.recipe;
         this.recipe = null;
         return result;
-    }
-
-    public RecipeBuilder withTitle(String title) {
-        recipe.setTitle(title);
-        return this;
-    }
-
-    public RecipeBuilder withPhotoUrl(String photoUrl) {
-        recipe.setPhotoUrl(photoUrl);
-        return this;
-    }
-
-    public RecipeBuilder withRecipeStep(RecipeStep recipeStep) {
-        recipe.addRecipeStep(recipeStep);
-        return this;
     }
 }

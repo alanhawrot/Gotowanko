@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.uj.gotowanko.controllers.recipes.builders.RecipeBuilder;
 import pl.edu.uj.gotowanko.controllers.recipes.builders.RecipeStepBuilder;
@@ -15,7 +16,6 @@ import pl.edu.uj.gotowanko.entities.User;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.*;
 import pl.edu.uj.gotowanko.repositories.RecipesRepository;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 /**
@@ -43,9 +43,9 @@ public class RecipeController {
             throws InvalidIngredientUnit, InvalidIngredientAmount, InvalidIngredient {
 
         RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
+                .withTitle(dto.getTitle())
                 .withApproximateCost(dto.getApproximateCost())
                 .withCookingTimeInMinutes(dto.getCookingTimeInMinutes())
-                .withTitle(dto.getTitle())
                 .withPhotoUrl(dto.getPhotoUrl());
         //TODO: withRating(?)
         for (CreateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
