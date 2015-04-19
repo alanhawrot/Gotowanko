@@ -10,6 +10,8 @@ import javax.persistence.*;
 @Entity(name = "Ingredients")
 public class Ingredient {
 
+    private static final String DEFAULT_INGREDIENT_IMAGE = "/images/ingredients/noImage.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +20,7 @@ public class Ingredient {
     private String name;
 
     @Column(nullable = false)
-    @ColumnDefault("'/images/ingredients/noImage.png'")
+    @ColumnDefault("'" + DEFAULT_INGREDIENT_IMAGE + "'")
     private String iconUrl;
 
     public Long getId() {
@@ -42,6 +44,6 @@ public class Ingredient {
     }
 
     public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
+        this.iconUrl = iconUrl == null ? DEFAULT_INGREDIENT_IMAGE : iconUrl;
     }
 }

@@ -1,5 +1,7 @@
 package pl.edu.uj.gotowanko.controllers.units;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import pl.edu.uj.gotowanko.entities.IngredientUnit;
@@ -18,6 +20,8 @@ public class UnitsController {
     @Autowired
     private IngredientUnitRepository ingredientUnitRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(UnitsController.class.getSimpleName());
+
     /**
      * Zahardcodowane jednostki
      */
@@ -25,6 +29,7 @@ public class UnitsController {
     @Transactional
     public void initializeWithDefaultUnits() {
         if (ingredientUnitRepository.findAll().isEmpty()) {
+            logger.info("Initializing units");
             ingredientUnitRepository.save(new IngredientUnit("Kilogram", "Kg"));
             ingredientUnitRepository.save(new IngredientUnit("Dekagram", "Dg"));
             ingredientUnitRepository.save(new IngredientUnit("Gram", "g"));

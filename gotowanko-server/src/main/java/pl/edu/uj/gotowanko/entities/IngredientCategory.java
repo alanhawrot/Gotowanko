@@ -1,6 +1,9 @@
 package pl.edu.uj.gotowanko.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -10,7 +13,10 @@ import java.util.HashSet;
 @Entity(name = "IngredientCategories")
 public class IngredientCategory extends Ingredient {
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "ingredientcategory_subingredients",
+            joinColumns = @JoinColumn(name = "ingredientcategory"),
+            inverseJoinColumns = @JoinColumn(name = "subingredient"))
     private Collection<Ingredient> ingredients = new HashSet<>();
 
     public Collection<Ingredient> getIngredients() {
@@ -19,5 +25,9 @@ public class IngredientCategory extends Ingredient {
 
     private void setIngredients(Collection<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
     }
 }

@@ -2,10 +2,8 @@ package pl.edu.uj.gotowanko.controllers.ingredients;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.uj.gotowanko.controllers.ingredients.dto.CreateIngredientCategoryRequestDTO;
 import pl.edu.uj.gotowanko.controllers.ingredients.dto.CreateIngredientCategoryResponseDTO;
 import pl.edu.uj.gotowanko.controllers.ingredients.dto.CreateIngredientRequestDTO;
@@ -17,6 +15,7 @@ import pl.edu.uj.gotowanko.repositories.IngredientCategoryRepository;
 import pl.edu.uj.gotowanko.repositories.IngredientRepository;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 
 /**
@@ -24,7 +23,7 @@ import javax.transaction.Transactional;
  */
 
 @RestController
-@RequestMapping(value = "/ingredients")
+@RequestMapping("/ingredients")
 public class IngredientController {
 
     @Autowired
@@ -33,13 +32,14 @@ public class IngredientController {
     @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
 
+    @Secured("ROLE_USER")
+    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST)
-    @Transactional
-    public CreateIngredientResponseDTO createIngredient(CreateIngredientRequestDTO dto) throws NoSuchResourceException {
+    public CreateIngredientResponseDTO createIngredient(@Valid @RequestBody CreateIngredientRequestDTO dto) throws NoSuchResourceException {
         Ingredient ingredient = new Ingredient();
         ingredient.setIconUrl(dto.getIconUrl());
-        ingredient.setName(dto.getName());
+        ingredient.setName(dto.getIngredientName());
         ingredient = ingredientRepository.save(ingredient);
 
         if(dto.getIngredientCategoryIds() != null) {
@@ -47,7 +47,7 @@ public class IngredientController {
                 IngredientCategory ingredientCategory = ingredientCategoryRepository.findOne(categoryId);
                 if(ingredientCategory == null)
                     throw new NoSuchResourceException("ingredient category with id %d doesn't exists", categoryId);
-                ingredientCategory.getIngredients().add(ingredient);
+                ingredientCategory.addIngredient(ingredient);
                 ingredientCategoryRepository.save(ingredientCategory);
             }
         }
@@ -57,14 +57,14 @@ public class IngredientController {
         return responseDTO;
     }
 
+    @Secured("ROLE_USER")
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/category", method = RequestMethod.POST)
-    public CreateIngredientCategoryResponseDTO createIngredientCategory(CreateIngredientCategoryRequestDTO dto) {
+    @RequestMapping(value = "/categories", method = RequestMethod.POST)
+    public CreateIngredientCategoryResponseDTO createIngredientCategory(@Valid @RequestBody CreateIngredientCategoryRequestDTO dto) {
         IngredientCategory category = new IngredientCategory();
         category.setIconUrl(dto.getIconUrl());
-        category.setName(dto.getName());
-        category = ingredientRepository.save(category);
-
+        category.setName(dto.getIngredientCategoryName());
+        category = ingredientCategoryRepository.save(category);
 
         CreateIngredientCategoryResponseDTO responseDTO = new CreateIngredientCategoryResponseDTO();
         responseDTO.setIngredientCategoryId(category.getId());

@@ -2,7 +2,6 @@ package pl.edu.uj.gotowanko.controllers.ingredients.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,19 +9,19 @@ import java.util.Set;
  */
 public class CreateIngredientRequestDTO {
     @NotBlank
-    private String name;
+    private String ingredientName;
 
     private String iconUrl;
 
 
     private Set<Long> ingredientCategoryIds;
 
-    public String getName() {
-        return name;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 
     public String getIconUrl() {

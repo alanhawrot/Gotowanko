@@ -16,7 +16,7 @@ public class LoggingExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        logger.debug("Returning HTTP 400 Bad Request", e);
+        logger.info("Returning HTTP 400 Bad Request", e);
         throw e;
     }
 }
