@@ -79,7 +79,7 @@
 
     <security:authentication-manager>
         <security:authentication-provider>
-            <security:jdbc-user-service id="userService" data-source-ref="dataSource"
+            <security:jdbc-user-service id="jdbcUserService" data-source-ref="dataSource"
                                         users-by-username-query="SELECT email, password, TRUE FROM Users WHERE email=?"
                                         authorities-by-username-query="SELECT email, 'ROLE_USER' FROM Users WHERE email=?"/>
         </security:authentication-provider>
