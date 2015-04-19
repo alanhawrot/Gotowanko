@@ -69,7 +69,7 @@ public class RecipeController {
         }
 
         Recipe recipe = recipeBuilder.build();
-        recipesRepository.save(recipe);
+        recipe = recipesRepository.save(recipe);
         CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
         responseDTO.setRecipeId(recipe.getId());
         return responseDTO;

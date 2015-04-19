@@ -18,6 +18,14 @@ public class IngredientUnit {
     @Column(nullable = false)
     private String shortName;
 
+    public IngredientUnit() {
+    }
+
+    public IngredientUnit(String name, String shortName) {
+        this.name = name;
+        this.shortName = shortName;
+    }
+
     public Long getId() {
         return id;
     }
