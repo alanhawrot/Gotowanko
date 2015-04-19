@@ -10,7 +10,6 @@ import java.util.Collection;
 /**
  * Created by alanhawrot on 19.04.15.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetCurrentlyLoggedUserResponseDTO {
 
     private long id;

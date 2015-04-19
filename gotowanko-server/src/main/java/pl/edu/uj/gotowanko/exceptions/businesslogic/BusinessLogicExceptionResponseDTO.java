@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * Created by michal on 23.03.15.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BusinessLogicExceptionResponseDTO {
     public String errorCode;
     public String errorMessage;

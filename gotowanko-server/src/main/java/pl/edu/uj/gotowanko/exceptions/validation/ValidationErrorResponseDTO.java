@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ValidationErrorResponseDTO {
     private String errorMessage;
     private String jsonPath;

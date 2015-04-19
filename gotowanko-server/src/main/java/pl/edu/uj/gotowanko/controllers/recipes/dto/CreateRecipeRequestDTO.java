@@ -21,7 +21,7 @@ public class CreateRecipeRequestDTO {
 
     private Integer approximateCost;
 
-    private Duration cookingTimeInMinutes;
+    private Duration cookingTime;
 
     private String photoUrl;
 
@@ -58,12 +58,12 @@ public class CreateRecipeRequestDTO {
         this.approximateCost = approximateCost;
     }
 
-    public Duration getCookingTimeInMinutes() {
-        return cookingTimeInMinutes;
+    public Duration getCookingTime() {
+        return cookingTime;
     }
 
-    public void setCookingTimeInMinutes(Duration cookingTimeInMinutes) {
-        this.cookingTimeInMinutes = cookingTimeInMinutes;
+    public void setCookingTime(Duration cookingTime) {
+        this.cookingTime = cookingTime;
     }
 
     public String getPhotoUrl() {

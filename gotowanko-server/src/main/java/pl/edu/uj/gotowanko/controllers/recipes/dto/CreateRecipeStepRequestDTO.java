@@ -24,7 +24,7 @@ public class CreateRecipeStepRequestDTO {
     @NotEmpty
     private List<CreateRecipeIngredientRequestDTO> ingredients;
 
-    private Duration timerDurationInMinutes;
+    private Duration timerDuration;
 
     private Duration realizationTime;
 
@@ -56,12 +56,12 @@ public class CreateRecipeStepRequestDTO {
         this.description = description;
     }
 
-    public Duration getTimerDurationInMinutes() {
-        return timerDurationInMinutes;
+    public Duration getTimerDuration() {
+        return timerDuration;
     }
 
-    public void setTimerDurationInMinutes(Duration timerDurationInMinutes) {
-        this.timerDurationInMinutes = timerDurationInMinutes;
+    public void setTimerDuration(Duration timerDuration) {
+        this.timerDuration = timerDuration;
     }
 
     public Duration getRealizationTime() {

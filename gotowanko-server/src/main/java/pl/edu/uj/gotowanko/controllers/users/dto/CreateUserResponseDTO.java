@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Calendar;
 
 /**
- * Created by alanhawrot on 23.03.15.
- */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+ * Created by alanhawrot on 23.03.15. */
 public class CreateUserResponseDTO {
 
     private long id;

@@ -39,13 +39,13 @@ public class RecipeController {
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRecipe(@Valid @RequestBody CreateRecipeRequestDTO dto)
+    public CreateRecipeResponseDTO createRecipe(@Valid @RequestBody CreateRecipeRequestDTO dto)
             throws InvalidIngredientUnit, InvalidIngredientAmount, InvalidIngredient {
 
         RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
                 .withTitle(dto.getTitle())
                 .withApproximateCost(dto.getApproximateCost())
-                .withCookingTimeInMinutes(dto.getCookingTimeInMinutes())
+                .withCookingTimeInMinutes(dto.getCookingTime())
                 .withPhotoUrl(dto.getPhotoUrl());
         //TODO: withRating(?)
         for (CreateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
@@ -55,7 +55,7 @@ public class RecipeController {
                     .withPhotoUrl(stepDto.getPhotoUrl())
                     .withVideoUrl(stepDto.getVideoUrl())
                     .withRealizationTime(stepDto.getRealizationTime())
-                    .withTimerDurationInMinutes(stepDto.getTimerDurationInMinutes());
+                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
 
             for (CreateRecipeIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
                 recipeStepBuilder.withIngredient(
@@ -70,6 +70,9 @@ public class RecipeController {
 
         Recipe recipe = recipeBuilder.build();
         recipesRepository.save(recipe);
+        CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
+        responseDTO.setRecipeId(recipe.getId());
+        return responseDTO;
     }
 
     @Secured("ROLE_USER")
