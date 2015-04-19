@@ -21,9 +21,6 @@ public class Ingredient {
     @ColumnDefault("'/images/ingredients/noImage.png'")
     private String iconUrl;
 
-    public Ingredient() {
-    }
-
     public long getId() {
         return id;
     }

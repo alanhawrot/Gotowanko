@@ -5,15 +5,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.edu.uj.gotowanko.entities.User;
-import pl.edu.uj.gotowanko.repositories.UsersRepository;
+import pl.edu.uj.gotowanko.repositories.UserRepository;
 
 import java.util.Optional;
 
 @Service
-public class UsersService {
+public class UserService {
 
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     public Optional<String> getCurrentlyLoggedUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -24,7 +24,7 @@ public class UsersService {
 
         Optional<String> currentlyLoggedUserEmail = getCurrentlyLoggedUserEmail();
         if (currentlyLoggedUserEmail.isPresent())
-            return Optional.of(usersRepository.findByEmail(currentlyLoggedUserEmail.get()));
+            return Optional.of(userRepository.findByEmail(currentlyLoggedUserEmail.get()));
         else
             return Optional.empty();
 

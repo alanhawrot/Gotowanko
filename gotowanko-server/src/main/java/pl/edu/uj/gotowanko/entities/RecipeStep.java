@@ -38,9 +38,6 @@ public class RecipeStep {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Recipe recipe;
 
-    public RecipeStep() {
-    }
-
     public long getId() {
         return id;
     }
@@ -93,7 +90,7 @@ public class RecipeStep {
         return ingredients;
     }
 
-    public void setIngredients(Collection<IngredientAmount> ingredients) {
+    private void setIngredients(Collection<IngredientAmount> ingredients) {
         this.ingredients = ingredients;
     }
 

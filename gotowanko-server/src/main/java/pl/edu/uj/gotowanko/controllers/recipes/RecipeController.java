@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeIngredientRequestDTO;
 import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeRequestDTO;
 import pl.edu.uj.gotowanko.controllers.recipes.dto.CreateRecipeStepRequestDTO;
+import pl.edu.uj.gotowanko.controllers.recipes.dto.LikedRecipeResponseDTO;
+import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.Recipe;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredient;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientAmount;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientUnit;
+import pl.edu.uj.gotowanko.entities.User;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.*;
 import pl.edu.uj.gotowanko.repositories.RecipesRepository;
 
 import javax.transaction.Transactional;
@@ -31,6 +32,9 @@ public class RecipeController {
 
     @Autowired
     private RecipeFactory recipeFactory;
+
+    @Autowired
+    private UserService userService;
 
     @Secured(value = "ROLE_USER")
     @Transactional
@@ -67,5 +71,40 @@ public class RecipeController {
 
         Recipe recipe = recipeBuilder.build();
         recipesRepository.save(recipe);
+    }
+
+    @Secured("ROLE_USER")
+    @RequestMapping(value = "/{id}/liked", method = RequestMethod.GET)
+    public LikedRecipeResponseDTO likeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyLikedException {
+        Recipe recipe = recipesRepository.findOne(id);
+
+        if (recipe == null) {
+            throw new NoSuchResourceException("There is no recipe with given id");
+        }
+
+        User user = userService.getCurrentlyLoggedUser().get();
+
+        if (user.containsRecipeLike(recipe)) {
+            throw new RecipeAlreadyLikedException("Given user has already liked given recipe");
+        }
+
+        recipe.addUserLike(user);
+        user.addRecipeLike(recipe);
+
+        LikedRecipeResponseDTO likedRecipe = new LikedRecipeResponseDTO();
+        likedRecipe.setId(recipe.getId());
+        likedRecipe.setTitle(recipe.getTitle());
+        likedRecipe.setPhotoUrl(recipe.getPhotoUrl());
+        likedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
+        likedRecipe.setApproximateCost(recipe.getApproximateCost());
+        likedRecipe.setNumberOfLikes(recipe.getNumberOfLikes());
+        likedRecipe.setDateAdded(recipe.getDateAdded());
+        likedRecipe.setLastEdited(recipe.getLastEdited());
+        likedRecipe.setRecipeSteps(recipe.getRecipeSteps());
+        likedRecipe.setUser(recipe.getUser());
+        likedRecipe.setComments(recipe.getComments());
+        likedRecipe.setUserLikes(recipe.getUserLikes());
+
+        return likedRecipe;
     }
 }

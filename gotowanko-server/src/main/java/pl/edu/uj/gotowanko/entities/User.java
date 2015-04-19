@@ -1,6 +1,7 @@
 package pl.edu.uj.gotowanko.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,10 +23,10 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Collection<Recipe> recipes;
+    private Collection<Recipe> recipes = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Collection<Comment> comments;
+    private Collection<Comment> comments = new HashSet<>();
 
     @Column(nullable = false)
     @Temporal(value = TemporalType.DATE)
@@ -35,10 +36,8 @@ public class User {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastLogged;
 
-    public User() {
-        recipes = new HashSet<Recipe>();
-        comments = new HashSet<Comment>();
-    }
+    @ManyToMany(targetEntity = Recipe.class)
+    private Collection<Recipe> recipeLikes = new HashSet<>();
 
     public long getId() {
         return id;
@@ -68,7 +67,7 @@ public class User {
         return recipes;
     }
 
-    public void setRecipes(Collection<Recipe> recipes) {
+    private void setRecipes(Collection<Recipe> recipes) {
         this.recipes = recipes;
     }
 
@@ -76,7 +75,7 @@ public class User {
         return comments;
     }
 
-    public void setComments(Collection<Comment> comments) {
+    private void setComments(Collection<Comment> comments) {
         this.comments = comments;
     }
 
@@ -94,5 +93,25 @@ public class User {
 
     public void setLastLogged(Calendar lastLogged) {
         this.lastLogged = lastLogged;
+    }
+
+    public Collection<Recipe> getRecipeLikes() {
+        return recipeLikes;
+    }
+
+    private void setRecipeLikes(Collection<Recipe> recipeLikes) {
+        this.recipeLikes = recipeLikes;
+    }
+
+    public void addRecipeLike(Recipe recipe) {
+        getRecipeLikes().add(recipe);
+    }
+
+    public void removeRecipeLike(Recipe recipe) {
+        getRecipeLikes().remove(recipe);
+    }
+
+    public boolean containsRecipeLike(Recipe recipe) {
+        return getRecipeLikes().contains(recipe);
     }
 }

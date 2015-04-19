@@ -1,57 +1,30 @@
-package pl.edu.uj.gotowanko.entities;
+package pl.edu.uj.gotowanko.controllers.recipes.dto;
 
-import org.hibernate.annotations.ColumnDefault;
+import pl.edu.uj.gotowanko.entities.Comment;
+import pl.edu.uj.gotowanko.entities.RecipeStep;
+import pl.edu.uj.gotowanko.entities.User;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by alanhawrot on 18.03.15.
+ * Created by alanhawrot on 19.04.15.
  */
-@Entity(name = "Recipes")
-public class Recipe {
+public class LikedRecipeResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable = false)
     private String title;
-
-    @Column(nullable = false)
-    @ColumnDefault(value = "'/images/recipe/noImage.png'")
     private String photoUrl;
-
-    @Column
     private Integer cookingTimeInMinutes;
-
-    @Column
     private Integer approximateCost;
-
-    @Column
     private Integer numberOfLikes;
-
-    @Column
-    @Temporal(value = TemporalType.DATE)
     private Calendar dateAdded;
-
-    @Column
-    @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastEdited;
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<RecipeStep> recipeSteps = new ArrayList<>();
-
-    @ManyToOne(optional = false)
     private User user;
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<Comment> comments = new HashSet<>();
-
-    @ManyToMany(targetEntity = User.class, mappedBy = "recipeLikes")
     private Collection<User> userLikes = new HashSet<>();
 
     public long getId() {
@@ -78,20 +51,28 @@ public class Recipe {
         this.photoUrl = photoUrl;
     }
 
-    public int getCookingTimeInMinutes() {
+    public Integer getCookingTimeInMinutes() {
         return cookingTimeInMinutes;
     }
 
-    public void setCookingTimeInMinutes(int cookingTimeInMinutes) {
+    public void setCookingTimeInMinutes(Integer cookingTimeInMinutes) {
         this.cookingTimeInMinutes = cookingTimeInMinutes;
     }
 
-    public int getApproximateCost() {
+    public Integer getApproximateCost() {
         return approximateCost;
     }
 
-    public void setApproximateCost(int approximateCost) {
+    public void setApproximateCost(Integer approximateCost) {
         this.approximateCost = approximateCost;
+    }
+
+    public Integer getNumberOfLikes() {
+        return numberOfLikes;
+    }
+
+    public void setNumberOfLikes(Integer numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
     }
 
     public Calendar getDateAdded() {
@@ -114,7 +95,7 @@ public class Recipe {
         return recipeSteps;
     }
 
-    private void setRecipeSteps(Collection<RecipeStep> recipeSteps) {
+    public void setRecipeSteps(Collection<RecipeStep> recipeSteps) {
         this.recipeSteps = recipeSteps;
     }
 
@@ -130,39 +111,15 @@ public class Recipe {
         return comments;
     }
 
-    private void setComments(Collection<Comment> comments) {
+    public void setComments(Collection<Comment> comments) {
         this.comments = comments;
-    }
-
-    public void addRecipeStep(RecipeStep recipeStep) {
-        recipeSteps.add(recipeStep);
     }
 
     public Collection<User> getUserLikes() {
         return userLikes;
     }
 
-    private void setUserLikes(Collection<User> userLikes) {
+    public void setUserLikes(Collection<User> userLikes) {
         this.userLikes = userLikes;
-    }
-
-    public int getNumberOfLikes() {
-        return getUserLikes().size();
-    }
-
-    private void setNumberOfLikes(Integer numberOfLikes) {
-        this.numberOfLikes = numberOfLikes;
-    }
-
-    public void addUserLike(User user) {
-        getUserLikes().add(user);
-    }
-
-    public void removeUserLike(User user) {
-        getUserLikes().remove(user);
-    }
-
-    public boolean containsUserLike(User user) {
-        return getUserLikes().contains(user);
     }
 }

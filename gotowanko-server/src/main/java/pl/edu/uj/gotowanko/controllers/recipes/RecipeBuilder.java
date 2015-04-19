@@ -1,9 +1,6 @@
 package pl.edu.uj.gotowanko.controllers.recipes;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import pl.edu.uj.gotowanko.controllers.users.UsersService;
+import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.Recipe;
 import pl.edu.uj.gotowanko.entities.RecipeStep;
 import pl.edu.uj.gotowanko.entities.User;
@@ -19,7 +16,7 @@ public class RecipeBuilder {
 
     private Recipe recipe;
 
-    public RecipeBuilder(UsersService usersService, Recipe recipe) {
+    public RecipeBuilder(UserService userService, Recipe recipe) {
         this.recipe = recipe;
 
         if (recipe.getDateAdded() == null)
@@ -29,14 +26,14 @@ public class RecipeBuilder {
             recipe.setLastEdited(Calendar.getInstance());
 
         if (recipe.getUser() == null) {
-            Optional<User> currentlyLoggedUser = usersService.getCurrentlyLoggedUser();
+            Optional<User> currentlyLoggedUser = userService.getCurrentlyLoggedUser();
             if (currentlyLoggedUser.isPresent())
                 recipe.setUser(currentlyLoggedUser.get());
         }
     }
 
-    public RecipeBuilder(UsersService usersService) {
-        this(usersService, new Recipe());
+    public RecipeBuilder(UserService userService) {
+        this(userService, new Recipe());
     }
 
     public RecipeBuilder withApproximateCost(Integer approximateCost) {

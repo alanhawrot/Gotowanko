@@ -24,9 +24,6 @@ public class IngredientAmount {
     @Column(nullable = false)
     private Long amount;
 
-    public IngredientAmount() {
-    }
-
     public long getId() {
         return id;
     }

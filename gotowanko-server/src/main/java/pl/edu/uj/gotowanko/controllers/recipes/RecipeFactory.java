@@ -2,7 +2,7 @@ package pl.edu.uj.gotowanko.controllers.recipes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.edu.uj.gotowanko.controllers.users.UsersService;
+import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.IngredientAmount;
 import pl.edu.uj.gotowanko.entities.Recipe;
 import pl.edu.uj.gotowanko.entities.RecipeStep;
@@ -16,7 +16,7 @@ import pl.edu.uj.gotowanko.repositories.IngredientUnitRepository;
 public class RecipeFactory {
 
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @Autowired
     private IngredientRepository ingredientRepository;
@@ -25,11 +25,11 @@ public class RecipeFactory {
     private IngredientUnitRepository ingredientUnitRepository;
 
     public RecipeBuilder builderForRecipe() {
-        return new RecipeBuilder(usersService);
+        return new RecipeBuilder(userService);
     }
 
     public RecipeBuilder builderForRecipe(Recipe recipe) {
-        return new RecipeBuilder(usersService, recipe);
+        return new RecipeBuilder(userService, recipe);
     }
 
     public RecipeStepBuilder builderForRecipeStep() {

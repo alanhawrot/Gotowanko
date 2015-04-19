@@ -23,18 +23,18 @@ import java.util.Calendar;
  */
 @RestController
 @RequestMapping(value = "/users")
-public class UsersController {
+public class UserController {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) throws ResourceAlreadyExistsException {
-        if (!usersRepository.findAllByEmail(createUserRequestDTO.getEmail()).isEmpty()) {
+        if (!userRepository.findAllByEmail(createUserRequestDTO.getEmail()).isEmpty()) {
             throw new ResourceAlreadyExistsException("User already exists.");
         }
 
@@ -45,7 +45,7 @@ public class UsersController {
         newUser.setRegistrationDate(calendar);
         newUser.setLastLogged(calendar);
 
-        usersRepository.save(newUser);
+        userRepository.save(newUser);
 
         CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO();
         createUserResponseDTO.setId(newUser.getId());
@@ -58,8 +58,8 @@ public class UsersController {
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) throws PermissionDeniedException, NoSuchResourceException {
-        String authenticatedUserEmail = usersService.getCurrentlyLoggedUserEmail().get();
-        User modifiedUser = usersRepository.findOne(id);
+        String authenticatedUserEmail = userService.getCurrentlyLoggedUserEmail().get();
+        User modifiedUser = userRepository.findOne(id);
 
         if (modifiedUser == null) {
             throw new NoSuchResourceException("There is no user with given id");
@@ -72,14 +72,14 @@ public class UsersController {
         modifiedUser.setEmail(updateUserRequestDTO.getEmail());
         modifiedUser.setPassword(updateUserRequestDTO.getPassword());
 
-        usersRepository.save(modifiedUser);
+        userRepository.save(modifiedUser);
     }
 
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id) throws PermissionDeniedException, NoSuchResourceException {
-        String authenticatedUserEmail = usersService.getCurrentlyLoggedUserEmail().get();
-        User modifiedUser = usersRepository.findOne(id);
+        String authenticatedUserEmail = userService.getCurrentlyLoggedUserEmail().get();
+        User modifiedUser = userRepository.findOne(id);
 
         if (modifiedUser == null) {
             throw new NoSuchResourceException("There is no user with given id");
@@ -89,13 +89,13 @@ public class UsersController {
             throw new PermissionDeniedException("You are not the owner of given account");
         }
 
-        usersRepository.delete(modifiedUser);
+        userRepository.delete(modifiedUser);
     }
 
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public GetUserResponseDTO getUser(@PathVariable Long id) throws NoSuchResourceException {
-        User user = usersRepository.findOne(id);
+        User user = userRepository.findOne(id);
 
         if (user == null) {
             throw new NoSuchResourceException("There is no user with given id");
@@ -115,7 +115,7 @@ public class UsersController {
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "/currently_logged", method = RequestMethod.GET)
     public GetCurrentlyLoggedUserResponseDTO getCurrentlyLoggedUser() {
-        User user = usersService.getCurrentlyLoggedUser().get();
+        User user = userService.getCurrentlyLoggedUser().get();
 
         GetCurrentlyLoggedUserResponseDTO currentlyLoggedUser = new GetCurrentlyLoggedUserResponseDTO();
         currentlyLoggedUser.setId(user.getId());

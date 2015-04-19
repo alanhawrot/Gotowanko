@@ -30,9 +30,6 @@ public class Comment {
     @ManyToOne(optional = false)
     private Recipe recipe;
 
-    public Comment() {
-    }
-
     public long getId() {
         return id;
     }
