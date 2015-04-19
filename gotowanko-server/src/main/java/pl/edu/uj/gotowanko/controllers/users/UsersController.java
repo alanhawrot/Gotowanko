@@ -1,5 +1,6 @@
 package pl.edu.uj.gotowanko.controllers.users;
 
+import pl.edu.uj.gotowanko.controllers.users.dto.GetCurrentlyLoggedUserResponseDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserRequestDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserResponseDTO;
 import pl.edu.uj.gotowanko.controllers.users.dto.GetUserResponseDTO;
@@ -109,5 +110,21 @@ public class UsersController {
         userResponseDTO.setComments(user.getComments());
 
         return userResponseDTO;
+    }
+
+    @Secured(value = "ROLE_USER")
+    @RequestMapping(value = "/currently_logged", method = RequestMethod.GET)
+    public GetCurrentlyLoggedUserResponseDTO getCurrentlyLoggedUser() {
+        User user = usersService.getCurrentlyLoggedUser().get();
+
+        GetCurrentlyLoggedUserResponseDTO currentlyLoggedUser = new GetCurrentlyLoggedUserResponseDTO();
+        currentlyLoggedUser.setId(user.getId());
+        currentlyLoggedUser.setEmail(user.getEmail());
+        currentlyLoggedUser.setRecipes(user.getRecipes());
+        currentlyLoggedUser.setComments(user.getComments());
+        currentlyLoggedUser.setRegistrationDate(user.getRegistrationDate());
+        currentlyLoggedUser.setLastLogged(user.getLastLogged());
+
+        return currentlyLoggedUser;
     }
 }
