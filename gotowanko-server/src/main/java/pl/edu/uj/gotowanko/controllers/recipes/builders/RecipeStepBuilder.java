@@ -1,7 +1,5 @@
-package pl.edu.uj.gotowanko.controllers.recipes;
+package pl.edu.uj.gotowanko.controllers.recipes.builders;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import pl.edu.uj.gotowanko.entities.IngredientAmount;
 import pl.edu.uj.gotowanko.entities.RecipeStep;
 

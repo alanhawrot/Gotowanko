@@ -1,4 +1,4 @@
-package pl.edu.uj.gotowanko.controllers.recipes;
+package pl.edu.uj.gotowanko.controllers.recipes.builders;
 
 import pl.edu.uj.gotowanko.entities.Ingredient;
 import pl.edu.uj.gotowanko.entities.IngredientAmount;
@@ -6,7 +6,6 @@ import pl.edu.uj.gotowanko.entities.IngredientUnit;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredient;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientAmount;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientUnit;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchResourceException;
 import pl.edu.uj.gotowanko.repositories.IngredientRepository;
 import pl.edu.uj.gotowanko.repositories.IngredientUnitRepository;
 

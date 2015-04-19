@@ -1,4 +1,4 @@
-package pl.edu.uj.gotowanko.controllers.recipes;
+package pl.edu.uj.gotowanko.controllers.recipes.builders;
 
 import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.Recipe;
