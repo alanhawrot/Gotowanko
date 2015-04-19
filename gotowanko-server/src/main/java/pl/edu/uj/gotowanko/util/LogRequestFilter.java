@@ -42,14 +42,10 @@ public class LogRequestFilter implements Filter {
             //after chain has finished, request is processed, copy of request and response body is
             //available with .getCopy() methods.
 
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(request.getInputStream(), writer, "utf-8");
-            logger.error("boduy:"+StringEscapeUtils.escapeJava(writer.toString()));
+           /* ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
+            CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());*/
 
-            ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(httpRequest);
-            CopyOutputStream copyOutputStream = new CopyOutputStream(response.getOutputStream());
-
-            chain.doFilter(requestWrapper, new HttpServletResponseWrapper(httpResponse) {
+            chain.doFilter(httpRequest, httpResponse/*new HttpServletResponseWrapper(httpResponse) {
 
                 private PrintWriter printWriter = new PrintWriter(copyOutputStream);
 
@@ -63,7 +59,7 @@ public class LogRequestFilter implements Filter {
                     return printWriter;
                 }
 
-            });
+            }*/);
 
             String requestContentType = httpRequest.getHeader("content-type");
             String responseContentType = httpResponse.getContentType();
@@ -74,27 +70,26 @@ public class LogRequestFilter implements Filter {
                     .stream()
                     .map(x -> httpRequest.getHeader(x).toString())
                     .collect(Collectors.joining(", ")));
-            String requestBody = new String(requestWrapper.getContentAsByteArray());
+            /*String requestBody = new String(requestWrapper.getContentAsByteArray());
             if (requestContentType != null && requestContentType.startsWith("application/json") && !requestBody.isEmpty()) {
                 logger.info("Request body:" + LINE_SEPARATOR + objectMapper
                         .writerWithDefaultPrettyPrinter()
                         .writeValueAsString(objectMapper.readValue(requestBody, Object.class)));
             } else {
                 logger.info("Request body:" + LINE_SEPARATOR + requestBody);
-            }
-
+            }*/
             logger.info("Response Status: " + httpResponse.getStatus());
             logger.info("Response Content-Type: " + responseContentType);
 
 
-            String responseBody = copyOutputStream.getCopy();
+            /*String responseBody = copyOutputStream.getCopy();
             if (responseContentType != null && responseContentType.startsWith("application/json") && !responseBody.isEmpty()) {
                 logger.info("Response body:" + LINE_SEPARATOR + objectMapper
                         .writerWithDefaultPrettyPrinter()
                         .writeValueAsString(objectMapper.readValue(responseBody, Object.class)));
             } else {
                 logger.info("Response body:" + LINE_SEPARATOR + responseBody);
-            }
+            }*/
         } else {
             chain.doFilter(request, response);
         }
