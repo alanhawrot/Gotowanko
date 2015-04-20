@@ -31,9 +31,9 @@ public class IngredientUnitController {
         if (ingredientUnitRepository.findAll().isEmpty()) {
             logger.info("Initializing units");
             ingredientUnitRepository.save(new IngredientUnit("Kilogram", "Kg"));
-            ingredientUnitRepository.save(new IngredientUnit("Dekagram", "Dg"));
+            ingredientUnitRepository.save(new IngredientUnit("Dag", "Dg"));
             ingredientUnitRepository.save(new IngredientUnit("Gram", "g"));
-            ingredientUnitRepository.save(new IngredientUnit("Litr", "l"));
+            ingredientUnitRepository.save(new IngredientUnit("Liter", "l"));
         }
     }
 }

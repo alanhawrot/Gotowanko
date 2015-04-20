@@ -8,16 +8,16 @@ import org.hibernate.validator.constraints.NotBlank;
 public class CreateIngredientCategoryRequestDTO {
 
     @NotBlank
-    private String ingredientCategoryName;
+    private String name;
 
     private String iconUrl;
 
-    public String getIngredientCategoryName() {
-        return this.ingredientCategoryName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setIngredientCategoryName(String ingredientCategoryName) {
-        this.ingredientCategoryName = ingredientCategoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIconUrl() {

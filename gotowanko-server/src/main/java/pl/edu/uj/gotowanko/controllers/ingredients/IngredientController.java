@@ -39,7 +39,7 @@ public class IngredientController {
     public CreateIngredientResponseDTO createIngredient(@Valid @RequestBody CreateIngredientRequestDTO dto) throws NoSuchResourceException {
         Ingredient ingredient = new Ingredient();
         ingredient.setIconUrl(dto.getIconUrl());
-        ingredient.setName(dto.getIngredientName());
+        ingredient.setName(dto.getName());
         ingredient = ingredientRepository.save(ingredient);
 
         if(dto.getIngredientCategoryIds() != null) {
@@ -63,7 +63,7 @@ public class IngredientController {
     public CreateIngredientCategoryResponseDTO createIngredientCategory(@Valid @RequestBody CreateIngredientCategoryRequestDTO dto) {
         IngredientCategory category = new IngredientCategory();
         category.setIconUrl(dto.getIconUrl());
-        category.setName(dto.getIngredientCategoryName());
+        category.setName(dto.getName());
         category = ingredientCategoryRepository.save(category);
 
         CreateIngredientCategoryResponseDTO responseDTO = new CreateIngredientCategoryResponseDTO();

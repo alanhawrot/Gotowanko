@@ -9,19 +9,19 @@ import java.util.Set;
  */
 public class CreateIngredientRequestDTO {
     @NotBlank
-    private String ingredientName;
+    private String name;
 
     private String iconUrl;
 
 
     private Set<Long> ingredientCategoryIds;
 
-    public String getIngredientName() {
-        return ingredientName;
+    public String getName() {
+        return name;
     }
 
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIconUrl() {
