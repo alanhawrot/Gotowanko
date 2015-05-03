@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * Created by michal on 03.05.15.
  */
-@Entity
+@Entity(name = "RecipeUpdatePropositions")
 public class RecipeUpdateProposition {
 
     @Id

@@ -61,6 +61,9 @@ public class Recipe {
     @ManyToMany(targetEntity = User.class, mappedBy = "recipeLikes")
     private Collection<User> userLikes = new HashSet<>();
 
+    @OneToMany(targetEntity = RecipeUpdateProposition.class, mappedBy = "currentRecipe", cascade = CascadeType.ALL)
+    private Collection<RecipeUpdateProposition> updatePropositions = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -171,5 +174,13 @@ public class Recipe {
 
     public void setState(RecipeState state) {
         this.state = state;
+    }
+
+    public Collection<RecipeUpdateProposition> getUpdatePropositions() {
+        return updatePropositions;
+    }
+
+    public void setUpdatePropositions(Collection<RecipeUpdateProposition> updatePropositions) {
+        this.updatePropositions = updatePropositions;
     }
 }
