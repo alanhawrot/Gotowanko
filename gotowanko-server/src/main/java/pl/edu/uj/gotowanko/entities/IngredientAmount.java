@@ -22,7 +22,7 @@ public class IngredientAmount {
     private IngredientUnit ingredientUnit;
 
     @Column(nullable = false)
-    private Long amount;
+    private Double amount;
 
     public Long getId() {
         return id;
@@ -32,11 +32,11 @@ public class IngredientAmount {
         this.id = id;
     }
 
-    public Long getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

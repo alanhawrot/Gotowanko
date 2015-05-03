@@ -11,12 +11,13 @@ import pl.edu.uj.gotowanko.controllers.recipes.builders.RecipeBuilder;
 import pl.edu.uj.gotowanko.controllers.recipes.builders.RecipeStepBuilder;
 import pl.edu.uj.gotowanko.controllers.recipes.dto.*;
 import pl.edu.uj.gotowanko.controllers.users.UserService;
-import pl.edu.uj.gotowanko.entities.Recipe;
-import pl.edu.uj.gotowanko.entities.User;
+import pl.edu.uj.gotowanko.entities.*;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.*;
 import pl.edu.uj.gotowanko.repositories.RecipesRepository;
 
 import javax.validation.Valid;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Created by michal on 17.04.15.
@@ -73,6 +74,60 @@ public class RecipeController {
         CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
         responseDTO.setRecipeId(recipe.getId());
         return responseDTO;
+    }
+
+    @Transactional
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public GetRecipeResponseDTO getRecipe(@PathVariable Long id) throws NoSuchResourceException {
+        Recipe recipe = recipesRepository.findOne(id);
+        if (recipe == null)
+            throw new NoSuchResourceException("There is no recipe with given id");
+
+        GetRecipeResponseDTO dto = new GetRecipeResponseDTO();
+        dto.setTitle(recipe.getTitle());
+        dto.setDateAdded(recipe.getDateAdded());
+        dto.setLastEdited(recipe.getLastEdited());
+        dto.setApproximateCost(recipe.getApproximateCost());
+        dto.setLikesNumber(recipe.getUserLikes().size());
+        dto.setCookingTime(Duration.of(recipe.getCookingTimeInMinutes(), ChronoUnit.MINUTES));
+        dto.setPhotoUrl(recipe.getPhotoUrl());
+
+        //TODO: recipe.getUser().getName()
+        for (RecipeStep recipeStep : recipe.getRecipeSteps()) {
+            GetRecipeStepsResponseDTO recipeStepDto = new GetRecipeStepsResponseDTO();
+            recipeStepDto.setTitle(recipeStep.getTitle());
+            recipeStepDto.setDescription(recipeStep.getDescription());
+            for (IngredientAmount ingredientAmount : recipeStep.getIngredients()) {
+                GetRecipeStepIngredientResponseDTO recipeStepIngredientDto = new GetRecipeStepIngredientResponseDTO();
+                recipeStepIngredientDto.setId(ingredientAmount.getIngredient().getId());
+                recipeStepIngredientDto.setName(ingredientAmount.getIngredient().getName());
+                recipeStepIngredientDto.setAmount(ingredientAmount.getAmount());
+                recipeStepIngredientDto.setIconUrl(ingredientAmount.getIngredient().getIconUrl());
+                recipeStepIngredientDto.setUnitName(ingredientAmount.getIngredientUnit().getName());
+                recipeStepIngredientDto.setUnitShortName(ingredientAmount.getIngredientUnit().getShortName());
+                recipeStepIngredientDto.setUnitId(ingredientAmount.getIngredientUnit().getId());
+
+                recipeStepDto.getIngredients().add(recipeStepIngredientDto);
+            }
+            recipeStepDto.setPhotoUrl(recipeStep.getPhotoUrl());
+            recipeStepDto.setRealizationTime(Duration.of(recipeStep.getRealizationTimeInMinutes(), ChronoUnit.MINUTES));
+            recipeStepDto.setTimerDuration(Duration.of(recipeStep.getTimerDurationInMinutes(), ChronoUnit.MINUTES));
+            recipeStepDto.setVideoUrl(recipeStep.getVideoUrl());
+
+            dto.getRecipeSteps().add(recipeStepDto);
+        }
+
+        for (Comment comment : recipe.getComments()) {
+            //TODO: comment.getUser().getName();
+            GetRecipeCommentResponseDTO commentDto = new GetRecipeCommentResponseDTO();
+            commentDto.setLastEdited(comment.getLastEdited());
+            commentDto.setContent(comment.getContent());
+            commentDto.setId(comment.getId());
+
+            dto.getComments().add(commentDto);
+        }
+
+        return dto;
     }
 
     @Secured("ROLE_USER")

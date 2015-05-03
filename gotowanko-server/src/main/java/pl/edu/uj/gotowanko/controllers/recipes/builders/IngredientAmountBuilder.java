@@ -48,7 +48,7 @@ public class IngredientAmountBuilder {
         return this;
     }
 
-    public IngredientAmountBuilder withAmount(Long amount) throws InvalidIngredientAmount {
+    public IngredientAmountBuilder withAmount(Double amount) throws InvalidIngredientAmount {
         if (amount <= 0)
             throw new InvalidIngredientAmount(amount);
         ingredientAmount.setAmount(amount);

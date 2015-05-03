@@ -1,5 +1,6 @@
 package pl.edu.uj.gotowanko.controllers.recipes.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -14,13 +15,14 @@ public class CreateRecipeIngredientRequestDTO {
     private Long ingredientUnitId;
 
     @NotNull
-    private Long ingredientAmount;
+    @Min(0)
+    private Double ingredientAmount;
 
-    public Long getIngredientAmount() {
+    public Double getIngredientAmount() {
         return ingredientAmount;
     }
 
-    public void setIngredientAmount(Long ingredientAmount) {
+    public void setIngredientAmount(Double ingredientAmount) {
         this.ingredientAmount = ingredientAmount;
     }
 

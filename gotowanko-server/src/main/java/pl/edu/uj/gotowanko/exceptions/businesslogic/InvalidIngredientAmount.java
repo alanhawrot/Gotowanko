@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
  */
 public class InvalidIngredientAmount extends BusinessLogicException {
 
-    public InvalidIngredientAmount(Long amount) {
-        super(String.format("Ingredient amount can't be less or equal to 0. Got %d.", amount), HttpStatus.PRECONDITION_FAILED);
+    public InvalidIngredientAmount(Double amount) {
+        super(String.format("Ingredient amount can't be less or equal to 0. Got %f.", amount), HttpStatus.PRECONDITION_FAILED);
     }
 
 }
