@@ -8,6 +8,8 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.net.DatagramSocket;
+
 import static java.lang.String.format;
 
 /**
@@ -16,6 +18,7 @@ import static java.lang.String.format;
 @Service
 public class MailService {
     private static final Logger logger = LoggerFactory.getLogger(MailService.class.getSimpleName());
+    public static final String TEAM_EMAIL = "gotowanko.uj@gmail.com";
 
     @Autowired
     private MailSender mailSender;
@@ -74,6 +77,12 @@ public class MailService {
 
         public boolean send(String destinationEmail) {
             return MailService.this.send(sourceEmail, destinationEmail, title, bodyBuilder.toString());
+        }
+
+        public MailBuilder withGotowankoDefaultFooter() {
+            nextLine(format("%nBest regards,"));
+            nextLine(format("team gotowanko.pl"));
+            return this;
         }
     }
 }

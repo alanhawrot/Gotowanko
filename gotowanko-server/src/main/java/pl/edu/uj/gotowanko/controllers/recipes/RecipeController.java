@@ -20,6 +20,7 @@ import pl.edu.uj.gotowanko.util.PathService;
 import javax.validation.Valid;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -91,7 +92,7 @@ public class RecipeController {
             recipeBuilder.withRecipeStep(recipeStepBuilder.build());
         }
 
-        Recipe recipe  = recipesRepository.save(recipeBuilder.build());
+        Recipe recipe = recipesRepository.save(recipeBuilder.build());
         CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
         responseDTO.setRecipeId(recipe.getId());
         return responseDTO;
@@ -196,21 +197,55 @@ public class RecipeController {
         proposition.setUpdatedRecipe(updatedRecipe);
         proposition = recipeUpdatePropositionRepository.save(proposition);
 
-        mailService.from("team@gotowanko.pl")
+        mailService.from(mailService.TEAM_EMAIL)
                 .withTitle("Someone asks you to update recipe `%s`", currentRecipe.getTitle())
                 .nextLine("Hello %s,%n", requestedUser.getEmail()) //TODO: getName()?
                 .nextLine("User %s would like to improve your recipe titled `%s`.", requestingUser.getEmail(), currentRecipe.getTitle())
                 .nextLine("To check requested changes please click below link:")
                 .nextLine("%s%n", pathService.getWebUpdatePropositionPath(proposition.getId()))
                 .nextLine("If you want to ignore this change request please let us know why:")
-                .nextLine("%s%n", pathService.getWebRejectPropositionPath(proposition.getId()))
-                .nextLine("Best regards,")
-                .nextLine("team gotowanko.pl")
+                .nextLine("%s", pathService.getWebRejectPropositionPath(proposition.getId()))
+                .withGotowankoDefaultFooter()
                 .send(requestedUser.getEmail());
 
         RecipeUpdatePropositionResponseDTO responseDTO = new RecipeUpdatePropositionResponseDTO();
         responseDTO.setRecipeUpdatePropositionId(proposition.getId());
         return responseDTO;
+    }
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/{id}/proposition", method = RequestMethod.DELETE)
+    public void cancelProposition(@Valid @RequestBody CancelPropositionRequestDTO dto , @PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
+        RecipeUpdateProposition proposition = recipeUpdatePropositionRepository.findOne(id);
+
+        if (proposition == null)
+            throw new NoSuchResourceException("Recipe update proposition with such id doesn't exists");
+
+        User recipeOwner = proposition.getCurrentRecipe().getUser();
+        User updateRequester = proposition.getUpdatedRecipe().getUser();
+        User currentUser = userService.getCurrentlyLoggedUser().get();
+        if (!Arrays.asList(recipeOwner, updateRequester).stream().anyMatch(currentUser::equals))
+            throw new PermissionDeniedException("You doesn't have permission to cancel that proposition");
+
+        if (recipeOwner.equals(currentUser)) {
+            mailService.from(mailService.TEAM_EMAIL)
+                    .withTitle("Update recipe request has been rejected")
+                    .nextLine("Hello %s,%n", updateRequester.getEmail())
+                    .nextLine("We are sorry, but %s has rejected update proposition to recipe `%s`", recipeOwner.getEmail(), proposition.getCurrentRecipe().getTitle())
+                    .nextLine("We received fallowing reason:")
+                    .nextLine("%s%n", dto.getReason())
+                    .nextLine("Please write your own version of the recipe instead.")
+                    .withGotowankoDefaultFooter()
+                    .send(updateRequester.getEmail());
+        }
+
+        Recipe rejectedUpdate = proposition.getUpdatedRecipe();
+        recipeUpdatePropositionRepository.delete(proposition);
+        recipesRepository.delete(rejectedUpdate);
+
+
     }
 
     @Secured(value = "ROLE_USER")
