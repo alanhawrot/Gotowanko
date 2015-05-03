@@ -15,6 +15,9 @@ public class RecipeStep {
     private Long id;
 
     @Column(nullable = false)
+    private Long stepNumber;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -35,7 +38,7 @@ public class RecipeStep {
     @OneToMany(targetEntity = IngredientAmount.class, mappedBy = "recipeStep", cascade = CascadeType.ALL)
     private Collection<IngredientAmount> ingredients = new ArrayList<>();
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Recipe recipe;
 
     public Long getId() {
@@ -112,5 +115,13 @@ public class RecipeStep {
 
     public void addIngredient(IngredientAmount ingredientAmount) {
         ingredients.add(ingredientAmount);
+    }
+
+    public Long getStepNumber() {
+        return stepNumber;
+    }
+
+    public void setStepNumber(Long stepNumber) {
+        this.stepNumber = stepNumber;
     }
 }

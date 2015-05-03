@@ -4,24 +4,21 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.Collection;
 
 /**
- * Created by michal on 17.04.15.
+ * Created by michal on 03.05.15.
  */
-public class CreateRecipeRequestDTO {
+public class UpdatePropositionRequestDTO {
     @NotBlank
     private String title;
 
     @NotEmpty
-    private List<CreateRecipeStepRequestDTO> recipeSteps;
+    private Collection<UpdatePropositionRecipeStepRequestDTO> recipeSteps;
 
     private Integer approximateCost;
-
     private Duration cookingTime;
-
     private String photoUrl;
-
 
     public String getTitle() {
         return title;
@@ -29,14 +26,6 @@ public class CreateRecipeRequestDTO {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public List<CreateRecipeStepRequestDTO> getRecipeSteps() {
-        return recipeSteps;
-    }
-
-    public void setRecipeSteps(List<CreateRecipeStepRequestDTO> recipeSteps) {
-        this.recipeSteps = recipeSteps;
     }
 
     public Integer getApproximateCost() {
@@ -61,5 +50,13 @@ public class CreateRecipeRequestDTO {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Collection<UpdatePropositionRecipeStepRequestDTO> getRecipeSteps() {
+        return recipeSteps;
+    }
+
+    public void setRecipeSteps(Collection<UpdatePropositionRecipeStepRequestDTO> recipeSteps) {
+        this.recipeSteps = recipeSteps;
     }
 }

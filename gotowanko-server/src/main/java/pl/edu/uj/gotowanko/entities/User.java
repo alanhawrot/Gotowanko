@@ -39,6 +39,26 @@ public class User {
     @ManyToMany(targetEntity = Recipe.class)
     private Collection<Recipe> recipeLikes = new HashSet<>();
 
+    /**
+     * Compare User instances by id.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
     public Long getId() {
         return id;
     }

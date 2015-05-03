@@ -21,7 +21,7 @@
 
     <jpa:repositories base-package="pl.edu.uj.gotowanko.repositories"/>
 
-    <context:component-scan base-package="pl.edu.uj.gotowanko.controllers, pl.edu.uj.gotowanko.exceptions"/>
+    <context:component-scan base-package="pl.edu.uj.gotowanko.controllers, pl.edu.uj.gotowanko.exceptions, pl.edu.uj.gotowanko.util"/>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
@@ -87,6 +87,21 @@
 
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="username" value="gotowanko.uj" />
+        <property name="port" value="587" />
+        <property name="password" value="semik.hawrot" />
+        <property name="protocol" value="smtp" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.quitwait">false</prop>
+            </props>
+        </property>
     </bean>
 
 </beans>

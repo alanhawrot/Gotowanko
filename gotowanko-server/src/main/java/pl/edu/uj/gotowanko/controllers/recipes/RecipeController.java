@@ -13,11 +13,14 @@ import pl.edu.uj.gotowanko.controllers.recipes.dto.*;
 import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.*;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.*;
-import pl.edu.uj.gotowanko.repositories.RecipesRepository;
+import pl.edu.uj.gotowanko.repositories.*;
+import pl.edu.uj.gotowanko.util.MailService;
+import pl.edu.uj.gotowanko.util.PathService;
 
 import javax.validation.Valid;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 
 /**
  * Created by michal on 17.04.15.
@@ -31,17 +34,35 @@ public class RecipeController {
     private RecipesRepository recipesRepository;
 
     @Autowired
+    private IngredientAmountRepository ingredientAmountRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private RecipeStepsRepository recipeStepsRepository;
+
+    @Autowired
+    private RecipeUpdatePropositionRepository recipeUpdatePropositionRepository;
+
+    @Autowired
     private RecipeFactory recipeFactory;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private PathService pathService;
 
     @Secured(value = "ROLE_USER")
     @Transactional
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateRecipeResponseDTO createRecipe(@Valid @RequestBody CreateRecipeRequestDTO dto)
-            throws InvalidIngredientUnit, InvalidIngredientAmount, InvalidIngredient {
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient {
 
         RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
                 .withTitle(dto.getTitle())
@@ -52,6 +73,7 @@ public class RecipeController {
         for (CreateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
             RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
                     .withTitle(stepDto.getTitle())
+                    .withStepNumber(stepDto.getStepNumber())
                     .withDescription(stepDto.getDescription())
                     .withPhotoUrl(stepDto.getPhotoUrl())
                     .withVideoUrl(stepDto.getVideoUrl())
@@ -69,11 +91,140 @@ public class RecipeController {
             recipeBuilder.withRecipeStep(recipeStepBuilder.build());
         }
 
-        Recipe recipe = recipeBuilder.build();
-        recipe = recipesRepository.save(recipe);
+        Recipe recipe  = recipesRepository.save(recipeBuilder.build());
         CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
         responseDTO.setRecipeId(recipe.getId());
         return responseDTO;
+    }
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public void updateRecipeRequest(@Valid @RequestBody UpdateRecipeRequestDTO dto, @PathVariable Long id)
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
+
+        Recipe recipe = recipesRepository.findOne(id);
+
+        if (recipe == null)
+            throw new NoSuchResourceException("Recipe with such id doesn't exists");
+
+        if (!userService.getCurrentlyLoggedUser().get().equals(recipe.getUser()))
+            throw new PermissionDeniedException("Not an owner of the recipe");
+
+        recipe.getRecipeSteps().forEach(recipeStepsRepository::delete);
+        recipe.getRecipeSteps().clear();
+
+        RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe(recipe)
+                .withLastEdited(Calendar.getInstance())
+                .withTitle(dto.getTitle())
+                .withApproximateCost(dto.getApproximateCost())
+                .withCookingTimeInMinutes(dto.getCookingTime())
+                .withPhotoUrl(dto.getPhotoUrl());
+        //TODO: withRating(?)
+        for (UpdateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
+            RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
+                    .withTitle(stepDto.getTitle())
+                    .withStepNumber(stepDto.getStepNumber())
+                    .withDescription(stepDto.getDescription())
+                    .withPhotoUrl(stepDto.getPhotoUrl())
+                    .withVideoUrl(stepDto.getVideoUrl())
+                    .withRealizationTime(stepDto.getRealizationTime())
+                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
+
+            for (UpdateRecipeIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
+                recipeStepBuilder.withIngredient(
+                        recipeFactory.builderForIngredientAmount()
+                                .withAmount(ingredientDto.getIngredientAmount())
+                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredientUnit(ingredientDto.getIngredientUnitId())
+                                .build());
+            }
+            recipeBuilder.withRecipeStep(recipeStepBuilder.build());
+        }
+
+        recipe = recipesRepository.save(recipeBuilder.build());
+    }
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/{id}/proposition", method = RequestMethod.POST)
+    public RecipeUpdatePropositionResponseDTO updateProposition(@Valid @RequestBody UpdatePropositionRequestDTO dto, @PathVariable Long id)
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
+
+        Recipe currentRecipe = recipesRepository.findOne(id);
+
+        if (currentRecipe == null)
+            throw new NoSuchResourceException("Recipe with such id doesn't exists");
+
+        User requestingUser = userService.getCurrentlyLoggedUser().get();
+        User requestedUser = currentRecipe.getUser();
+        if (requestingUser.equals(requestedUser))
+            throw new PermissionDeniedException("Can't send update proposition for your own recipe");
+
+        RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
+                .withRecipeState(Recipe.RecipeState.UPDATE_PROPOSITION)
+                .withTitle(dto.getTitle())
+                .withApproximateCost(dto.getApproximateCost())
+                .withCookingTimeInMinutes(dto.getCookingTime())
+                .withPhotoUrl(dto.getPhotoUrl());
+        //TODO: withRating(?)
+        for (UpdatePropositionRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
+            RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
+                    .withTitle(stepDto.getTitle())
+                    .withStepNumber(stepDto.getStepNumber())
+                    .withDescription(stepDto.getDescription())
+                    .withPhotoUrl(stepDto.getPhotoUrl())
+                    .withVideoUrl(stepDto.getVideoUrl())
+                    .withRealizationTime(stepDto.getRealizationTime())
+                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
+
+            for (UpdateRecipePropositionIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
+                recipeStepBuilder.withIngredient(
+                        recipeFactory.builderForIngredientAmount()
+                                .withAmount(ingredientDto.getIngredientAmount())
+                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredientUnit(ingredientDto.getIngredientUnitId())
+                                .build());
+            }
+            recipeBuilder.withRecipeStep(recipeStepBuilder.build());
+        }
+
+        Recipe updatedRecipe = recipesRepository.save(recipeBuilder.build());
+        RecipeUpdateProposition proposition = new RecipeUpdateProposition();
+        proposition.setCurrentRecipe(currentRecipe);
+        proposition.setUpdatedRecipe(updatedRecipe);
+        proposition = recipeUpdatePropositionRepository.save(proposition);
+
+        mailService.from("team@gotowanko.pl")
+                .withTitle("Someone asks you to update recipe `%s`", currentRecipe.getTitle())
+                .nextLine("Hello %s,%n", requestedUser.getEmail()) //TODO: getName()?
+                .nextLine("User %s would like to improve your recipe titled `%s`.", requestingUser.getEmail(), currentRecipe.getTitle())
+                .nextLine("To check requested changes please click below link:")
+                .nextLine("%s%n", pathService.getWebUpdatePropositionPath(proposition.getId()))
+                .nextLine("If you want to ignore this change request please let us know why:")
+                .nextLine("%s%n", pathService.getWebRejectPropositionPath(proposition.getId()))
+                .nextLine("Best regards,")
+                .nextLine("team gotowanko.pl")
+                .send(requestedUser.getEmail());
+
+        RecipeUpdatePropositionResponseDTO responseDTO = new RecipeUpdatePropositionResponseDTO();
+        responseDTO.setRecipeUpdatePropositionId(proposition.getId());
+        return responseDTO;
+    }
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteRecipe(@PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
+        Recipe recipe = recipesRepository.findOne(id);
+        if (recipe == null)
+            throw new NoSuchResourceException("There is no recipe with given id");
+
+        if (!userService.getCurrentlyLoggedUser().get().equals(recipe.getUser()))
+            throw new PermissionDeniedException("Not an owner of the recipe");
+
+        recipesRepository.delete(recipe);
     }
 
     @Transactional

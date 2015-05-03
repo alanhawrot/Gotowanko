@@ -3,9 +3,9 @@ package pl.edu.uj.gotowanko.controllers.recipes.builders;
 import pl.edu.uj.gotowanko.entities.Ingredient;
 import pl.edu.uj.gotowanko.entities.IngredientAmount;
 import pl.edu.uj.gotowanko.entities.IngredientUnit;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredient;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchIngredient;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientAmount;
-import pl.edu.uj.gotowanko.exceptions.businesslogic.InvalidIngredientUnit;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchIngredientUnit;
 import pl.edu.uj.gotowanko.repositories.IngredientRepository;
 import pl.edu.uj.gotowanko.repositories.IngredientUnitRepository;
 
@@ -32,18 +32,18 @@ public class IngredientAmountBuilder {
         this.ingredientRepository = ingredientRepository;
     }
 
-    public IngredientAmountBuilder withIngredient(Long ingredientId) throws InvalidIngredient {
+    public IngredientAmountBuilder withIngredient(Long ingredientId) throws NoSuchIngredient {
         Ingredient ingredient = ingredientRepository.findOne(ingredientId);
         if (ingredient == null)
-            throw new InvalidIngredient(ingredientId);
+            throw new NoSuchIngredient(ingredientId);
         ingredientAmount.setIngredient(ingredient);
         return this;
     }
 
-    public IngredientAmountBuilder withIngredientUnit(Long unitId) throws InvalidIngredientUnit {
+    public IngredientAmountBuilder withIngredientUnit(Long unitId) throws NoSuchIngredientUnit {
         IngredientUnit ingredientUnit = ingredientUnitRepository.findOne(unitId);
         if (ingredientUnit == null)
-            throw new InvalidIngredientUnit(unitId);
+            throw new NoSuchIngredientUnit(unitId);
         ingredientAmount.setIngredientUnit(ingredientUnit);
         return this;
     }

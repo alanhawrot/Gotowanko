@@ -16,9 +16,17 @@ public class Recipe {
 
     private static final String DEFAULT_RECIPE_IMAGE = "/images/recipe/noImage.png";
 
+    public enum RecipeState {
+        NORMAL, UPDATE_PROPOSITION;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RecipeState state;
 
     @Column(nullable = false)
     private String title;
@@ -155,5 +163,13 @@ public class Recipe {
 
     public boolean containsUserLike(User user) {
         return getUserLikes().contains(user);
+    }
+
+    public RecipeState getState() {
+        return state;
+    }
+
+    public void setState(RecipeState state) {
+        this.state = state;
     }
 }

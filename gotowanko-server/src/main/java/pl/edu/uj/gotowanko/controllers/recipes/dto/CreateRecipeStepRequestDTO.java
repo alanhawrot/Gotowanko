@@ -3,6 +3,7 @@ package pl.edu.uj.gotowanko.controllers.recipes.dto;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class CreateRecipeStepRequestDTO {
 
     @NotNull
+    @Min(0)
     private Long stepNumber;
 
     @NotBlank
@@ -95,4 +97,6 @@ public class CreateRecipeStepRequestDTO {
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
+
+
 }

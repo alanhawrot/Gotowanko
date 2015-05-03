@@ -73,4 +73,9 @@ public class RecipeStepBuilder {
         return result;
 
     }
+
+    public RecipeStepBuilder withStepNumber(Long stepNumber) {
+        this.recipeStep.setStepNumber(stepNumber);
+        return this;
+    }
 }

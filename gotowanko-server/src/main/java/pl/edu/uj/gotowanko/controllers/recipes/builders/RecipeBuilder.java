@@ -30,6 +30,9 @@ public class RecipeBuilder {
             if (currentlyLoggedUser.isPresent())
                 recipe.setUser(currentlyLoggedUser.get());
         }
+
+        if(recipe.getState() == null)
+            recipe.setState(Recipe.RecipeState.NORMAL);
     }
 
     public RecipeBuilder(UserService userService) {
@@ -63,6 +66,16 @@ public class RecipeBuilder {
         return this;
     }
 
+    public RecipeBuilder withLastEdited(Calendar instance) {
+        recipe.setLastEdited(instance);
+        return this;
+    }
+
+    public RecipeBuilder withRecipeState(Recipe.RecipeState updateProposition) {
+        recipe.setState(updateProposition);
+        return this;
+    }
+
     public Recipe build() {
         if (recipe == null)
             throw new IllegalStateException("RecipeBuilder may not be reused");
@@ -75,10 +88,13 @@ public class RecipeBuilder {
         if (recipe.getDateAdded() == null)
             throw new IllegalStateException("Date added must be set before building recipe");
         if (recipe.getRecipeSteps() == null || recipe.getRecipeSteps().isEmpty())
-            throw new IllegalStateException("Atleast one recipe step must be set before building recipe");
+            throw new IllegalStateException("At least one recipe step must be set before building recipe");
+        if(recipe.getState() == null)
+            throw  new IllegalStateException("Recipe state must be set before building recipe");
 
         Recipe result = this.recipe;
         this.recipe = null;
         return result;
     }
+
 }
