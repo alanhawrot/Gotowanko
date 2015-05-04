@@ -7,6 +7,7 @@ import pl.edu.uj.gotowanko.entities.User;
 
 import java.time.Duration;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -31,7 +32,7 @@ public class RecipeBuilder {
                 recipe.setUser(currentlyLoggedUser.get());
         }
 
-        if(recipe.getState() == null)
+        if (recipe.getState() == null)
             recipe.setState(Recipe.RecipeState.NORMAL);
     }
 
@@ -66,6 +67,13 @@ public class RecipeBuilder {
         return this;
     }
 
+    public RecipeBuilder withRecipeSteps(Collection<RecipeStep> recipeSteps) {
+        recipe.getRecipeSteps().addAll(recipeSteps);
+        for (RecipeStep step : recipeSteps)
+            step.setRecipe(recipe);
+        return this;
+    }
+
     public RecipeBuilder withLastEdited(Calendar instance) {
         recipe.setLastEdited(instance);
         return this;
@@ -89,12 +97,11 @@ public class RecipeBuilder {
             throw new IllegalStateException("Date added must be set before building recipe");
         if (recipe.getRecipeSteps() == null || recipe.getRecipeSteps().isEmpty())
             throw new IllegalStateException("At least one recipe step must be set before building recipe");
-        if(recipe.getState() == null)
-            throw  new IllegalStateException("Recipe state must be set before building recipe");
+        if (recipe.getState() == null)
+            throw new IllegalStateException("Recipe state must be set before building recipe");
 
         Recipe result = this.recipe;
         this.recipe = null;
         return result;
     }
-
 }

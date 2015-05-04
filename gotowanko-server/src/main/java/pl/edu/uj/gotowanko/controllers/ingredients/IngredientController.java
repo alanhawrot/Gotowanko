@@ -1,5 +1,7 @@
 package pl.edu.uj.gotowanko.controllers.ingredients;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -14,6 +16,7 @@ import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchResourceException;
 import pl.edu.uj.gotowanko.repositories.IngredientCategoryRepository;
 import pl.edu.uj.gotowanko.repositories.IngredientRepository;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -25,12 +28,46 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/ingredients")
 public class IngredientController {
+    private static final Logger logger = LoggerFactory.getLogger(IngredientController.class.getSimpleName());
 
     @Autowired
     private IngredientRepository ingredientRepository;
 
     @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
+
+    @PostConstruct
+    @Transactional
+    public void initializeIngredients() {
+        if (ingredientRepository.findAll().isEmpty()) {
+            logger.info("Initializing ingredients");
+
+            IngredientCategory vegetables = new IngredientCategory("Warzywa");
+
+            IngredientCategory meat = new IngredientCategory("Mięso");
+
+            IngredientCategory sausages = new IngredientCategory("Kiełbasy");
+            meat.addIngredient(sausages);
+
+            vegetables.addIngredient(new Ingredient("Marchewka"));
+
+            vegetables.addIngredient(new Ingredient("Rzodkiewka"));
+
+            vegetables.addIngredient(new Ingredient("Sałata lodowa"));
+
+            sausages.addIngredient(new Ingredient("Kiełbasa śląska"));
+
+            sausages.addIngredient(new Ingredient("Kiełbasa podwawelska"));
+
+            meat.addIngredient(new Ingredient("Szynka wiejska"));
+
+            meat.addIngredient(new Ingredient("Łosoś"));
+
+
+            ingredientCategoryRepository.save(vegetables);
+            ingredientCategoryRepository.save(meat);
+        }
+    }
 
     @Secured("ROLE_USER")
     @Transactional
@@ -42,10 +79,10 @@ public class IngredientController {
         ingredient.setName(dto.getName());
         ingredient = ingredientRepository.save(ingredient);
 
-        if(dto.getIngredientCategoryIds() != null) {
-            for(Long categoryId : dto.getIngredientCategoryIds()) {
+        if (dto.getIngredientCategoryIds() != null) {
+            for (Long categoryId : dto.getIngredientCategoryIds()) {
                 IngredientCategory ingredientCategory = ingredientCategoryRepository.findOne(categoryId);
-                if(ingredientCategory == null)
+                if (ingredientCategory == null)
                     throw new NoSuchResourceException("ingredient category with id %d doesn't exists", categoryId);
                 ingredientCategory.addIngredient(ingredient);
                 ingredientCategoryRepository.save(ingredientCategory);

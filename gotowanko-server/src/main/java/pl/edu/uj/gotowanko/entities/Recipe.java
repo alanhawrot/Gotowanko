@@ -124,7 +124,7 @@ public class Recipe {
         return recipeSteps;
     }
 
-    private void setRecipeSteps(Collection<RecipeStep> recipeSteps) {
+    public void setRecipeSteps(Collection<RecipeStep> recipeSteps) {
         this.recipeSteps = recipeSteps;
     }
 

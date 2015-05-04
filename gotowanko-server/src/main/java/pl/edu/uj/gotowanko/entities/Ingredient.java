@@ -23,6 +23,15 @@ public class Ingredient {
     @ColumnDefault("'" + DEFAULT_INGREDIENT_IMAGE + "'")
     private String iconUrl;
 
+    public Ingredient() {
+        this.iconUrl = DEFAULT_INGREDIENT_IMAGE;
+    }
+
+    public Ingredient(String name) {
+        this.name = name;
+        this.iconUrl = DEFAULT_INGREDIENT_IMAGE;
+    }
+
     public Long getId() {
         return id;
     }

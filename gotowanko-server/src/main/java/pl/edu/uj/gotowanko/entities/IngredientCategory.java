@@ -1,9 +1,6 @@
 package pl.edu.uj.gotowanko.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -13,11 +10,19 @@ import java.util.HashSet;
 @Entity(name = "IngredientCategories")
 public class IngredientCategory extends Ingredient {
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "ingredientcategory_subingredients",
             joinColumns = @JoinColumn(name = "ingredientcategory"),
             inverseJoinColumns = @JoinColumn(name = "subingredient"))
     private Collection<Ingredient> ingredients = new HashSet<>();
+
+    public IngredientCategory() {
+
+    }
+
+    public IngredientCategory(String name) {
+        super(name);
+    }
 
     public Collection<Ingredient> getIngredients() {
         return ingredients;

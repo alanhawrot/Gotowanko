@@ -216,8 +216,52 @@ public class RecipeController {
     @Secured(value = "ROLE_USER")
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/{id}/proposition", method = RequestMethod.DELETE)
-    public void cancelProposition(@Valid @RequestBody CancelPropositionRequestDTO dto , @PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
+    @RequestMapping(value = "/proposition/{id}", method = RequestMethod.PUT)
+    public void acceptProposition(@PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
+        RecipeUpdateProposition proposition = recipeUpdatePropositionRepository.findOne(id);
+
+        if (proposition == null)
+            throw new NoSuchResourceException("Recipe update proposition with such id doesn't exists");
+
+        Recipe currentRecipe = proposition.getCurrentRecipe();
+        Recipe recipeUpdate = proposition.getUpdatedRecipe();
+
+        User recipeOwner = currentRecipe.getUser();
+        User updateRequester = proposition.getUpdatedRecipe().getUser();
+        User currentUser = userService.getCurrentlyLoggedUser().get();
+
+        if (!currentUser.equals(recipeOwner))
+            throw new PermissionDeniedException("You doesn't have permission to accept that proposition");
+
+        mailService.from(mailService.TEAM_EMAIL)
+                .withTitle("Update recipe request has been accepted")
+                .nextLine("Hello %s,%n", updateRequester.getEmail())
+                .nextLine("We are happy to let you know, that update proposition to recipe `%s` has been accepted by the owner.", currentRecipe.getTitle())
+                .nextLine("Thank you for your contribution.")
+                .withGotowankoDefaultFooter()
+                .send(updateRequester.getEmail());
+
+        currentRecipe.getRecipeSteps().forEach(recipeStepsRepository::delete);
+        currentRecipe.getRecipeSteps().clear();
+        recipesRepository.save(
+                recipeFactory.builderForRecipe(currentRecipe)
+                        .withTitle(recipeUpdate.getTitle())
+                        .withLastEdited(Calendar.getInstance())
+                        .withPhotoUrl(recipeUpdate.getPhotoUrl())
+                        .withApproximateCost(recipeUpdate.getApproximateCost())
+                        .withCookingTimeInMinutes(Duration.of(recipeUpdate.getCookingTimeInMinutes(), ChronoUnit.MINUTES))
+                        .withRecipeSteps(recipeUpdate.getRecipeSteps())
+                        .build());
+        recipeUpdatePropositionRepository.delete(proposition);
+        recipesRepository.delete(recipeUpdate);
+
+    }
+
+    @Secured(value = "ROLE_USER")
+    @Transactional
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/proposition/{id}", method = RequestMethod.DELETE)
+    public void cancelProposition(@Valid @RequestBody CancelPropositionRequestDTO dto, @PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
         RecipeUpdateProposition proposition = recipeUpdatePropositionRepository.findOne(id);
 
         if (proposition == null)
@@ -229,7 +273,7 @@ public class RecipeController {
         if (!Arrays.asList(recipeOwner, updateRequester).stream().anyMatch(currentUser::equals))
             throw new PermissionDeniedException("You doesn't have permission to cancel that proposition");
 
-        if (recipeOwner.equals(currentUser)) {
+        if (currentUser.equals(recipeOwner)) {
             mailService.from(mailService.TEAM_EMAIL)
                     .withTitle("Update recipe request has been rejected")
                     .nextLine("Hello %s,%n", updateRequester.getEmail())
@@ -239,12 +283,19 @@ public class RecipeController {
                     .nextLine("Please write your own version of the recipe instead.")
                     .withGotowankoDefaultFooter()
                     .send(updateRequester.getEmail());
+        } else if (currentUser.equals(updateRequester)) {
+            mailService.from(mailService.TEAM_EMAIL)
+                    .withTitle("Update recipe request has been cancelled")
+                    .nextLine("Hello %s,%n", updateRequester.getEmail())
+                    .nextLine("%s has cancelled update request to recipe `%s`.", updateRequester.getEmail(), proposition.getCurrentRecipe().getTitle())
+                    .nextLine("Link will be no longer available, so please ignore it.")
+                    .withGotowankoDefaultFooter()
+                    .send(recipeOwner.getEmail());
         }
 
         Recipe rejectedUpdate = proposition.getUpdatedRecipe();
         recipeUpdatePropositionRepository.delete(proposition);
         recipesRepository.delete(rejectedUpdate);
-
 
     }
 
