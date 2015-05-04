@@ -14,14 +14,17 @@ import pl.edu.uj.gotowanko.controllers.users.UserService;
 import pl.edu.uj.gotowanko.entities.*;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.*;
 import pl.edu.uj.gotowanko.repositories.*;
+import pl.edu.uj.gotowanko.util.GetFilteredRecipesSortOptions;
 import pl.edu.uj.gotowanko.util.MailService;
 import pl.edu.uj.gotowanko.util.PathService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.util.*;
 
 /**
  * Created by michal on 17.04.15.
@@ -32,7 +35,7 @@ public class RecipeController {
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class.getSimpleName());
 
     @Autowired
-    private RecipesRepository recipesRepository;
+    private RecipeRepository recipeRepository;
 
     @Autowired
     private IngredientAmountRepository ingredientAmountRepository;
@@ -41,7 +44,7 @@ public class RecipeController {
     private CommentRepository commentRepository;
 
     @Autowired
-    private RecipeStepsRepository recipeStepsRepository;
+    private RecipeStepRepository recipeStepRepository;
 
     @Autowired
     private RecipeUpdatePropositionRepository recipeUpdatePropositionRepository;
@@ -57,6 +60,9 @@ public class RecipeController {
 
     @Autowired
     private PathService pathService;
+
+    @Autowired
+    private RecipeComparatorFactory recipeComparatorFactory;
 
     @Secured(value = "ROLE_USER")
     @Transactional
@@ -92,7 +98,7 @@ public class RecipeController {
             recipeBuilder.withRecipeStep(recipeStepBuilder.build());
         }
 
-        Recipe recipe = recipesRepository.save(recipeBuilder.build());
+        Recipe recipe = recipeRepository.save(recipeBuilder.build());
         CreateRecipeResponseDTO responseDTO = new CreateRecipeResponseDTO();
         responseDTO.setRecipeId(recipe.getId());
         return responseDTO;
@@ -104,7 +110,7 @@ public class RecipeController {
     public void updateRecipeRequest(@Valid @RequestBody UpdateRecipeRequestDTO dto, @PathVariable Long id)
             throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
 
-        Recipe recipe = recipesRepository.findOne(id);
+        Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null)
             throw new NoSuchResourceException("Recipe with such id doesn't exists");
@@ -112,7 +118,7 @@ public class RecipeController {
         if (!userService.getCurrentlyLoggedUser().get().equals(recipe.getUser()))
             throw new PermissionDeniedException("Not an owner of the recipe");
 
-        recipe.getRecipeSteps().forEach(recipeStepsRepository::delete);
+        recipe.getRecipeSteps().forEach(recipeStepRepository::delete);
         recipe.getRecipeSteps().clear();
 
         RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe(recipe)
@@ -143,7 +149,7 @@ public class RecipeController {
             recipeBuilder.withRecipeStep(recipeStepBuilder.build());
         }
 
-        recipe = recipesRepository.save(recipeBuilder.build());
+        recipe = recipeRepository.save(recipeBuilder.build());
     }
 
     @Secured(value = "ROLE_USER")
@@ -153,7 +159,7 @@ public class RecipeController {
     public RecipeUpdatePropositionResponseDTO updateProposition(@Valid @RequestBody UpdatePropositionRequestDTO dto, @PathVariable Long id)
             throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
 
-        Recipe currentRecipe = recipesRepository.findOne(id);
+        Recipe currentRecipe = recipeRepository.findOne(id);
 
         if (currentRecipe == null)
             throw new NoSuchResourceException("Recipe with such id doesn't exists");
@@ -191,7 +197,7 @@ public class RecipeController {
             recipeBuilder.withRecipeStep(recipeStepBuilder.build());
         }
 
-        Recipe updatedRecipe = recipesRepository.save(recipeBuilder.build());
+        Recipe updatedRecipe = recipeRepository.save(recipeBuilder.build());
         RecipeUpdateProposition proposition = new RecipeUpdateProposition();
         proposition.setCurrentRecipe(currentRecipe);
         proposition.setUpdatedRecipe(updatedRecipe);
@@ -241,9 +247,9 @@ public class RecipeController {
                 .withGotowankoDefaultFooter()
                 .send(updateRequester.getEmail());
 
-        currentRecipe.getRecipeSteps().forEach(recipeStepsRepository::delete);
+        currentRecipe.getRecipeSteps().forEach(recipeStepRepository::delete);
         currentRecipe.getRecipeSteps().clear();
-        recipesRepository.save(
+        recipeRepository.save(
                 recipeFactory.builderForRecipe(currentRecipe)
                         .withTitle(recipeUpdate.getTitle())
                         .withLastEdited(Calendar.getInstance())
@@ -253,7 +259,7 @@ public class RecipeController {
                         .withRecipeSteps(recipeUpdate.getRecipeSteps())
                         .build());
         recipeUpdatePropositionRepository.delete(proposition);
-        recipesRepository.delete(recipeUpdate);
+        recipeRepository.delete(recipeUpdate);
 
     }
 
@@ -295,7 +301,8 @@ public class RecipeController {
 
         Recipe rejectedUpdate = proposition.getUpdatedRecipe();
         recipeUpdatePropositionRepository.delete(proposition);
-        recipesRepository.delete(rejectedUpdate);
+        recipeRepository.delete(rejectedUpdate);
+
 
     }
 
@@ -303,20 +310,20 @@ public class RecipeController {
     @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteRecipe(@PathVariable Long id) throws NoSuchResourceException, PermissionDeniedException {
-        Recipe recipe = recipesRepository.findOne(id);
+        Recipe recipe = recipeRepository.findOne(id);
         if (recipe == null)
             throw new NoSuchResourceException("There is no recipe with given id");
 
         if (!userService.getCurrentlyLoggedUser().get().equals(recipe.getUser()))
             throw new PermissionDeniedException("Not an owner of the recipe");
 
-        recipesRepository.delete(recipe);
+        recipeRepository.delete(recipe);
     }
 
     @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public GetRecipeResponseDTO getRecipe(@PathVariable Long id) throws NoSuchResourceException {
-        Recipe recipe = recipesRepository.findOne(id);
+        Recipe recipe = recipeRepository.findOne(id);
         if (recipe == null)
             throw new NoSuchResourceException("There is no recipe with given id");
 
@@ -370,7 +377,7 @@ public class RecipeController {
     @Secured("ROLE_USER")
     @RequestMapping(value = "/{id}/liked", method = RequestMethod.GET)
     public LikedRecipeResponseDTO likeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyLikedException {
-        Recipe recipe = recipesRepository.findOne(id);
+        Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
             throw new NoSuchResourceException("There is no recipe with given id");
@@ -404,7 +411,7 @@ public class RecipeController {
     @Secured("ROLE_USER")
     @RequestMapping(value = "/{id}/disliked", method = RequestMethod.GET)
     public DislikedRecipeResponseDTO dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyDislikedException {
-        Recipe recipe = recipesRepository.findOne(id);
+        Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
             throw new NoSuchResourceException("There is no recipe with given id");
@@ -433,5 +440,105 @@ public class RecipeController {
         dislikedRecipe.setUserLikes(recipe.getUserLikes());
 
         return dislikedRecipe;
+    }
+
+    @Transactional
+    @RequestMapping(method = RequestMethod.GET)
+    public GetFilteredRecipesPageableDTO searchRecipes(@RequestParam(value = "query", defaultValue = "") String query,
+                                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "20") Integer size,
+                                                       @RequestParam(value = "sort", defaultValue = "BY_DATE_ADDED") String sort) throws UnsupportedEncodingException {
+        if (page < 1) {
+            page = 1;
+        }
+
+        if (size < 1) {
+            size = 20;
+        }
+
+        GetFilteredRecipesSortOptions sortOption = GetFilteredRecipesSortOptions.BY_DATE_ADDED;
+        GetFilteredRecipesSortOptions[] sortOptions = GetFilteredRecipesSortOptions.values();
+        for (GetFilteredRecipesSortOptions so : sortOptions) {
+            if (so.toString().compareToIgnoreCase(sort) == 0) {
+                sortOption = so;
+            }
+        }
+
+        String decodedQuery = URLDecoder.decode(query, "UTF-8");
+        String[] keywords = decodedQuery.split("\\*");
+        List<Recipe> filteredRecipes = new ArrayList<>();
+
+        if (keywords.length > 0) {
+            String firstKeyword = keywords[0].trim();
+
+            filteredRecipes.addAll(recipeRepository.findByTitleContainingIgnoreCaseOrUser_EmailContainingIgnoreCaseAndState(firstKeyword, firstKeyword, Recipe.RecipeState.NORMAL));
+            List<IngredientAmount> queriedIngredients = ingredientAmountRepository.findByIngredient_NameContainingIgnoreCase(firstKeyword);
+
+            queriedIngredients.stream().map(IngredientAmount::getRecipeStep).map(RecipeStep::getRecipe).forEach(r -> {
+                if (r.getState() == Recipe.RecipeState.NORMAL && !filteredRecipes.contains(r)) {
+                    filteredRecipes.add(r);
+                }
+            });
+
+            for (int i = 1; i < keywords.length; i++) {
+                String keyword = keywords[i].trim();
+
+                filteredRecipes.stream().filter(r -> r.getTitle().compareToIgnoreCase(keyword) == 0
+                        || r.getUser().getEmail().compareToIgnoreCase(keyword) == 0
+                        || r.getRecipeSteps().stream()
+                        .anyMatch(rs -> rs.getIngredients().stream()
+                                .anyMatch(ia -> ia.getIngredient().getName().compareToIgnoreCase(keyword) == 0)));
+            }
+        }
+
+        Collections.sort(filteredRecipes, recipeComparatorFactory.createRecipeComparator(sortOption));
+
+        GetFilteredRecipesPageableDTO getFilteredRecipesPageableDTO = new GetFilteredRecipesPageableDTO();
+
+        GetFilteredRecipesPageableDTO.PageMetadata pageMetadata = getFilteredRecipesPageableDTO.createPageMetadata();
+        pageMetadata.setSize(size);
+        pageMetadata.setTotalElements(filteredRecipes.size());
+        pageMetadata.setNumber(page);
+        pageMetadata.setTotalPages(filteredRecipes.size() % size > 0 ? filteredRecipes.size() / size + 1 : filteredRecipes.size() / size);
+
+        getFilteredRecipesPageableDTO.setPageMetadata(pageMetadata);
+
+        for (int i = (page - 1) * size; i < size * page && i < pageMetadata.getTotalElements(); i++) {
+            Recipe r = filteredRecipes.get(i);
+
+            GetFilteredRecipesPageableDTO.FilteredRecipeDTO filteredRecipeDTO = getFilteredRecipesPageableDTO.createFilteredRecipeDTO();
+            filteredRecipeDTO.setId(r.getId());
+            filteredRecipeDTO.setTitle(r.getTitle());
+            filteredRecipeDTO.setUserEmail(r.getUser().getEmail());
+            filteredRecipeDTO.setNumberOfLikes(r.getUserLikes().size());
+            filteredRecipeDTO.setPhotoUrl(r.getPhotoUrl());
+            filteredRecipeDTO.setDateAdded(r.getDateAdded());
+            filteredRecipeDTO.setLastEdited(r.getLastEdited());
+
+            getFilteredRecipesPageableDTO.addFilteredRecipeDTO(filteredRecipeDTO);
+        }
+
+        if (page > 1 && page <= pageMetadata.getTotalPages()) {
+            GetFilteredRecipesPageableDTO.Link prev = getFilteredRecipesPageableDTO.createLink();
+            prev.setPage("prev");
+            prev.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page - 1) + "&size=" + size + "&sort=" + sortOption.toString());
+            getFilteredRecipesPageableDTO.addLink(prev);
+        }
+
+        for (int i = 1; i <= pageMetadata.getTotalPages(); i++) {
+            GetFilteredRecipesPageableDTO.Link link = getFilteredRecipesPageableDTO.createLink();
+            link.setPage(String.valueOf(i));
+            link.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + i + "&size=" + size + "&sort=" + sortOption.toString());
+            getFilteredRecipesPageableDTO.addLink(link);
+        }
+
+        if (page < pageMetadata.getTotalPages()) {
+            GetFilteredRecipesPageableDTO.Link next = getFilteredRecipesPageableDTO.createLink();
+            next.setPage("next");
+            next.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page + 1) + "&size=" + size + "&sort=" + sortOption.toString());
+            getFilteredRecipesPageableDTO.addLink(next);
+        }
+
+        return getFilteredRecipesPageableDTO;
     }
 }

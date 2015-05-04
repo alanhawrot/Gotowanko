@@ -20,7 +20,7 @@ public class PathService {
     private String ROOT_URL = format("http://%s:%s", "localhost", "8080");
 
     public String getServerRoot() {
-        return ROOT_URL;
+        return ROOT_URL + "/rest";
     }
 
     public String getWebRoot() { //TODO: fix web address
