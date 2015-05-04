@@ -76,7 +76,6 @@ public class RecipeController {
                 .withApproximateCost(dto.getApproximateCost())
                 .withCookingTimeInMinutes(dto.getCookingTime())
                 .withPhotoUrl(dto.getPhotoUrl());
-        //TODO: withRating(?)
         for (CreateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
             RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
                     .withTitle(stepDto.getTitle())
@@ -127,7 +126,6 @@ public class RecipeController {
                 .withApproximateCost(dto.getApproximateCost())
                 .withCookingTimeInMinutes(dto.getCookingTime())
                 .withPhotoUrl(dto.getPhotoUrl());
-        //TODO: withRating(?)
         for (UpdateRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
             RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
                     .withTitle(stepDto.getTitle())
@@ -175,7 +173,6 @@ public class RecipeController {
                 .withApproximateCost(dto.getApproximateCost())
                 .withCookingTimeInMinutes(dto.getCookingTime())
                 .withPhotoUrl(dto.getPhotoUrl());
-        //TODO: withRating(?)
         for (UpdatePropositionRecipeStepRequestDTO stepDto : dto.getRecipeSteps()) {
             RecipeStepBuilder recipeStepBuilder = recipeFactory.builderForRecipeStep()
                     .withTitle(stepDto.getTitle())
@@ -205,8 +202,8 @@ public class RecipeController {
 
         mailService.from(mailService.TEAM_EMAIL)
                 .withTitle("Someone asks you to update recipe `%s`", currentRecipe.getTitle())
-                .nextLine("Hello %s,%n", requestedUser.getEmail()) //TODO: getName()?
-                .nextLine("User %s would like to improve your recipe titled `%s`.", requestingUser.getEmail(), currentRecipe.getTitle())
+                .nextLine("Hello %s,%n", requestedUser.getName())
+                .nextLine("User %s would like to improve your recipe titled `%s`.", requestingUser.getName(), currentRecipe.getTitle())
                 .nextLine("To check requested changes please click below link:")
                 .nextLine("%s%n", pathService.getWebUpdatePropositionPath(proposition.getId()))
                 .nextLine("If you want to ignore this change request please let us know why:")
@@ -241,7 +238,7 @@ public class RecipeController {
 
         mailService.from(mailService.TEAM_EMAIL)
                 .withTitle("Update recipe request has been accepted")
-                .nextLine("Hello %s,%n", updateRequester.getEmail())
+                .nextLine("Hello %s,%n", updateRequester.getName())
                 .nextLine("We are happy to let you know, that update proposition to recipe `%s` has been accepted by the owner.", currentRecipe.getTitle())
                 .nextLine("Thank you for your contribution.")
                 .withGotowankoDefaultFooter()
@@ -282,8 +279,8 @@ public class RecipeController {
         if (currentUser.equals(recipeOwner)) {
             mailService.from(mailService.TEAM_EMAIL)
                     .withTitle("Update recipe request has been rejected")
-                    .nextLine("Hello %s,%n", updateRequester.getEmail())
-                    .nextLine("We are sorry, but %s has rejected update proposition to recipe `%s`", recipeOwner.getEmail(), proposition.getCurrentRecipe().getTitle())
+                    .nextLine("Hello %s,%n", updateRequester.getName())
+                    .nextLine("We are sorry, but %s has rejected update proposition to recipe `%s`", recipeOwner.getName(), proposition.getCurrentRecipe().getTitle())
                     .nextLine("We received fallowing reason:")
                     .nextLine("%s%n", dto.getReason())
                     .nextLine("Please write your own version of the recipe instead.")
@@ -292,8 +289,8 @@ public class RecipeController {
         } else if (currentUser.equals(updateRequester)) {
             mailService.from(mailService.TEAM_EMAIL)
                     .withTitle("Update recipe request has been cancelled")
-                    .nextLine("Hello %s,%n", updateRequester.getEmail())
-                    .nextLine("%s has cancelled update request to recipe `%s`.", updateRequester.getEmail(), proposition.getCurrentRecipe().getTitle())
+                    .nextLine("Hello %s,%n", updateRequester.getName())
+                    .nextLine("%s has cancelled update request to recipe `%s`.", updateRequester.getName(), proposition.getCurrentRecipe().getTitle())
                     .nextLine("Link will be no longer available, so please ignore it.")
                     .withGotowankoDefaultFooter()
                     .send(recipeOwner.getEmail());
@@ -335,8 +332,8 @@ public class RecipeController {
         dto.setLikesNumber(recipe.getUserLikes().size());
         dto.setCookingTime(Duration.of(recipe.getCookingTimeInMinutes(), ChronoUnit.MINUTES));
         dto.setPhotoUrl(recipe.getPhotoUrl());
+        dto.setUserName(recipe.getUser().getName());
 
-        //TODO: recipe.getUser().getName()
         for (RecipeStep recipeStep : recipe.getRecipeSteps()) {
             GetRecipeStepsResponseDTO recipeStepDto = new GetRecipeStepsResponseDTO();
             recipeStepDto.setTitle(recipeStep.getTitle());
@@ -362,8 +359,8 @@ public class RecipeController {
         }
 
         for (Comment comment : recipe.getComments()) {
-            //TODO: comment.getUser().getName();
             GetRecipeCommentResponseDTO commentDto = new GetRecipeCommentResponseDTO();
+            commentDto.setUserName(comment.getUser().getName());
             commentDto.setLastEdited(comment.getLastEdited());
             commentDto.setContent(comment.getContent());
             commentDto.setId(comment.getId());
@@ -510,6 +507,7 @@ public class RecipeController {
             filteredRecipeDTO.setId(r.getId());
             filteredRecipeDTO.setTitle(r.getTitle());
             filteredRecipeDTO.setUserEmail(r.getUser().getEmail());
+            filteredRecipeDTO.setUserName(r.getUser().getName());
             filteredRecipeDTO.setNumberOfLikes(r.getUserLikes().size());
             filteredRecipeDTO.setPhotoUrl(r.getPhotoUrl());
             filteredRecipeDTO.setDateAdded(r.getDateAdded());

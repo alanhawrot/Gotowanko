@@ -42,6 +42,7 @@ public class GetFilteredRecipesPageableDTO {
         private Long id;
         private String title;
         private String userEmail;
+        private String userName;
         private Integer numberOfLikes;
         private String photoUrl;
         private Calendar dateAdded;
@@ -101,6 +102,14 @@ public class GetFilteredRecipesPageableDTO {
 
         public void setLastEdited(Calendar lastEdited) {
             this.lastEdited = lastEdited;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getUserName() {
+            return userName;
         }
     }
 

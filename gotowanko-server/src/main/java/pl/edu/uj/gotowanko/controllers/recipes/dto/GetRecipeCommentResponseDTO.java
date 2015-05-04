@@ -9,6 +9,7 @@ public class GetRecipeCommentResponseDTO {
     private Long id;
     private String content;
     private Calendar lastEdited;
+    private String userName;
 
     public Long getId() {
         return id;
@@ -35,4 +36,11 @@ public class GetRecipeCommentResponseDTO {
     }
 
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }

@@ -22,6 +22,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String name;
+
     @OneToMany(mappedBy = "user")
     private Collection<Recipe> recipes = new HashSet<>();
 
@@ -133,5 +136,13 @@ public class User {
 
     public boolean containsRecipeLike(Recipe recipe) {
         return getRecipeLikes().contains(recipe);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

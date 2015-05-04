@@ -1,5 +1,7 @@
 package pl.edu.uj.gotowanko.entities;
 
+import org.hibernate.annotations.FetchProfile;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +12,7 @@ import java.util.HashSet;
 @Entity(name = "IngredientCategories")
 public class IngredientCategory extends Ingredient {
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "ingredientcategory_subingredients",
             joinColumns = @JoinColumn(name = "ingredientcategory"),
             inverseJoinColumns = @JoinColumn(name = "subingredient"))

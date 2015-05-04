@@ -14,6 +14,7 @@ public class GetCurrentlyLoggedUserResponseDTO {
 
     private long id;
     private String email;
+    private String name;
     private Collection<Recipe> recipes;
     private Collection<Comment> comments;
     private Calendar registrationDate;
@@ -68,5 +69,13 @@ public class GetCurrentlyLoggedUserResponseDTO {
 
     public void setLastLogged(Calendar lastLogged) {
         this.lastLogged = lastLogged;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

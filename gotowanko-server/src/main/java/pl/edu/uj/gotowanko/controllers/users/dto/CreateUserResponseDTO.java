@@ -11,6 +11,7 @@ public class CreateUserResponseDTO {
     private long id;
     private String email;
     private Calendar registrationDate;
+    private String name;
 
     public CreateUserResponseDTO() {
     }
@@ -37,5 +38,13 @@ public class CreateUserResponseDTO {
 
     public void setRegistrationDate(Calendar registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

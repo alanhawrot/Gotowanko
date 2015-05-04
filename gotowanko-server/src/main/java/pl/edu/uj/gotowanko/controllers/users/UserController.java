@@ -41,6 +41,7 @@ public class UserController {
         User newUser = new User();
         newUser.setEmail(createUserRequestDTO.getEmail());
         newUser.setPassword(createUserRequestDTO.getPassword());
+        newUser.setName(createUserRequestDTO.getName());
         Calendar calendar = Calendar.getInstance();
         newUser.setRegistrationDate(calendar);
         newUser.setLastLogged(calendar);
@@ -50,6 +51,7 @@ public class UserController {
         CreateUserResponseDTO createUserResponseDTO = new CreateUserResponseDTO();
         createUserResponseDTO.setId(newUser.getId());
         createUserResponseDTO.setEmail(newUser.getEmail());
+        createUserResponseDTO.setName(newUser.getName());
         createUserResponseDTO.setRegistrationDate(newUser.getRegistrationDate());
 
         return createUserResponseDTO;
@@ -71,6 +73,7 @@ public class UserController {
 
         modifiedUser.setEmail(updateUserRequestDTO.getEmail());
         modifiedUser.setPassword(updateUserRequestDTO.getPassword());
+        modifiedUser.setName(updateUserRequestDTO.getName());
 
         userRepository.save(modifiedUser);
     }
@@ -104,6 +107,7 @@ public class UserController {
         GetUserResponseDTO userResponseDTO = new GetUserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setEmail(user.getEmail());
+        userResponseDTO.setName(user.getName());
         userResponseDTO.setRegistrationDate(user.getRegistrationDate());
         userResponseDTO.setLastLogged(user.getLastLogged());
         userResponseDTO.setRecipes(user.getRecipes());
@@ -120,6 +124,7 @@ public class UserController {
         GetCurrentlyLoggedUserResponseDTO currentlyLoggedUser = new GetCurrentlyLoggedUserResponseDTO();
         currentlyLoggedUser.setId(user.getId());
         currentlyLoggedUser.setEmail(user.getEmail());
+        currentlyLoggedUser.setName(user.getName());
         currentlyLoggedUser.setRecipes(user.getRecipes());
         currentlyLoggedUser.setComments(user.getComments());
         currentlyLoggedUser.setRegistrationDate(user.getRegistrationDate());

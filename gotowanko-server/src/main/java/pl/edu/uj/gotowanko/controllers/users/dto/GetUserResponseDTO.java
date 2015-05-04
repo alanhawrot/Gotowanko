@@ -13,6 +13,7 @@ public class GetUserResponseDTO {
 
     private long id;
     private String email;
+    private String name;
     private Collection<Recipe> recipes;
     private Collection<Comment> comments;
     private Calendar registrationDate;
@@ -67,5 +68,13 @@ public class GetUserResponseDTO {
 
     public void setLastLogged(Calendar lastLogged) {
         this.lastLogged = lastLogged;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

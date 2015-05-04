@@ -18,6 +18,7 @@ public class GetRecipeResponseDTO {
     private String photoUrl;
     private Collection<GetRecipeStepsResponseDTO> recipeSteps = new ArrayList<>();
     private Collection<GetRecipeCommentResponseDTO> comments = new ArrayList<>();
+    private String userName;
 
     public void setTitle(String title) {
         this.title = title;
@@ -92,4 +93,11 @@ public class GetRecipeResponseDTO {
     }
 
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }
