@@ -14,7 +14,7 @@ import javax.validation.Valid;
 /**
  * Created by alanhawrot on 17.03.15.
  */
-@RestController
+@RestController(value = "/rest")
 public class HomeController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class.getSimpleName());
