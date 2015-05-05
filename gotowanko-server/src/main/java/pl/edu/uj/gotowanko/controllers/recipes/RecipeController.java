@@ -512,7 +512,7 @@ public class RecipeController {
     @Secured("ROLE_USER")
     @Transactional
     @RequestMapping(value = "/{recipeId}/comments", method = RequestMethod.POST)
-    public void addComment(@PathVariable Long recipeId, @Valid @RequestBody AddCommentRequestDTO addCommentRequestDTO) throws NoSuchResourceException {
+    public AddCommentResponseDTO addComment(@PathVariable Long recipeId, @Valid @RequestBody AddCommentRequestDTO addCommentRequestDTO) throws NoSuchResourceException {
         Recipe recipe = recipeRepository.findOne(recipeId);
 
         if (recipe == null) {
@@ -530,6 +530,11 @@ public class RecipeController {
         comment.setUser(user);
 
         commentRepository.save(comment);
+
+        AddCommentResponseDTO addCommentResponseDTO = new AddCommentResponseDTO();
+        addCommentResponseDTO.setId(comment.getId());
+
+        return addCommentResponseDTO;
     }
 
     @Secured("ROLE_USER")
