@@ -122,7 +122,15 @@ public class UserController {
 
             userResponseDTO.getRecipes().add(recipeResponseDTO);
         });
-        //TODO: comments
+        user.getComments().forEach(c -> {
+            GetUserCommentResponseDTO commentResponseDTO = new GetUserCommentResponseDTO();
+            commentResponseDTO.setId(c.getId());
+            commentResponseDTO.setContent(c.getContent());
+            commentResponseDTO.setLastEdited(c.getLastEdited());
+            commentResponseDTO.setRecipeId(c.getRecipe().getId());
+
+            userResponseDTO.getComments().add(commentResponseDTO);
+        });
 
         return userResponseDTO;
     }
@@ -148,7 +156,15 @@ public class UserController {
 
             currentlyLoggedUser.getRecipes().add(recipeResponseDTO);
         });
-        //TODO: comments
+        user.getComments().forEach(c -> {
+            GetUserCommentResponseDTO commentResponseDTO = new GetUserCommentResponseDTO();
+            commentResponseDTO.setId(c.getId());
+            commentResponseDTO.setContent(c.getContent());
+            commentResponseDTO.setLastEdited(c.getLastEdited());
+            commentResponseDTO.setRecipeId(c.getRecipe().getId());
+
+            currentlyLoggedUser.getComments().add(commentResponseDTO);
+        });
 
         return currentlyLoggedUser;
     }

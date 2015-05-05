@@ -46,9 +46,6 @@ public class RecipeController {
     private RecipeStepRepository recipeStepRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private RecipeUpdatePropositionRepository recipeUpdatePropositionRepository;
 
     @Autowired
@@ -376,7 +373,7 @@ public class RecipeController {
     @Secured("ROLE_USER")
     @Transactional
     @RequestMapping(value = "/{id}/liked", method = RequestMethod.GET)
-    public GetRecipeResponseDTO likeRecipe(@PathVariable Long id) throws NoSuchResourceException {
+    public void likeRecipe(@PathVariable Long id) throws NoSuchResourceException {
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
@@ -389,14 +386,12 @@ public class RecipeController {
             recipe.addUserLike(user);
             recipeRepository.save(recipe);
         }
-
-        return getRecipe(id);
     }
 
     @Secured("ROLE_USER")
     @Transactional
     @RequestMapping(value = "/{id}/disliked", method = RequestMethod.GET)
-    public GetRecipeResponseDTO dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException {
+    public void dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException {
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
@@ -409,16 +404,14 @@ public class RecipeController {
             recipe.removeUserLike(user);
             recipeRepository.save(recipe);
         }
-
-        return getRecipe(id);
     }
 
     @Transactional
     @RequestMapping(method = RequestMethod.GET)
     public GetFilteredRecipesPageableResponseDTO searchRecipes(@RequestParam(value = "query", defaultValue = "") String query,
-                                                       @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                       @RequestParam(value = "size", defaultValue = "20") Integer size,
-                                                       @RequestParam(value = "sort", defaultValue = "BY_DATE_ADDED") String sort) throws UnsupportedEncodingException {
+                                                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                               @RequestParam(value = "size", defaultValue = "20") Integer size,
+                                                               @RequestParam(value = "sort", defaultValue = "BY_DATE_ADDED") String sort) throws UnsupportedEncodingException {
         if (page < 1) {
             page = 1;
         }
@@ -512,5 +505,80 @@ public class RecipeController {
         }
 
         return getFilteredRecipesPageableResponseDTO;
+    }
+
+    @Secured("ROLE_USER")
+    @Transactional
+    @RequestMapping(value = "/{recipeId}/comments", method = RequestMethod.POST)
+    public void addComment(@PathVariable Long recipeId, @Valid @RequestBody AddCommentRequestDTO addCommentRequestDTO) throws NoSuchResourceException {
+        Recipe recipe = recipeRepository.findOne(recipeId);
+
+        if (recipe == null) {
+            throw new NoSuchResourceException("There is no recipe with given id");
+        }
+
+        User user = userService.getCurrentlyLoggedUser().get();
+
+        Comment comment = new Comment();
+        Calendar calendar = Calendar.getInstance();
+        comment.setDateAdded(calendar);
+        comment.setLastEdited(calendar);
+        comment.setContent(addCommentRequestDTO.getContent());
+        comment.setRecipe(recipe);
+        comment.setUser(user);
+
+        commentRepository.save(comment);
+    }
+
+    @Secured("ROLE_USER")
+    @Transactional
+    @RequestMapping(value = "/{recipeId}/comments/{commentId}", method = RequestMethod.PUT)
+    public void editComment(@PathVariable Long recipeId, @PathVariable Long commentId, @Valid @RequestBody AddCommentRequestDTO addCommentRequestDTO)
+            throws NoSuchResourceException, PermissionDeniedException {
+        Recipe recipe = recipeRepository.findOne(recipeId);
+
+        if (recipe == null) {
+            throw new NoSuchResourceException("There is no recipe with given id");
+        }
+
+        Comment comment = commentRepository.findOne(commentId);
+
+        if (comment == null) {
+            throw new NoSuchResourceException("There is no comment with given id");
+        }
+
+        User user = userService.getCurrentlyLoggedUser().get();
+
+        if (!comment.getUser().equals(user)) {
+            throw new PermissionDeniedException("You doesn't have permission to edit that comment");
+        }
+
+        comment.setContent(addCommentRequestDTO.getContent());
+        commentRepository.save(comment);
+    }
+
+    @Secured("ROLE_USER")
+    @Transactional
+    @RequestMapping(value = "/{recipeId}/comments/{commentId}", method = RequestMethod.DELETE)
+    public void deleteComment(@PathVariable Long recipeId, @PathVariable Long commentId) throws NoSuchResourceException, PermissionDeniedException {
+        Recipe recipe = recipeRepository.findOne(recipeId);
+
+        if (recipe == null) {
+            throw new NoSuchResourceException("There is no recipe with given id");
+        }
+
+        Comment comment = commentRepository.findOne(commentId);
+
+        if (comment == null) {
+            throw new NoSuchResourceException("There is no comment with given id");
+        }
+
+        User user = userService.getCurrentlyLoggedUser().get();
+
+        if (!comment.getUser().equals(user)) {
+            throw new PermissionDeniedException("You doesn't have permission to delete that comment");
+        }
+
+        commentRepository.delete(comment);
     }
 }
