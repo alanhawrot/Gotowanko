@@ -435,7 +435,8 @@ public class RecipeController {
         if (keywords.length > 0) {
             String firstKeyword = keywords[0].trim();
 
-            filteredRecipes.addAll(recipeRepository.findByTitleContainingIgnoreCaseOrUser_EmailContainingIgnoreCaseAndState(firstKeyword, firstKeyword, Recipe.RecipeState.NORMAL));
+            filteredRecipes.addAll(recipeRepository.findByTitleContainingIgnoreCaseOrUser_EmailContainingIgnoreCaseOrUser_NameContainingIgnoreCaseAndState(
+                    firstKeyword, firstKeyword, firstKeyword, Recipe.RecipeState.NORMAL));
             List<IngredientAmount> queriedIngredients = ingredientAmountRepository.findByIngredient_NameContainingIgnoreCase(firstKeyword);
 
             queriedIngredients.stream().map(IngredientAmount::getRecipeStep).map(RecipeStep::getRecipe).forEach(r -> {
@@ -445,13 +446,14 @@ public class RecipeController {
             });
 
             for (int i = 1; i < keywords.length; i++) {
-                String keyword = keywords[i].trim();
+                String keyword = keywords[i].toUpperCase().trim();
 
-                filteredRecipes.stream().filter(r -> r.getTitle().compareToIgnoreCase(keyword) == 0
-                        || r.getUser().getEmail().compareToIgnoreCase(keyword) == 0
+                filteredRecipes.stream().filter(r -> r.getTitle().toUpperCase().contains(keyword)
+                        || r.getUser().getEmail().toUpperCase().contains(keyword)
+                        || r.getUser().getName().toUpperCase().contains(keyword)
                         || r.getRecipeSteps().stream()
                         .anyMatch(rs -> rs.getIngredients().stream()
-                                .anyMatch(ia -> ia.getIngredient().getName().compareToIgnoreCase(keyword) == 0)));
+                                .anyMatch(ia -> ia.getIngredient().getName().toUpperCase().contains(keyword))));
             }
         }
 
