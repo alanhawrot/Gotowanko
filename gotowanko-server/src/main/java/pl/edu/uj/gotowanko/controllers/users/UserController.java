@@ -1,10 +1,6 @@
 package pl.edu.uj.gotowanko.controllers.users;
 
-import pl.edu.uj.gotowanko.controllers.users.dto.GetCurrentlyLoggedUserResponseDTO;
-import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserRequestDTO;
-import pl.edu.uj.gotowanko.controllers.users.dto.CreateUserResponseDTO;
-import pl.edu.uj.gotowanko.controllers.users.dto.GetUserResponseDTO;
-import pl.edu.uj.gotowanko.controllers.users.dto.UpdateUserRequestDTO;
+import pl.edu.uj.gotowanko.controllers.users.dto.*;
 import pl.edu.uj.gotowanko.entities.*;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.NoSuchResourceException;
 import pl.edu.uj.gotowanko.exceptions.businesslogic.PermissionDeniedException;
@@ -15,7 +11,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.uj.gotowanko.repositories.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -31,6 +29,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Transactional
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO) throws ResourceAlreadyExistsException {
@@ -58,6 +57,7 @@ public class UserController {
     }
 
     @Secured(value = "ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) throws PermissionDeniedException, NoSuchResourceException {
         String authenticatedUserEmail = userService.getCurrentlyLoggedUserEmail().get();
@@ -79,6 +79,7 @@ public class UserController {
     }
 
     @Secured(value = "ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable Long id) throws PermissionDeniedException, NoSuchResourceException {
         String authenticatedUserEmail = userService.getCurrentlyLoggedUserEmail().get();
@@ -96,6 +97,7 @@ public class UserController {
     }
 
     @Secured(value = "ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public GetUserResponseDTO getUser(@PathVariable Long id) throws NoSuchResourceException {
         User user = userRepository.findOne(id);
@@ -110,13 +112,23 @@ public class UserController {
         userResponseDTO.setName(user.getName());
         userResponseDTO.setRegistrationDate(user.getRegistrationDate());
         userResponseDTO.setLastLogged(user.getLastLogged());
-        userResponseDTO.setRecipes(user.getRecipes());
-        userResponseDTO.setComments(user.getComments());
+        user.getRecipes().forEach(r -> {
+            GetUserRecipeResponseDTO recipeResponseDTO = new GetUserRecipeResponseDTO();
+            recipeResponseDTO.setId(r.getId());
+            recipeResponseDTO.setTitle(r.getTitle());
+            recipeResponseDTO.setDateAdded(r.getDateAdded());
+            recipeResponseDTO.setLastEdited(r.getLastEdited());
+            recipeResponseDTO.setLikesNumber(r.getUserLikes().size());
+
+            userResponseDTO.getRecipes().add(recipeResponseDTO);
+        });
+        //TODO: comments
 
         return userResponseDTO;
     }
 
     @Secured(value = "ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/currently_logged", method = RequestMethod.GET)
     public GetCurrentlyLoggedUserResponseDTO getCurrentlyLoggedUser() {
         User user = userService.getCurrentlyLoggedUser().get();
@@ -125,10 +137,18 @@ public class UserController {
         currentlyLoggedUser.setId(user.getId());
         currentlyLoggedUser.setEmail(user.getEmail());
         currentlyLoggedUser.setName(user.getName());
-        currentlyLoggedUser.setRecipes(user.getRecipes());
-        currentlyLoggedUser.setComments(user.getComments());
         currentlyLoggedUser.setRegistrationDate(user.getRegistrationDate());
         currentlyLoggedUser.setLastLogged(user.getLastLogged());
+        user.getRecipes().forEach(r -> {
+            GetUserRecipeResponseDTO recipeResponseDTO = new GetUserRecipeResponseDTO();
+            recipeResponseDTO.setId(r.getId());
+            recipeResponseDTO.setTitle(r.getTitle());
+            recipeResponseDTO.setDateAdded(r.getDateAdded());
+            recipeResponseDTO.setLastEdited(r.getLastEdited());
+
+            currentlyLoggedUser.getRecipes().add(recipeResponseDTO);
+        });
+        //TODO: comments
 
         return currentlyLoggedUser;
     }

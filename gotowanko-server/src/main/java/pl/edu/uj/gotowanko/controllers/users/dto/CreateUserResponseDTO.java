@@ -13,9 +13,6 @@ public class CreateUserResponseDTO {
     private Calendar registrationDate;
     private String name;
 
-    public CreateUserResponseDTO() {
-    }
-
     public long getId() {
         return id;
     }

@@ -39,7 +39,7 @@ public class User {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastLogged;
 
-    @ManyToMany(targetEntity = Recipe.class)
+    @ManyToMany(targetEntity = Recipe.class, mappedBy = "userLikes")
     private Collection<Recipe> recipeLikes = new HashSet<>();
 
     /**
@@ -52,9 +52,8 @@ public class User {
 
         User user = (User) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        return !(id != null ? !id.equals(user.id) : user.id != null);
 
-        return true;
     }
 
     @Override

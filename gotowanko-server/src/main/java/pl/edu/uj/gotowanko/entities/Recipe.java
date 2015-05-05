@@ -58,7 +58,7 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Collection<Comment> comments = new HashSet<>();
 
-    @ManyToMany(targetEntity = User.class, mappedBy = "recipeLikes")
+    @ManyToMany(targetEntity = User.class, cascade = CascadeType.ALL)
     private Collection<User> userLikes = new HashSet<>();
 
     @OneToMany(targetEntity = RecipeUpdateProposition.class, mappedBy = "currentRecipe", cascade = CascadeType.ALL)

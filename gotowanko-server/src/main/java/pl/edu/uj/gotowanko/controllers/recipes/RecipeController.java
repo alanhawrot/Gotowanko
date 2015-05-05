@@ -19,7 +19,6 @@ import pl.edu.uj.gotowanko.util.MailService;
 import pl.edu.uj.gotowanko.util.PathService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.Duration;
@@ -45,6 +44,9 @@ public class RecipeController {
 
     @Autowired
     private RecipeStepRepository recipeStepRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private RecipeUpdatePropositionRepository recipeUpdatePropositionRepository;
@@ -372,8 +374,9 @@ public class RecipeController {
     }
 
     @Secured("ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/{id}/liked", method = RequestMethod.GET)
-    public LikedRecipeResponseDTO likeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyLikedException {
+    public GetRecipeResponseDTO likeRecipe(@PathVariable Long id) throws NoSuchResourceException {
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
@@ -382,32 +385,18 @@ public class RecipeController {
 
         User user = userService.getCurrentlyLoggedUser().get();
 
-        if (user.containsRecipeLike(recipe)) {
-            throw new RecipeAlreadyLikedException("Given user has already liked given recipe");
+        if (!recipe.getUserLikes().contains(user)) {
+            recipe.addUserLike(user);
+            recipeRepository.save(recipe);
         }
 
-        recipe.addUserLike(user);
-        user.addRecipeLike(recipe);
-
-        LikedRecipeResponseDTO likedRecipe = new LikedRecipeResponseDTO();
-        likedRecipe.setId(recipe.getId());
-        likedRecipe.setTitle(recipe.getTitle());
-        likedRecipe.setPhotoUrl(recipe.getPhotoUrl());
-        likedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
-        likedRecipe.setApproximateCost(recipe.getApproximateCost());
-        likedRecipe.setDateAdded(recipe.getDateAdded());
-        likedRecipe.setLastEdited(recipe.getLastEdited());
-        likedRecipe.setRecipeSteps(recipe.getRecipeSteps());
-        likedRecipe.setUser(recipe.getUser());
-        likedRecipe.setComments(recipe.getComments());
-        likedRecipe.setUserLikes(recipe.getUserLikes());
-
-        return likedRecipe;
+        return getRecipe(id);
     }
 
     @Secured("ROLE_USER")
+    @Transactional
     @RequestMapping(value = "/{id}/disliked", method = RequestMethod.GET)
-    public DislikedRecipeResponseDTO dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException, RecipeAlreadyDislikedException {
+    public GetRecipeResponseDTO dislikeRecipe(@PathVariable Long id) throws NoSuchResourceException {
         Recipe recipe = recipeRepository.findOne(id);
 
         if (recipe == null) {
@@ -416,32 +405,17 @@ public class RecipeController {
 
         User user = userService.getCurrentlyLoggedUser().get();
 
-        if (!user.containsRecipeLike(recipe)) {
-            throw new RecipeAlreadyDislikedException("Given user has already disliked given recipe");
+        if (recipe.getUserLikes().contains(user)) {
+            recipe.removeUserLike(user);
+            recipeRepository.save(recipe);
         }
 
-        recipe.removeUserLike(user);
-        user.removeRecipeLike(recipe);
-
-        DislikedRecipeResponseDTO dislikedRecipe = new DislikedRecipeResponseDTO();
-        dislikedRecipe.setId(recipe.getId());
-        dislikedRecipe.setTitle(recipe.getTitle());
-        dislikedRecipe.setPhotoUrl(recipe.getPhotoUrl());
-        dislikedRecipe.setCookingTimeInMinutes(recipe.getCookingTimeInMinutes());
-        dislikedRecipe.setApproximateCost(recipe.getApproximateCost());
-        dislikedRecipe.setDateAdded(recipe.getDateAdded());
-        dislikedRecipe.setLastEdited(recipe.getLastEdited());
-        dislikedRecipe.setRecipeSteps(recipe.getRecipeSteps());
-        dislikedRecipe.setUser(recipe.getUser());
-        dislikedRecipe.setComments(recipe.getComments());
-        dislikedRecipe.setUserLikes(recipe.getUserLikes());
-
-        return dislikedRecipe;
+        return getRecipe(id);
     }
 
     @Transactional
     @RequestMapping(method = RequestMethod.GET)
-    public GetFilteredRecipesPageableDTO searchRecipes(@RequestParam(value = "query", defaultValue = "") String query,
+    public GetFilteredRecipesPageableResponseDTO searchRecipes(@RequestParam(value = "query", defaultValue = "") String query,
                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                        @RequestParam(value = "size", defaultValue = "20") Integer size,
                                                        @RequestParam(value = "sort", defaultValue = "BY_DATE_ADDED") String sort) throws UnsupportedEncodingException {
@@ -490,53 +464,53 @@ public class RecipeController {
 
         Collections.sort(filteredRecipes, recipeComparatorFactory.createRecipeComparator(sortOption));
 
-        GetFilteredRecipesPageableDTO getFilteredRecipesPageableDTO = new GetFilteredRecipesPageableDTO();
+        GetFilteredRecipesPageableResponseDTO getFilteredRecipesPageableResponseDTO = new GetFilteredRecipesPageableResponseDTO();
 
-        GetFilteredRecipesPageableDTO.PageMetadata pageMetadata = getFilteredRecipesPageableDTO.createPageMetadata();
+        GetFilteredRecipesPageableResponseDTO.PageMetadata pageMetadata = getFilteredRecipesPageableResponseDTO.createPageMetadata();
         pageMetadata.setSize(size);
         pageMetadata.setTotalElements(filteredRecipes.size());
         pageMetadata.setNumber(page);
         pageMetadata.setTotalPages(filteredRecipes.size() % size > 0 ? filteredRecipes.size() / size + 1 : filteredRecipes.size() / size);
 
-        getFilteredRecipesPageableDTO.setPageMetadata(pageMetadata);
+        getFilteredRecipesPageableResponseDTO.setPageMetadata(pageMetadata);
 
         for (int i = (page - 1) * size; i < size * page && i < pageMetadata.getTotalElements(); i++) {
             Recipe r = filteredRecipes.get(i);
 
-            GetFilteredRecipesPageableDTO.FilteredRecipeDTO filteredRecipeDTO = getFilteredRecipesPageableDTO.createFilteredRecipeDTO();
-            filteredRecipeDTO.setId(r.getId());
-            filteredRecipeDTO.setTitle(r.getTitle());
-            filteredRecipeDTO.setUserEmail(r.getUser().getEmail());
-            filteredRecipeDTO.setUserName(r.getUser().getName());
-            filteredRecipeDTO.setNumberOfLikes(r.getUserLikes().size());
-            filteredRecipeDTO.setPhotoUrl(r.getPhotoUrl());
-            filteredRecipeDTO.setDateAdded(r.getDateAdded());
-            filteredRecipeDTO.setLastEdited(r.getLastEdited());
+            GetFilteredRecipesPageableResponseDTO.FilteredRecipeResponseDTO filteredRecipeResponseDTO = getFilteredRecipesPageableResponseDTO.createFilteredRecipeDTO();
+            filteredRecipeResponseDTO.setId(r.getId());
+            filteredRecipeResponseDTO.setTitle(r.getTitle());
+            filteredRecipeResponseDTO.setUserEmail(r.getUser().getEmail());
+            filteredRecipeResponseDTO.setUserName(r.getUser().getName());
+            filteredRecipeResponseDTO.setNumberOfLikes(r.getUserLikes().size());
+            filteredRecipeResponseDTO.setPhotoUrl(r.getPhotoUrl());
+            filteredRecipeResponseDTO.setDateAdded(r.getDateAdded());
+            filteredRecipeResponseDTO.setLastEdited(r.getLastEdited());
 
-            getFilteredRecipesPageableDTO.addFilteredRecipeDTO(filteredRecipeDTO);
+            getFilteredRecipesPageableResponseDTO.addFilteredRecipeDTO(filteredRecipeResponseDTO);
         }
 
         if (page > 1 && page <= pageMetadata.getTotalPages()) {
-            GetFilteredRecipesPageableDTO.Link prev = getFilteredRecipesPageableDTO.createLink();
+            GetFilteredRecipesPageableResponseDTO.Link prev = getFilteredRecipesPageableResponseDTO.createLink();
             prev.setPage("prev");
             prev.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page - 1) + "&size=" + size + "&sort=" + sortOption.toString());
-            getFilteredRecipesPageableDTO.addLink(prev);
+            getFilteredRecipesPageableResponseDTO.addLink(prev);
         }
 
         for (int i = 1; i <= pageMetadata.getTotalPages(); i++) {
-            GetFilteredRecipesPageableDTO.Link link = getFilteredRecipesPageableDTO.createLink();
+            GetFilteredRecipesPageableResponseDTO.Link link = getFilteredRecipesPageableResponseDTO.createLink();
             link.setPage(String.valueOf(i));
             link.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + i + "&size=" + size + "&sort=" + sortOption.toString());
-            getFilteredRecipesPageableDTO.addLink(link);
+            getFilteredRecipesPageableResponseDTO.addLink(link);
         }
 
         if (page < pageMetadata.getTotalPages()) {
-            GetFilteredRecipesPageableDTO.Link next = getFilteredRecipesPageableDTO.createLink();
+            GetFilteredRecipesPageableResponseDTO.Link next = getFilteredRecipesPageableResponseDTO.createLink();
             next.setPage("next");
             next.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page + 1) + "&size=" + size + "&sort=" + sortOption.toString());
-            getFilteredRecipesPageableDTO.addLink(next);
+            getFilteredRecipesPageableResponseDTO.addLink(next);
         }
 
-        return getFilteredRecipesPageableDTO;
+        return getFilteredRecipesPageableResponseDTO;
     }
 }

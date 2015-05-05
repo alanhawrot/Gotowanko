@@ -1,7 +1,5 @@
 package pl.edu.uj.gotowanko.controllers.recipes.dto;
 
-import pl.edu.uj.gotowanko.entities.User;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -9,10 +7,10 @@ import java.util.Collection;
 /**
  * Created by alanhawrot on 04.05.15.
  */
-public class GetFilteredRecipesPageableDTO {
+public class GetFilteredRecipesPageableResponseDTO {
 
     private Collection<Link> links = new ArrayList<>();
-    private Collection<FilteredRecipeDTO> content = new ArrayList<>();
+    private Collection<FilteredRecipeResponseDTO> content = new ArrayList<>();
     private PageMetadata pageMetadata;
 
     public class Link {
@@ -37,7 +35,7 @@ public class GetFilteredRecipesPageableDTO {
         }
     }
 
-    public class FilteredRecipeDTO {
+    public class FilteredRecipeResponseDTO {
 
         private Long id;
         private String title;
@@ -157,8 +155,8 @@ public class GetFilteredRecipesPageableDTO {
         return new Link();
     }
 
-    public FilteredRecipeDTO createFilteredRecipeDTO() {
-        return new FilteredRecipeDTO();
+    public FilteredRecipeResponseDTO createFilteredRecipeDTO() {
+        return new FilteredRecipeResponseDTO();
     }
 
     public PageMetadata createPageMetadata() {
@@ -177,16 +175,16 @@ public class GetFilteredRecipesPageableDTO {
         getLinks().add(link);
     }
 
-    public Collection<FilteredRecipeDTO> getContent() {
+    public Collection<FilteredRecipeResponseDTO> getContent() {
         return content;
     }
 
-    private void setContent(Collection<FilteredRecipeDTO> content) {
+    private void setContent(Collection<FilteredRecipeResponseDTO> content) {
         this.content = content;
     }
 
-    public void addFilteredRecipeDTO(FilteredRecipeDTO filteredRecipeDTO) {
-        getContent().add(filteredRecipeDTO);
+    public void addFilteredRecipeDTO(FilteredRecipeResponseDTO filteredRecipeResponseDTO) {
+        getContent().add(filteredRecipeResponseDTO);
     }
 
     public PageMetadata getPageMetadata() {

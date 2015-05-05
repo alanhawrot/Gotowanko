@@ -22,9 +22,6 @@ public class CreateUserRequestDTO {
     @NotBlank
     private String name;
 
-    public CreateUserRequestDTO() {
-    }
-
     public String getEmail() {
         return email;
     }

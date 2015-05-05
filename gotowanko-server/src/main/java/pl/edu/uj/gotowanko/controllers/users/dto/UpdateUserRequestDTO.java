@@ -22,9 +22,6 @@ public class UpdateUserRequestDTO {
     @NotBlank
     private String name;
 
-    public UpdateUserRequestDTO() {
-    }
-
     public String getEmail() {
         return email;
     }

@@ -5,6 +5,7 @@ import pl.edu.uj.gotowanko.entities.Recipe;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by alanhawrot on 25.03.15.
@@ -14,13 +15,10 @@ public class GetUserResponseDTO {
     private long id;
     private String email;
     private String name;
-    private Collection<Recipe> recipes;
-    private Collection<Comment> comments;
+    private Collection<GetUserRecipeResponseDTO> recipes = new HashSet<>();
+    private Collection<GetUserCommentResponseDTO> comments = new HashSet<>();
     private Calendar registrationDate;
     private Calendar lastLogged;
-
-    public GetUserResponseDTO() {
-    }
 
     public long getId() {
         return id;
@@ -38,19 +36,19 @@ public class GetUserResponseDTO {
         this.email = email;
     }
 
-    public Collection<Recipe> getRecipes() {
+    public Collection<GetUserRecipeResponseDTO> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(Collection<Recipe> recipes) {
+    public void setRecipes(Collection<GetUserRecipeResponseDTO> recipes) {
         this.recipes = recipes;
     }
 
-    public Collection<Comment> getComments() {
+    public Collection<GetUserCommentResponseDTO> getComments() {
         return comments;
     }
 
-    public void setComments(Collection<Comment> comments) {
+    public void setComments(Collection<GetUserCommentResponseDTO> comments) {
         this.comments = comments;
     }
 

@@ -1,11 +1,8 @@
 package pl.edu.uj.gotowanko.controllers.users.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import pl.edu.uj.gotowanko.entities.Comment;
-import pl.edu.uj.gotowanko.entities.Recipe;
-
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by alanhawrot on 19.04.15.
@@ -15,13 +12,10 @@ public class GetCurrentlyLoggedUserResponseDTO {
     private long id;
     private String email;
     private String name;
-    private Collection<Recipe> recipes;
-    private Collection<Comment> comments;
+    private Collection<GetUserRecipeResponseDTO> recipes = new HashSet<>();
+    private Collection<GetUserCommentResponseDTO> comments = new HashSet<>();
     private Calendar registrationDate;
     private Calendar lastLogged;
-
-    public GetCurrentlyLoggedUserResponseDTO() {
-    }
 
     public long getId() {
         return id;
@@ -39,19 +33,19 @@ public class GetCurrentlyLoggedUserResponseDTO {
         this.email = email;
     }
 
-    public Collection<Recipe> getRecipes() {
+    public Collection<GetUserRecipeResponseDTO> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(Collection<Recipe> recipes) {
+    public void setRecipes(Collection<GetUserRecipeResponseDTO> recipes) {
         this.recipes = recipes;
     }
 
-    public Collection<Comment> getComments() {
+    public Collection<GetUserCommentResponseDTO> getComments() {
         return comments;
     }
 
-    public void setComments(Collection<Comment> comments) {
+    public void setComments(Collection<GetUserCommentResponseDTO> comments) {
         this.comments = comments;
     }
 
