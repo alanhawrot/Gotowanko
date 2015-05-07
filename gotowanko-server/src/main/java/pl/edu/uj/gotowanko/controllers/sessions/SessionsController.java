@@ -15,7 +15,7 @@ import java.util.Calendar;
  * Created by alanhawrot on 26.03.15.
  */
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping("/rest/sessions")
 public class SessionsController {
 
     @Autowired

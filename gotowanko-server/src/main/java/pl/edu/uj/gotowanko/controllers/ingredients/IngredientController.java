@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 
 @RestController
-@RequestMapping("/ingredients")
+@RequestMapping("/rest/ingredients")
 public class IngredientController {
     private static final Logger logger = LoggerFactory.getLogger(IngredientController.class.getSimpleName());
 

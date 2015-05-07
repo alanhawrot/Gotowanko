@@ -20,7 +20,7 @@ import java.util.Calendar;
  * Created by alanhawrot on 22.03.15.
  */
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/rest/users")
 public class UserController {
 
     @Autowired

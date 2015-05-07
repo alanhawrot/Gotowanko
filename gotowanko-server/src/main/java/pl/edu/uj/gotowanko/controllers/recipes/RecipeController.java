@@ -29,7 +29,7 @@ import java.util.*;
  * Created by michal on 17.04.15.
  */
 @RestController
-@RequestMapping(value = "/recipes")
+@RequestMapping(value = "/rest/recipes")
 public class RecipeController {
     private static final Logger logger = LoggerFactory.getLogger(RecipeController.class.getSimpleName());
 

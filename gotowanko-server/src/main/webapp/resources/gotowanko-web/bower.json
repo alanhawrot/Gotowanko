@@ -1,0 +1,18 @@
+{
+  "name": "Gotowanko",
+  "description": "Social platform for cooking enthusiasts",
+  "version": "0.0.0",
+  "homepage": "http://localhost:8080/gotowanko",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.3.x",
+    "angular-route": "1.3.x",
+    "angular-loader": "1.3.x",
+    "angular-resource": "1.3.x",
+    "angular-mocks": "1.3.x",
+    "html5-boilerplate": "5.2.x",
+    "bootstrap": "3.3.x",
+    "jquery": "2.1.x"
+  }
+}
