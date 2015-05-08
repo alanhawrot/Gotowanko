@@ -12,7 +12,7 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
     .controller('SearchCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.searchRecipes = function (query) {
             var encodedQuery = encodeURIComponent(query.replace(/ /g, "*"));
-            var searchUrl = "http://localhost:8080/rest/recipes?query=" + encodedQuery;
+            var searchUrl = "/rest/recipes?query=" + encodedQuery;
 
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;
