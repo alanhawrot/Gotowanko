@@ -5,6 +5,7 @@ angular.module('gotowankoApp', [
     'ngRoute',
     'gotowankoApp.searchView',
     'gotowankoApp.loginView',
+    'gotowankoApp.registrationView',
 ]).
     config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/login'});

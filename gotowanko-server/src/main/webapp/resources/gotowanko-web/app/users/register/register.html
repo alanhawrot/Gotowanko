@@ -1,0 +1,53 @@
+<div class="well well-lg">
+    <form name="registrationForm">
+        <div class="form-group">
+            <label for="gotowankoName">Name</label>
+            <input type="text" name="name" class="form-control" id="gotowankoName" placeholder="Enter your name ..." ng-model="user.name"
+                   ng-minlength="2" ng-maxlength="30" required>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.email.$touched">
+            <alert ng-show="registrationForm.name.$error.required" type="danger">You did not enter your name</alert>
+            <alert ng-show="registrationForm.name.$error.minlength" type="danger">Your name need at least 2 characters</alert>
+            <alert ng-show="registrationForm.name.$error.maxlength" type="danger">Name can't be longer than 30 characters</alert>
+        </div>
+
+        <div class="form-group">
+            <label for="gotowankoEmail">Email address</label>
+            <input type="email" name="email" class="form-control" id="gotowankoEmail" placeholder="Enter email ..." ng-model="user.email"
+                   ng-minlength="5" ng-maxlength="30" required>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.email.$touched">
+            <alert ng-show="registrationForm.email.$error.required" type="danger">You did not enter email</alert>
+            <alert ng-show="registrationForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
+            <alert ng-show="registrationForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+        </div>
+
+        <div class="form-group">
+            <label for="gotowankoPassword">Password</label>
+            <input type="password" id="password" name="password" class="form-control" id="gotowankoPassword" placeholder="Enter password ..." ng-model="user.password"
+                   ng-minlength="6" ng-maxlength="30" required>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.password.$touched">
+            <alert ng-show="registrationForm.password.$error.required" type="danger">You did not enter password</alert>
+            <alert ng-show="registrationForm.password.$error.minlength" type="danger">Your password need at least 6 characters</alert>
+            <alert ng-show="registrationForm.password.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm password</label>
+            <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Enter your password again ..."
+                   ng-model="passwordCheck" valid-password-c required>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.confirmPassword.$touched">
+            <alert ng-show="registrationForm.confirmPassword.$error.required" type="danger">You did not confirm password</alert>
+            <alert ng-show="registrationForm.confirmPassword.$error.noMatch" type="danger">Passwords doesn't match</alert>
+        </div>
+
+        <button class="btn btn-primary" name="loginButton" type="button" ng-click="register()">sign in</button>
+        <br/>
+
+        <div ng-repeat="alert in alerts" class="alert-container">
+            <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+        </div>
+    </form>
+</div>

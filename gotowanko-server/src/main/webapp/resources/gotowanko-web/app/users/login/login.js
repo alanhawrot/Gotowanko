@@ -21,11 +21,11 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
         };
 
         $scope.gotowankoLogin = function (email, password) {
-            $scope.loginForm.$setSubmitted();
+            $scope.registrationForm.$setSubmitted();
             $scope.alerts = [];
             $log.info($scope);
-            $log.info("email errors:" + $scope.loginForm.email.$error);
-            $log.info("pass errors:" + $scope.loginForm.password.$error);
+            $log.info("email errors:" + $scope.registrationForm.email.$error);
+            $log.info("pass errors:" + $scope.registrationForm.password.$error);
             /*
              for (var error in $scope.loginForm.email.$error) {
              var alert = { type: 'danger' }
@@ -33,7 +33,7 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
              }
              }*/
 
-            if (!$scope.loginForm.email.$valid || !$scope.loginForm.password.$valid)
+            if (!$scope.registrationForm.email.$valid || !$scope.registrationForm.password.$valid)
                 return;
 
             var encodedLoginData = base64.encode(email + ":" + password);

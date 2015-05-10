@@ -1,34 +1,30 @@
 <div class="well well-lg">
-    <form name="loginForm">
+    <form name="registrationForm">
+
         <div class="form-group">
             <label for="gotowankoEmail">Email address</label>
             <input type="email" name="email" class="form-control" id="gotowankoEmail" placeholder="Enter email ..." ng-model="gotowankoEmail"
                    ng-minlength="5" ng-maxlength="30" required>
-
-            <div role="alert">
-                <span class="error" ng-show="gotowankoEmail.$error.required">Required!</span>
-                <span class="error" ng-show="gotowankoEmail.$error.gotowankoEmail">Not valid email!</span>
-            </div>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.email.$touched">
+            <alert ng-show="registrationForm.email.$error.required" type="danger">You did not enter email</alert>
+            <alert ng-show="registrationForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
+            <alert ng-show="registrationForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
         </div>
 
-        <div ng-show="loginForm.$submitted || loginForm.email.$touched">
-            <alert ng-show="loginForm.email.$error.required" type="danger">You did not enter email</alert>
-            <alert ng-show="loginForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
-            <alert ng-show="loginForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
-        </div>
 
         <div class="form-group">
             <label for="gotowankoPassword">Password</label>
             <input type="password" name="password" class="form-control" id="gotowankoPassword" placeholder="Enter password ..." ng-model="gotowankoPassword"
-                   ng-minlength="5" ng-maxlength="30" required>
+                   ng-minlength="6" ng-maxlength="30" required>
+        </div>
+        <div ng-show="registrationForm.$submitted || registrationForm.password.$touched">
+            <alert ng-show="registrationForm.password.$error.required" type="danger">You did not enter password</alert>
+            <alert ng-show="registrationForm.password.$error.minlength" type="danger">Your password need atleast 6 characters</alert>
+            <alert ng-show="registrationForm.password.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
         </div>
 
 
-        <div ng-show="loginForm.$submitted || loginForm.password.$touched">
-            <alert ng-show="loginForm.password.$error.required" type="danger">You did not enter email</alert>
-            <alert ng-show="loginForm.password.$error.minlength" type="danger">Your email need atleast 5 characters</alert>
-            <alert ng-show="loginForm.password.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
-        </div>
         <button class="btn btn-primary" name="loginButton" type="button" ng-click="gotowankoLogin(gotowankoEmail, gotowankoPassword)">sign in</button>
         <br/>
 
