@@ -27,11 +27,11 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
             if (query === undefined) {
                 query = '';
             }
+            var encodedQuery = encodeURIComponent(query.replace(/ /g, '*'));
 
             if (page === undefined) {
                 page = 1;
             }
-            var encodedQuery = encodeURIComponent(query.replace(/ /g, '*'));
 
             var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sort + '&page=' + page;
 

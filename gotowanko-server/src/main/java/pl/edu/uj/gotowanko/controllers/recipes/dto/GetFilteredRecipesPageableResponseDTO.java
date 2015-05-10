@@ -16,7 +16,7 @@ public class GetFilteredRecipesPageableResponseDTO {
     public class Link {
 
         private String page;
-        private String href;
+        private String value;
 
         public String getPage() {
             return page;
@@ -26,12 +26,12 @@ public class GetFilteredRecipesPageableResponseDTO {
             this.page = page;
         }
 
-        public String getHref() {
-            return href;
+        public String getValue() {
+            return value;
         }
 
-        public void setHref(String href) {
-            this.href = href;
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 

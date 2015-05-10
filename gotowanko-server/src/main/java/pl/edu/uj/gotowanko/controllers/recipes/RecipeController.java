@@ -488,21 +488,21 @@ public class RecipeController {
         if (page > 1 && page <= pageMetadata.getTotalPages()) {
             GetFilteredRecipesPageableResponseDTO.Link prev = getFilteredRecipesPageableResponseDTO.createLink();
             prev.setPage("prev");
-            prev.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page - 1) + "&size=" + size + "&sort=" + sortOption.toString());
+            prev.setValue(String.valueOf(page - 1));
             getFilteredRecipesPageableResponseDTO.addLink(prev);
         }
 
         for (int i = 1; i <= pageMetadata.getTotalPages(); i++) {
             GetFilteredRecipesPageableResponseDTO.Link link = getFilteredRecipesPageableResponseDTO.createLink();
             link.setPage(String.valueOf(i));
-            link.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + i + "&size=" + size + "&sort=" + sortOption.toString());
+            link.setValue(String.valueOf(i));
             getFilteredRecipesPageableResponseDTO.addLink(link);
         }
 
         if (page < pageMetadata.getTotalPages()) {
             GetFilteredRecipesPageableResponseDTO.Link next = getFilteredRecipesPageableResponseDTO.createLink();
             next.setPage("next");
-            next.setHref(pathService.getServerRoot() + "/recipes?query=" + query + "&page=" + (page + 1) + "&size=" + size + "&sort=" + sortOption.toString());
+            next.setValue(String.valueOf(page + 1));
             getFilteredRecipesPageableResponseDTO.addLink(next);
         }
 
