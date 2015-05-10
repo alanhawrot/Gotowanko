@@ -9,9 +9,5 @@ angular.module('gotowankoApp', [
     'myApp.version'
 ]).
     config(['$routeProvider', function ($routeProvider) {
-/*        when('/login', {
-            templateUrl: 'login/login-view.html',
-            controller: 'LoginController'
-        }).*/
-        $routeProvider.otherwise({redirectTo: '/search'});
+        $routeProvider.otherwise({redirectTo: '/login'});
     }]);
