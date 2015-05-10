@@ -485,27 +485,6 @@ public class RecipeController {
             getFilteredRecipesPageableResponseDTO.addFilteredRecipeDTO(filteredRecipeResponseDTO);
         }
 
-        if (page > 1 && page <= pageMetadata.getTotalPages()) {
-            GetFilteredRecipesPageableResponseDTO.Link prev = getFilteredRecipesPageableResponseDTO.createLink();
-            prev.setPage("prev");
-            prev.setValue(String.valueOf(page - 1));
-            getFilteredRecipesPageableResponseDTO.addLink(prev);
-        }
-
-        for (int i = 1; i <= pageMetadata.getTotalPages(); i++) {
-            GetFilteredRecipesPageableResponseDTO.Link link = getFilteredRecipesPageableResponseDTO.createLink();
-            link.setPage(String.valueOf(i));
-            link.setValue(String.valueOf(i));
-            getFilteredRecipesPageableResponseDTO.addLink(link);
-        }
-
-        if (page < pageMetadata.getTotalPages()) {
-            GetFilteredRecipesPageableResponseDTO.Link next = getFilteredRecipesPageableResponseDTO.createLink();
-            next.setPage("next");
-            next.setValue(String.valueOf(page + 1));
-            getFilteredRecipesPageableResponseDTO.addLink(next);
-        }
-
         return getFilteredRecipesPageableResponseDTO;
     }
 

@@ -9,31 +9,8 @@ import java.util.Collection;
  */
 public class GetFilteredRecipesPageableResponseDTO {
 
-    private Collection<Link> links = new ArrayList<>();
     private Collection<FilteredRecipeResponseDTO> content = new ArrayList<>();
     private PageMetadata pageMetadata;
-
-    public class Link {
-
-        private String page;
-        private String value;
-
-        public String getPage() {
-            return page;
-        }
-
-        public void setPage(String page) {
-            this.page = page;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
 
     public class FilteredRecipeResponseDTO {
 
@@ -151,28 +128,12 @@ public class GetFilteredRecipesPageableResponseDTO {
         }
     }
 
-    public Link createLink() {
-        return new Link();
-    }
-
     public FilteredRecipeResponseDTO createFilteredRecipeDTO() {
         return new FilteredRecipeResponseDTO();
     }
 
     public PageMetadata createPageMetadata() {
         return new PageMetadata();
-    }
-
-    public Collection<Link> getLinks() {
-        return links;
-    }
-
-    private void setLinks(Collection<Link> links) {
-        this.links = links;
-    }
-
-    public void addLink(Link link) {
-        getLinks().add(link);
     }
 
     public Collection<FilteredRecipeResponseDTO> getContent() {

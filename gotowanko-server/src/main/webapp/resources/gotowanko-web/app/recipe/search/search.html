@@ -1,23 +1,43 @@
 <div>
-    <form>
-        <input type="text" placeholder="Search recipes..." ng-model="query"/>
-        <select ng-model="sort">
-            <option value="dateAdded">Newest</option>
-            <option value="title">Alphabetical</option>
-            <option value="numberOfLikes">Most popular</option>
-        </select>
-        <input type="submit" ng-click="searchRecipes(query)" value="Search"/>
-    </form>
+    <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="Search recipes..." ng-model="query">
 
-    <ul>
-        <li ng-repeat="recipe in recipes | orderBy:sort">
-            {{recipe.title}}
-        </li>
-    </ul>
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                {{sort}} <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="" ng-click="sort = 'Newest'">Newest</a></li>
+                <li><a href="" ng-click="sort = 'Alphabetical'">Alphabetical</a></li>
+                <li><a href="" ng-click="sort = 'Most popular'">Most popular</a></li>
+            </ul>
+            <button class="btn btn-default" type="button" ng-click="searchRecipes(query)">Search</button>
+        </div>
+    </div>
 
-    <ul>
-        <li ng-repeat="link in links">
-            <a href="" ng-click="search(link.value)">{{link.page}}</a>
-        </li>
-    </ul>
+    <div>
+        <p ng-if="totalPages.length == 0">No recipes found</p>
+        <ul>
+            <li ng-repeat="recipe in recipes | orderBy:sort">
+                {{recipe.title}}
+            </li>
+        </ul>
+    </div>
+
+    <nav ng-show="totalPages.length > 0">
+        <ul class="pagination pagination-lg">
+            <li>
+                <a href="" aria-label="Previous" ng-click="searchRecipes(query, currentPage - 1)">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li ng-repeat="page in totalPages track by $index">
+                <a href="" ng-click="searchRecipes(query, page + 1)">{{page + 1}}</a>
+            </li>
+            <li>
+                <a href="" aria-label="Next" ng-click="searchRecipes(query, currentPage + 1)">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
