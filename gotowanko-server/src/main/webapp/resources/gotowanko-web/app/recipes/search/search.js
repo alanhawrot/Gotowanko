@@ -36,11 +36,13 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
             if (page === undefined || page <= 0) {
                 page = 1;
-            } else if (page > $scope.totalPages.length) {
-                page = $scope.totalPages.length;
+            } else if (page > $scope.totalPagesCollection.length) {
+                page = $scope.totalPagesCollection.length;
             }
 
             var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sortType + '&page=' + page;
+
+            console.log(searchUrl);
 
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;

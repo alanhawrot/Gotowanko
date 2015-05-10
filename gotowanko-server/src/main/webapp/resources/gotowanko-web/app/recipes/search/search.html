@@ -44,7 +44,7 @@
                 </a>
             </li>
             <li ng-repeat="page in totalPagesCollection track by $index">
-                <a href="" ng-click="searchRecipes(query, page + 1)">{{page + 1}}</a>
+                <a href="" ng-click="searchRecipes(query, $index + 1)">{{$index + 1}}</a>
             </li>
             <li>
                 <a href="" aria-label="Next" ng-click="searchRecipes(query, currentPage + 1)">
