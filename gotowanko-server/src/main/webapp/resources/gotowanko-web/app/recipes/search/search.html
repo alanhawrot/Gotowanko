@@ -1,6 +1,6 @@
 <div>
     <div class="input-group input-group-lg">
-        <input type="text" class="form-control" placeholder="Search recipes..." ng-model="query">
+        <input type="text" class="form-control" placeholder="Search recipes by name, ingredients and author" ng-model="query">
 
         <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -15,23 +15,36 @@
     </div>
 
     <div>
-        <p ng-if="totalPages.length == 0">No recipes found</p>
-        <ul>
+        <p ng-if="totalPagesCollection.length == 0">No recipes found</p>
+        <ul class="media-list">
             <li ng-repeat="recipe in recipes | orderBy:sortType">
-                {{recipe.title}}
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="" ng-ref="/recipes/{{recipe.id}}">
+                            <img class="media-object" ng-src="{{recipe.photoUrl}}" alt="Image">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <a href="" ng-ref="/recipes/{{recipe.id}}"><h4 class="media-heading">{{recipe.title}}</h4></a>
+                        <p>Date added: {{recipe.dateAdded | date:'dd:MM:yyyy'}}</p>
+                        <p>Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</p>
+                        <p>Author: {{recipe.userName}}</p>
+                        <p>Likes: {{recipe.numberOfLikes}}</p>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
 
-    <nav ng-show="totalPages.length > 0">
+    <nav ng-show="totalPagesCollection.length > 0">
         <ul class="pagination pagination-lg">
             <li>
                 <a href="" aria-label="Previous" ng-click="searchRecipes(query, currentPage - 1)">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li ng-repeat="page in totalPages track by $index">
-                <a href="" ng-click="searchRecipes(query, page + 1)">{{page + 1}}</a>
+            <li ng-repeat="page in totalPagesCollection track by $index">
+                <a href="" ng-click="searchRecipes(query, $index + 1)">{{$index + 1}}</a>
             </li>
             <li>
                 <a href="" aria-label="Next" ng-click="searchRecipes(query, currentPage + 1)">

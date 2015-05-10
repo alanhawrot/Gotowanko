@@ -4,7 +4,7 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/search', {
-            templateUrl: '/recipe/search/search.html',
+            templateUrl: '/recipes/search/search.html',
             controller: 'SearchController'
         });
     }])
@@ -36,15 +36,17 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
             if (page === undefined || page <= 0) {
                 page = 1;
-            } else if (page > $scope.totalPages.length) {
-                page = $scope.totalPages.length;
+            } else if (page > $scope.totalPagesCollection.length) {
+                page = $scope.totalPagesCollection.length;
             }
 
             var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sortType + '&page=' + page;
 
+            console.log(searchUrl);
+
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;
-                $scope.totalPages = new Array(data.pageMetadata.totalPages);
+                $scope.totalPagesCollection = new Array(data.pageMetadata.totalPages);
                 $scope.currentPage = data.pageMetadata.number;
             });
         };
