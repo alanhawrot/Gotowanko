@@ -4,12 +4,12 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/search', {
-            templateUrl: 'search_view/search-view.html',
-            controller: 'SearchCtrl'
+            templateUrl: '/recipe/search/search.html',
+            controller: 'SearchController'
         });
     }])
 
-    .controller('SearchCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('SearchController', ['$scope', '$http', function ($scope, $http) {
         $scope.sort = 'dateAdded';
 
         $scope.searchRecipes = function (query, page) {
