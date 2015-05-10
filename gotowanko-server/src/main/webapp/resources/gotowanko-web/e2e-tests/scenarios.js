@@ -18,7 +18,7 @@ describe('my app', function() {
     });
 
 
-    it('should render search_view when user navigates to /search_view', function() {
+    it('should render search_view when users navigates to /search_view', function() {
       expect(element.all(by.css('[ng-view] p')).first().getText()).
         toMatch(/partial for view 1/);
     });
@@ -33,7 +33,7 @@ describe('my app', function() {
     });
 
 
-    it('should render view2 when user navigates to /view2', function() {
+    it('should render view2 when users navigates to /view2', function() {
       expect(element.all(by.css('[ng-view] p')).first().getText()).
         toMatch(/partial for view 2/);
     });

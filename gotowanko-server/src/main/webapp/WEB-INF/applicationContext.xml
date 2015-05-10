@@ -76,7 +76,7 @@
     <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
     <security:http>
-        <security:http-basic/>
+        <security:http-basic entry-point-ref="customBasicAuthenticationEntryPoint"/>
     </security:http>
 
     <security:authentication-manager>
@@ -92,11 +92,11 @@
     </bean>
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.gmail.com" />
-        <property name="username" value="gotowanko.uj" />
-        <property name="port" value="587" />
-        <property name="password" value="semik.hawrot" />
-        <property name="protocol" value="smtp" />
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="username" value="gotowanko.uj"/>
+        <property name="port" value="587"/>
+        <property name="password" value="semik.hawrot"/>
+        <property name="protocol" value="smtp"/>
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.smtp.auth">true</prop>
@@ -105,5 +105,7 @@
             </props>
         </property>
     </bean>
-
+    <bean id="customBasicAuthenticationEntryPoint" class="pl.edu.uj.gotowanko.util.BasicAuthenticationEntryPointWithoutLoginPopupWindow">
+        <constructor-arg value="RealmName"/>
+    </bean>
 </beans>
