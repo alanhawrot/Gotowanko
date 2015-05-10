@@ -1,10 +1,20 @@
-<div>
-    <input ng-model="query" placeholder="Search recipes..." type="text"/>
-    <input type="submit" ng-click="searchRecipes(query)" value="Search"/>
-
-    <ul>
-        <li ng-repeat="recipe in recipes">
-            {{ recipe.title }}
-        </li>
-    </ul>
+<div class="well well-lg">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+                <input type="text" class="form-control" placeholder="Search for...">
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="login(email, password)">Go!</button>
+      </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
 </div>

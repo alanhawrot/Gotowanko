@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'])
+angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/login', {
             templateUrl: 'login_view/login-view.html',
-            controller: 'SearchCtrl'
+            controller: 'LoginController'
         });
     }])
 
