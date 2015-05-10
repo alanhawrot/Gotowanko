@@ -10,22 +10,23 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
     }])
 
     .controller('SearchController', ['$scope', '$http', function ($scope, $http) {
-        $scope.sort = 'Newest';
+        $scope.sortName = 'Newest';
+        $scope.sortType = 'dateAdded';
 
         $scope.searchRecipes = function (query, page) {
-            var sort = $scope.sort;
-            switch (sort) {
+            var sortType = $scope.sortType;
+            switch (sortType) {
                 case 'dateAdded':
-                    sort = 'BY_DATE_ADDED';
+                    sortType = 'BY_DATE_ADDED';
                     break;
                 case 'title':
-                    sort = 'BY_TITLE_ALPHABETICALLY';
+                    sortType = 'BY_TITLE_ALPHABETICALLY';
                     break;
                 case 'numberOfLikes':
-                    sort = 'BY_NUMBER_OF_LIKES';
+                    sortType = 'BY_NUMBER_OF_LIKES';
                     break;
                 default:
-                    sort = 'BY_DATE_ADDED';
+                    sortType = 'BY_DATE_ADDED';
             }
 
             if (query === undefined) {
@@ -39,7 +40,7 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
                 page = $scope.totalPages.length;
             }
 
-            var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sort + '&page=' + page;
+            var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sortType + '&page=' + page;
 
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;

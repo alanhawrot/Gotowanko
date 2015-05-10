@@ -4,11 +4,11 @@
 
         <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                {{sort}} <span class="caret"></span></button>
+                {{sortName}} <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="" ng-click="sort = 'Newest'">Newest</a></li>
-                <li><a href="" ng-click="sort = 'Alphabetical'">Alphabetical</a></li>
-                <li><a href="" ng-click="sort = 'Most popular'">Most popular</a></li>
+                <li><a href="" ng-click="sortName = 'Newest'; sortType = 'dateAdded'">Newest</a></li>
+                <li><a href="" ng-click="sortName = 'Alphabetical'; sortType = 'title'">Alphabetical</a></li>
+                <li><a href="" ng-click="sortName = 'Most popular'; sortType = 'numberOfLikes'">Most popular</a></li>
             </ul>
             <button class="btn btn-default" type="button" ng-click="searchRecipes(query)">Search</button>
         </div>
@@ -17,7 +17,7 @@
     <div>
         <p ng-if="totalPages.length == 0">No recipes found</p>
         <ul>
-            <li ng-repeat="recipe in recipes | orderBy:sort">
+            <li ng-repeat="recipe in recipes | orderBy:sortType">
                 {{recipe.title}}
             </li>
         </ul>
