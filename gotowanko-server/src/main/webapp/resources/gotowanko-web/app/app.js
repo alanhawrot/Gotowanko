@@ -5,7 +5,6 @@ angular.module('gotowankoApp', [
     'ngRoute',
     'gotowankoApp.searchView',
     'gotowankoApp.loginView',
-    'gotowankoApp.anotherView',
     'gotowankoApp.version'
 ]).
     config(['$routeProvider', function ($routeProvider) {
