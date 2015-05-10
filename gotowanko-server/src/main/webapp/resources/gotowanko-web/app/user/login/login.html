@@ -1,13 +1,29 @@
 <div class="well well-lg">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Username..." />
-                <input type="password" class="form-control" placeholder="Password...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="login(email, password)">sign in</button>
-                  </span>
+    <form name="myForm">
+        <div class="form-group">
+            <label for="gotowankoEmail">Email address</label>
+            <input type="email" name="input" class="form-control" id="gotowankoEmail" placeholder="Enter email ..."
+                   ng-minlength="5" ng-maxlength="30" ng-model="gotowankoEmail" required>
+
+            <div role="alert">
+                <span class="error" ng-show="gotowankoEmail.$error.required">Required!</span>
+                <span class="error" ng-show="gotowankoEmail.$error.gotowankoEmail">Not valid email!</span>
             </div>
+
         </div>
-    </div>
+        <div class="form-group">
+            <label for="gotowankoPassword">Password</label>
+            <input type="password" name="password" class="form-control" id="gotowankoPassword" placeholder="Enter password ..." ng-model="gotowankoPassword"
+                   required>
+        </div>
+        <button class="btn btn-primary" type="button" ng-click="gotowankoLogin(gotowankoEmail, gotowankoPassword)">sign in</button>
+        <pre>myForm.input.$error = {{ myForm.input.$error | json }}</pre>
+        <div ng-show="myForm.$submitted || myForm.input.$touched || myForm.password.$touched">
+            <div ng-show="myForm.input.$error.required">You did not enter a field</div>
+            <div ng-show="myForm.input.$error.minlength">Your field is too short</div>
+            <div ng-show="myForm.input.$error.maxlength">Your field is too long</div>
+        </div>
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+        <button class='btn btn-default' ng-click="addAlert()">Add Alert</button>
+    </form>
 </div>
