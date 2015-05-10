@@ -5,7 +5,7 @@ angular.module('gotowankoApp', [
     'ngRoute',
     'gotowankoApp.searchView',
     'gotowankoApp.anotherView',
-    'myApp.version'
+    'gotowankoApp.version'
 ]).
     config(['$routeProvider', function ($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/search'});

@@ -1,10 +1,23 @@
 <div>
-    <input ng-model="query" placeholder="Search recipes..." type="text"/>
-    <input type="submit" ng-click="searchRecipes(query)" value="Search"/>
+    <form>
+        <input type="text" placeholder="Search recipes..." ng-model="query"/>
+        <select ng-model="sort">
+            <option value="dateAdded">Newest</option>
+            <option value="title">Alphabetical</option>
+            <option value="numberOfLikes">Most popular</option>
+        </select>
+        <input type="submit" ng-click="searchRecipes(query)" value="Search"/>
+    </form>
 
     <ul>
-        <li ng-repeat="recipe in recipes">
-            {{ recipe.title }}
+        <li ng-repeat="recipe in recipes | orderBy:sort">
+            {{recipe.title}}
+        </li>
+    </ul>
+
+    <ul>
+        <li ng-repeat="link in links">
+            <a href="" ng-click="search(link.page)">{{link.page}}</a>
         </li>
     </ul>
 </div>
