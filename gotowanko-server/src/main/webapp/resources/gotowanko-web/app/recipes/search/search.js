@@ -4,7 +4,7 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/search', {
-            templateUrl: '/recipe/search/search.html',
+            templateUrl: '/recipes/search/search.html',
             controller: 'SearchController'
         });
     }])
@@ -44,7 +44,7 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;
-                $scope.totalPages = new Array(data.pageMetadata.totalPages);
+                $scope.totalPagesCollection = new Array(data.pageMetadata.totalPages);
                 $scope.currentPage = data.pageMetadata.number;
             });
         };
