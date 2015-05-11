@@ -412,10 +412,6 @@ public class RecipeController {
                                                                @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                @RequestParam(value = "size", defaultValue = "20") Integer size,
                                                                @RequestParam(value = "sort", defaultValue = "BY_DATE_ADDED") String sort) throws UnsupportedEncodingException {
-        if (page < 1) {
-            page = 1;
-        }
-
         if (size < 1) {
             size = 20;
         }
@@ -464,8 +460,14 @@ public class RecipeController {
         GetFilteredRecipesPageableResponseDTO.PageMetadata pageMetadata = getFilteredRecipesPageableResponseDTO.createPageMetadata();
         pageMetadata.setSize(size);
         pageMetadata.setTotalElements(filteredRecipes.size());
-        pageMetadata.setNumber(page);
         pageMetadata.setTotalPages(filteredRecipes.size() % size > 0 ? filteredRecipes.size() / size + 1 : filteredRecipes.size() / size);
+        if (page > pageMetadata.getTotalPages()) {
+            page = pageMetadata.getTotalPages();
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        pageMetadata.setNumber(page);
 
         getFilteredRecipesPageableResponseDTO.setPageMetadata(pageMetadata);
 
@@ -475,6 +477,7 @@ public class RecipeController {
             GetFilteredRecipesPageableResponseDTO.FilteredRecipeResponseDTO filteredRecipeResponseDTO = getFilteredRecipesPageableResponseDTO.createFilteredRecipeDTO();
             filteredRecipeResponseDTO.setId(r.getId());
             filteredRecipeResponseDTO.setTitle(r.getTitle());
+            filteredRecipeResponseDTO.setUserId(r.getUser().getId());
             filteredRecipeResponseDTO.setUserEmail(r.getUser().getEmail());
             filteredRecipeResponseDTO.setUserName(r.getUser().getName());
             filteredRecipeResponseDTO.setNumberOfLikes(r.getUserLikes().size());

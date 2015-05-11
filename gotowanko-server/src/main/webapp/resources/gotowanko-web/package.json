@@ -6,6 +6,7 @@
   "repository": "https://github.com/alanhawrot/Gotowanko",
   "license": "MIT",
   "devDependencies": {
+    "angular-utf8-base64": "^0.0.2",
     "bower": "^1.3.1",
     "grunt": "^0.4.5",
     "grunt-connect-proxy": "^0.2.0",

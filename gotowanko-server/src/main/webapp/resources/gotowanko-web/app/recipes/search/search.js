@@ -10,23 +10,23 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
     }])
 
     .controller('SearchController', ['$scope', '$http', function ($scope, $http) {
-        $scope.sortName = 'Newest';
-        $scope.sortType = 'dateAdded';
+        $scope.sort = 'Newest';
+        $scope.size = 20;
 
         $scope.searchRecipes = function (query, page) {
-            var sortType = $scope.sortType;
-            switch (sortType) {
-                case 'dateAdded':
-                    sortType = 'BY_DATE_ADDED';
+            var sort = $scope.sort;
+            switch (sort) {
+                case 'Newest':
+                    sort = 'BY_DATE_ADDED';
                     break;
-                case 'title':
-                    sortType = 'BY_TITLE_ALPHABETICALLY';
+                case 'Alphabetical':
+                    sort = 'BY_TITLE_ALPHABETICALLY';
                     break;
-                case 'numberOfLikes':
-                    sortType = 'BY_NUMBER_OF_LIKES';
+                case 'Most popular':
+                    sort = 'BY_NUMBER_OF_LIKES';
                     break;
                 default:
-                    sortType = 'BY_DATE_ADDED';
+                    sort = 'BY_DATE_ADDED';
             }
 
             if (query === undefined) {
@@ -40,14 +40,18 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
                 page = $scope.totalPagesCollection.length;
             }
 
-            var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sortType + '&page=' + page;
+            var size = $scope.size;
 
-            console.log(searchUrl);
+            var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sort + '&page=' + page + '&size=' + size;
 
             $http.get(searchUrl).success(function (data) {
                 $scope.recipes = data.content;
                 $scope.totalPagesCollection = new Array(data.pageMetadata.totalPages);
                 $scope.currentPage = data.pageMetadata.number;
             });
+        };
+
+        $scope.sendEmail = function (email) {
+            window.location.href = "mailto:" + email;
         };
     }]);
