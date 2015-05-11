@@ -9,6 +9,10 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute'])
         });
     }])
 
-    .controller('UserDetailsController', ['$scope', '$http', function ($scope, $http) {
+    .controller('UserDetailsController', ['$scope', '$routeParams', '$http', function ($scope, $routeParams, $http) {
+        var getUserUrl = '/rest/users/' + $routeParams.userId;
 
+        $http.get(getUserUrl).success(function (data) {
+            $scope.user = data;
+        });
     }]);

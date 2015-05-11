@@ -128,6 +128,7 @@ public class UserController {
             commentResponseDTO.setContent(c.getContent());
             commentResponseDTO.setLastEdited(c.getLastEdited());
             commentResponseDTO.setRecipeId(c.getRecipe().getId());
+            commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
             userResponseDTO.getComments().add(commentResponseDTO);
         });
@@ -162,6 +163,7 @@ public class UserController {
             commentResponseDTO.setContent(c.getContent());
             commentResponseDTO.setLastEdited(c.getLastEdited());
             commentResponseDTO.setRecipeId(c.getRecipe().getId());
+            commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
             currentlyLoggedUser.getComments().add(commentResponseDTO);
         });

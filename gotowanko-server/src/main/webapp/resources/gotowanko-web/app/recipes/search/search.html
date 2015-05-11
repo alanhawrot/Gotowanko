@@ -69,21 +69,21 @@
                     <li ng-repeat="recipe in recipes">
                         <div class="media">
                             <div class="media-left media-middle">
-                                <a href="" ng-ref="/recipes/{{recipe.id}}">
+                                <a href="" ng-href="#/recipes/{{recipe.id}}">
                                     <img class="media-object" ng-src="{{recipe.photoUrl}}" alt="Image">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <a href="" ng-ref="/recipes/{{recipe.id}}"><h4 class="media-heading">
+                                <a href="" ng-href="#/recipes/{{recipe.id}}"><h4 class="media-heading">
                                     {{recipe.title}}</h4>
                                 </a>
 
-                                <p>Date added: {{recipe.dateAdded | date:'dd:MM:yyyy'}}<br>
+                                <p>Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
                                     Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
                                     Likes: {{recipe.numberOfLikes}}<br>
                                 <address>
                                     Username: <a href=""
-                                                 ng-ref="/users/details/{{recipe.userName}}">{{recipe.userName}}</a><br>
+                                                 ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
                                     Email: <a href="" ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a>
                                 </address>
                                 </p>

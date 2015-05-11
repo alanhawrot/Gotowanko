@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-xs-12">
+        <p class="well">
+            Email: {{user.email}}<br>
+            Name: {{user.name}}<br>
+            Registration date: {{user.registrationDate | date:'dd-MM-yyyy'}}<br>
+            Last logged: {{user.lastLogged | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <h3>Recipes:</h3>
+        <ul>
+            <li ng-repeat="recipe in user.recipes">
+                <p>
+                    Title: <a href="" ng-href="#/recipes/{{recipe.id}}">{{recipe.title}}</a><br>
+                    Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
+                    Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                    Likes: {{recipe.likesNumber}}
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-xs-6">
+        <h3>Comments:</h3>
+        <ul>
+            <li ng-repeat="comment in user.comments">
+                <p>
+                    Recipe: <a href="" ng-ref="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a><br>
+                    Comment: {{comment.content}}<br>
+                    Last edited: {{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
