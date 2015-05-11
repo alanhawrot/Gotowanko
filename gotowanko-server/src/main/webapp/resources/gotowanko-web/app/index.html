@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="gotowankoApp" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>
+<html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="gotowankoApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="gotowankoApp" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,10 +24,12 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-utf8-base64/angular-utf8-base64.min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="app.js"></script>
     <script src="services/services.js"></script>
     <script src="recipes/search/search.js"></script>
     <script src="users/login/login.js"></script>
+    <script src="users/logout/logout.js"></script>
     <script src="users/register/register.js"></script>
     <script src="users/details/details.js"></script>
     <script src="components/version/version.js"></script>
@@ -36,12 +42,32 @@
 
 </head>
 <body>
-  <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-  <![endif]-->
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-<div ng-view></div>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your
+    experience.</p>
+<![endif]-->
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+<div class="top-bg floating-left" style="width: 100%;">
+    <div class="floating-left margin-left-lg"><h2><b>Gotowanko</b></h2></div>
+    <div ng-controller="UserStatusController" class="margin-right-lg floating-right">
+        <div ng-if="isLogged()">
+            <a type="button" class="btn btn-default navbar-btn" ng-click="logout1()">Wyloguj <b>{{user.name}}</b></a>
+        </div>
+        <div ng-if="!isLogged()"></div>
+    </div>
+</div>
+<div class="clear"></div>
+<div class="margin-lg">
+    <ul class="nav nav-pills nav-stacked floating-left" ng-controller="NavigationController">
+        <li role="presentation" ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search">Search for recipe</a></li>
+        <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login">Login</a></li>
+        <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register">register</a></li>
+        <li role="presentation" ng-if="isLogged()" ng-class="{ active: isActive('/users/{{user.id}}') }"><a href="" ng-href="#/users/{{user.id}}">profile</a>
+        </li>
+    </ul>
+    <div class="floating-left margin-left-lg" ng-view></div>
+</div>
 </body>
 </html>

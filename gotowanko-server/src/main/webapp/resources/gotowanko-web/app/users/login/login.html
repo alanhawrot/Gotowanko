@@ -8,6 +8,7 @@
         </div>
         <div ng-show="registrationForm.$submitted || registrationForm.email.$touched">
             <alert ng-show="registrationForm.email.$error.required" type="danger">You did not enter email</alert>
+            <alert ng-show="registrationForm.email.$error.email" type="danger">Invalid email format</alert>
             <alert ng-show="registrationForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
             <alert ng-show="registrationForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
         </div>

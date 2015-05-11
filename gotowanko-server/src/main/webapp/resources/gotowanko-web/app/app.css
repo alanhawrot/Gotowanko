@@ -37,3 +37,39 @@
     left: 50%;
     z-index: 100;
 }
+
+.floating-left {
+    float: left;
+}
+
+.floating-right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.margin-right-lg {
+    margin-right: 30px;
+}
+
+.margin-top-lg {
+    margin-top: 30px;
+}
+
+.margin-left-lg {
+    margin-left: 30px;
+}
+
+.margin-lg {
+    margin: 30px;
+}
+
+.margin-sm {
+    margin: 0px;
+}
+
+.top-bg {
+    background-color: #EE5757;
+}
