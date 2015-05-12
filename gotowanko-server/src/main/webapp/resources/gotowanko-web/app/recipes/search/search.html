@@ -1,49 +1,42 @@
-<div class="row">
-    <div class="col-xs-12 well">
-        <div class="input-group input-group-lg">
-            <input type="text" class="form-control" placeholder="Search recipes by name, ingredients and author"
-                   ng-model="query">
+<div>
+    <div class="row">
+        <div class="col-xs-12 well">
+            <div class="input-group input-group-lg">
+                <input type="text" class="form-control" placeholder="Search recipes by name, ingredients and author"
+                       ng-model="query">
 
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                        aria-expanded="false">
-                    {{sort}} <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="" ng-click="sort = 'Newest'">Newest</a></li>
-                    <li><a href="" ng-click="sort = 'Alphabetical'">Alphabetical</a></li>
-                    <li><a href="" ng-click="sort = 'Most popular'">Most popular</a>
-                    </li>
-                </ul>
-                <button class="btn btn-default" type="button" ng-click="searchRecipes(query)">Search</button>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                        Elements per page: {{size}} <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" ng-click="size = 5">5</a></li>
+                        <li><a href="" ng-click="size = 10">10</a></li>
+                        <li><a href="" ng-click="size = 20">20</a></li>
+                        <li><a href="" ng-click="size = 50">50</a></li>
+                    </ul>
+                </div>
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                        {{sort}} <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" ng-click="sort = 'Newest'">Newest</a></li>
+                        <li><a href="" ng-click="sort = 'Alphabetical'">Alphabetical</a></li>
+                        <li><a href="" ng-click="sort = 'Most popular'">Most popular</a>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" type="button" ng-click="searchRecipes(query)">Search</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <p class="text-center" ng-show="totalPagesCollection.length == 0">No recipes found</p>
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="text-center" ng-show="totalPagesCollection.length == 0">No recipes found</p>
 
-        <div class="col-xs-1" ng-show="totalPagesCollection.length > 0">
-            <div class="radio">
-                <label><input type="radio" name="sizeRadio" ng-model="size" value="5"
-                              ng-click="searchRecipes(query, currentPage)">5</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sizeRadio" ng-model="size" value="10"
-                              ng-click="searchRecipes(query, currentPage)">10</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sizeRadio" ng-model="size" value="20" checked
-                              ng-click="searchRecipes(query, currentPage)">20</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sizeRadio" ng-model="size" value="50"
-                              ng-click="searchRecipes(query, currentPage)">50</label>
-            </div>
-        </div>
-
-        <div class="col-xs-11">
             <div class="text-center">
                 <nav ng-show="totalPagesCollection.length > 0">
                     <ul class="pagination pagination-lg">
@@ -68,23 +61,23 @@
                 <ul class="media-list">
                     <li ng-repeat="recipe in recipes">
                         <div class="media">
+                            <div class="media-heading">
+                                <a href="" ng-href="#/recipes/{{recipe.id}}"><h2>{{recipe.title}}</h2></a>
+                            </div>
                             <div class="media-left media-middle">
                                 <a href="" ng-href="#/recipes/{{recipe.id}}">
                                     <img class="media-object" ng-src="{{recipe.photoUrl}}" alt="Image">
                                 </a>
                             </div>
-                            <div class="media-body">
-                                <a href="" ng-href="#/recipes/{{recipe.id}}"><h4 class="media-heading">
-                                    {{recipe.title}}</h4>
-                                </a>
-
+                            <div class="media-body padding-left">
                                 <p>Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
                                     Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
                                     Likes: {{recipe.numberOfLikes}}<br>
                                 <address>
                                     Username: <a href=""
                                                  ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
-                                    Email: <a href="" ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a>
+                                    Email: <a href=""
+                                              ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a>
                                 </address>
                                 </p>
                             </div>

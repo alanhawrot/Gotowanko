@@ -8,7 +8,7 @@ var m = angular.module('gotowankoApp', [
     'gotowankoApp.loginView',
     'gotowankoApp.registrationView',
     'gotowankoApp.userDetailsView'
-])
+]);
 m.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/search'});
 }]);
@@ -46,7 +46,7 @@ m.factory('getUser', ['$log', '$cookieStore', function ($log, $cookieStore) {
 }]);
 
 
-m.factory('logout1', ['$http', '$log', '$cookieStore', '$location', function ( $http, $log, $cookieStore, $location) {
+m.factory('logout1', ['$http', '$log', '$cookieStore', '$location', function ($http, $log, $cookieStore, $location) {
     return function () {
         $log.info("Logging out");
         $http.delete('/rest/sessions')

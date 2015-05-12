@@ -66,6 +66,14 @@
     margin: 30px;
 }
 
+.padding-lg {
+    padding: 30px;
+}
+
+.padding-left {
+    padding: 30px;
+}
+
 .margin-sm {
     margin: 0px;
 }
