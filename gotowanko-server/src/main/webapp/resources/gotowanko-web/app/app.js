@@ -25,12 +25,28 @@ m.controller('NavigationController', ['$scope', '$log', '$location', 'getUser', 
         };
     }]);
 
-m.controller('UserStatusController', ['$scope', '$log', 'isLogged', 'getUser', 'logout1',
-    function ($scope, $log, isLogged, getUser, logout1) {
+m.controller('UserStatusController', ['$scope', '$log', '$http', '$location', '$cookieStore', 'isLogged', 'getUser',
+    function ($scope, $log, $http, $location, $cookieStore, isLogged, getUser) {
         $scope.isLogged = isLogged;
         $scope.user = getUser();
-        $scope.logout1 = logout1;
-
+        $scope.logout = function () {
+            $log.info("Logging out");
+            $http.delete('/rest/sessions')
+                .success(function (data, status, headers, config) {
+                    angular.forEach($cookieStore, function (v, k) {
+                        $cookieStore.remove(k);
+                    });
+                    $log.info(data + " " + status);
+                    $scope.alerts = [];
+                    $scope.alerts.push({type: 'success', msg: 'Logout successful'});
+                    $location.path('/');
+                })
+                .error(function (data, status, headers, config) {
+                    $log.info(data + " " + status);
+                    $scope.alerts = [];
+                    $scope.alerts.push({type: 'danger', msg: data});
+                });
+        };
     }]);
 
 m.factory('isLogged', ['$log', 'getUser', function ($log, getUser) {
@@ -43,26 +59,4 @@ m.factory('getUser', ['$log', '$cookieStore', function ($log, $cookieStore) {
     return function () {
         return $cookieStore.get('current.user')
     };
-}]);
-
-
-m.factory('logout1', ['$http', '$log', '$cookieStore', '$location', function ($http, $log, $cookieStore, $location) {
-    return function () {
-        $log.info("Logging out");
-        $http.delete('/rest/sessions')
-            .success(function (data, status, headers, config) {
-                $cookieStore.remove('current.user');
-                $log.info(data + " " + status);
-                $scope.alerts = [];
-                $scope.alerts.push({type: 'success', msg: 'Logout successful'});
-                Session.clear();
-                $location.path('/');
-            })
-            .error(function (data, status, headers, config) {
-                $log.info(data + " " + status);
-                $scope.alerts = [];
-                $scope.alerts.push({type: 'danger', msg: data});
-            });
-    }
-
 }]);

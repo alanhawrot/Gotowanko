@@ -33,7 +33,7 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
 
                 var encodedLoginData = base64.encode(email + ":" + password);
 
-                $log.info(email + " " + password + " " + encodedLoginData)
+                $log.info(email + " " + password + " " + encodedLoginData);
                 $http.defaults.headers.common['Authorization'] = 'Basic ' + encodedLoginData;
                 $http.post('/rest/sessions')
                     .success(function (data, status, headers, config) {

@@ -29,7 +29,6 @@
     <script src="services/services.js"></script>
     <script src="recipes/search/search.js"></script>
     <script src="users/login/login.js"></script>
-    <script src="users/logout/logout.js"></script>
     <script src="users/register/register.js"></script>
     <script src="users/details/details.js"></script>
     <script src="components/version/version.js"></script>
@@ -53,9 +52,8 @@
     <div class="floating-left margin-left-lg"><h2><b>Gotowanko</b></h2></div>
     <div ng-controller="UserStatusController" class="margin-right-lg floating-right">
         <div ng-if="isLogged()">
-            <a type="button" class="btn btn-default navbar-btn" ng-click="logout1()">Wyloguj <b>{{user.name}}</b></a>
+            <a type="button" class="btn btn-default navbar-btn" ng-click="logout()">Wyloguj <b>{{user.name}}</b></a>
         </div>
-        <div ng-if="!isLogged()"></div>
     </div>
 </div>
 <div class="clear"></div>
