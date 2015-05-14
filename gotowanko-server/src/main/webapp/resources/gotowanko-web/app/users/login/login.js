@@ -42,21 +42,19 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
                                 $scope.alerts = [];
                                 $scope.alerts.push({type: 'success', msg: 'Login successful'});
                                 $cookieStore.put('current.user', data);
-                                $scope.loginData = data;
                                 $log.info(status + ": " + data);
-
+                                location.reload();
+                                $location.path("/");
                             })
                             .error(function (data, status, headers, config) {
                                 $log.warn(status + ": " + data);
                             });
                     })
                     .error(function (data, status, headers, config) {
-                        $log.info(data + " " + status)
+                        $log.info(data + " " + status);
                         $scope.alerts = [];
                         $scope.alerts.push({type: 'danger', msg: 'Invalid email or password'});
                     });
             };
-
-
         }]);
 

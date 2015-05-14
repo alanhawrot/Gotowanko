@@ -33,12 +33,13 @@ m.controller('UserStatusController', ['$scope', '$log', '$http', '$location', '$
             $log.info("Logging out");
             $http.delete('/rest/sessions')
                 .success(function (data, status, headers, config) {
-                    angular.forEach($cookieStore, function (v, k) {
-                        $cookieStore.remove(k);
-                    });
+                    $http.defaults.headers.common.Authorization = undefined;
+                    $cookieStore.remove('current.user');
+                    $cookieStore.remove('JSESSIONID');
                     $log.info(data + " " + status);
                     $scope.alerts = [];
                     $scope.alerts.push({type: 'success', msg: 'Logout successful'});
+                    location.reload();
                     $location.path('/');
                 })
                 .error(function (data, status, headers, config) {
@@ -57,6 +58,8 @@ m.factory('isLogged', ['$log', 'getUser', function ($log, getUser) {
 
 m.factory('getUser', ['$log', '$cookieStore', function ($log, $cookieStore) {
     return function () {
-        return $cookieStore.get('current.user')
+        var user = $cookieStore.get('current.user');
+        $log.info(user);
+        return user;
     };
 }]);
