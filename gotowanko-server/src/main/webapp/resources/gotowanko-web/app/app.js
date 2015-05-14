@@ -58,8 +58,6 @@ m.factory('isLogged', ['$log', 'getUser', function ($log, getUser) {
 
 m.factory('getUser', ['$log', '$cookieStore', function ($log, $cookieStore) {
     return function () {
-        var user = $cookieStore.get('current.user');
-        $log.info(user);
-        return user;
+        return $cookieStore.get('current.user');
     };
 }]);

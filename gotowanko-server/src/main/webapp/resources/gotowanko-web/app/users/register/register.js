@@ -54,11 +54,9 @@ m.controller('RegistrationController', ['$scope', '$http', '$log', 'base64', fun
                 $log.info(data);
             }).
             error(function (data, status, headers, config) {
-                $log.info(data + " " + status)
+                $log.info(data + " " + status);
                 $scope.alerts = [];
                 $scope.alerts.push({type: 'danger', msg: data.errorMessage});
             });
     };
-
-
 }]);

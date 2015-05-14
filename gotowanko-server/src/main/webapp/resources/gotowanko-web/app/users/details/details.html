@@ -4,7 +4,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="detailsGotowankoName">Name</label>
-                    <input type="text" name="name" class="form-control" id="detailsGotowankoName" placeholder="Enter your name" ng-model="user.name"
+                    <input ng-disabled="!isUserEditing" type="text" name="name" class="form-control" id="detailsGotowankoName" placeholder="Enter your name" ng-model="user.name"
                            ng-minlength="2" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.name.$touched">
@@ -15,7 +15,7 @@
 
                 <div class="form-group">
                     <label for="detailsGotowankoEmail">Email address</label>
-                    <input type="email" name="email" class="form-control" id="detailsGotowankoEmail" placeholder="Enter email" ng-model="user.email"
+                    <input ng-disabled="!isUserEditing" type="email" name="email" class="form-control" id="detailsGotowankoEmail" placeholder="Enter email" ng-model="user.email"
                            ng-minlength="5" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.email.$touched">
@@ -33,7 +33,7 @@
             <div class="col-xs-3 col-xs-offset-2">
                 <div class="form-group">
                     <label for="detailsGotowankoPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="detailsGotowankoPassword" placeholder="Enter password" ng-model="user.password"
+                    <input ng-disabled="!isUserEditing" type="password" name="password" class="form-control" id="detailsGotowankoPassword" placeholder="Enter password" ng-model="password"
                            ng-minlength="6" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.password.$touched">
@@ -44,8 +44,8 @@
 
                 <div class="form-group">
                     <label for="detailsConfirmPassword">Confirm password</label>
-                    <input type="password" name="confirmPassword" class="form-control" id="detailsConfirmPassword" placeholder="Enter your password again"
-                           ng-model="passwordCheck" valid-password-c required>
+                    <input ng-disabled="!isUserEditing" type="password" name="confirmPassword" class="form-control" id="detailsConfirmPassword" placeholder="Enter your password again"
+                           ng-model="passwordCheck" details-valid-password-c required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.confirmPassword.$touched">
                     <alert ng-show="detailsForm.confirmPassword.$error.required" type="danger">You did not confirm password</alert>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="col-xs-2 col-xs-offset-1">
-                <button type="button" class="btn btn-warning">Edit your profile</button>
+                <button type="button" class="btn btn-warning" ng-click="editProfile()">{{editButtonText}}</button>
             </div>
 
             <div class="row">
