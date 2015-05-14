@@ -7,7 +7,7 @@ var m = angular.module('gotowankoApp.registrationView', ['ngRoute', 'ui.bootstra
             templateUrl: '/users/register/register.html',
             controller: 'RegistrationController'
         });
-    }])
+    }]);
 
 m.directive('validPasswordC', function () {
     return {
@@ -19,7 +19,8 @@ m.directive('validPasswordC', function () {
             })
         }
     }
-})
+});
+
 m.controller('RegistrationController', ['$scope', '$http', '$log', 'base64', function ($scope, $http, $log, base64) {
     $scope.gotowankoEmail = undefined;
     $scope.alerts = [
@@ -34,15 +35,15 @@ m.controller('RegistrationController', ['$scope', '$http', '$log', 'base64', fun
     $scope.register = function () {
         $scope.registrationForm.$setSubmitted();
         $scope.alerts = [];
-        $log.info("name errors:" + angular.toJson( $scope.registrationForm.name.$error));
+        $log.info("name errors:" + angular.toJson($scope.registrationForm.name.$error));
         $log.info("email errors:" + angular.toJson($scope.registrationForm.email.$error));
         $log.info("pass errors:" + angular.toJson($scope.registrationForm.password.$error));
         $scope.registrationForm.confirmPassword.$setValidity('parse', true);
         $log.info("pass confirm errors:" + angular.toJson($scope.registrationForm.confirmPassword.$error));
 
         $log.info(
-            $scope.registrationForm.confirmPassword.$valid  + " " + $scope.registrationForm.name.$valid + " " + $scope.registrationForm.email.$valid + " " + $scope.registrationForm.password.$valid)
-        if (!$scope.registrationForm.confirmPassword.$valid ||!$scope.registrationForm.name.$valid || !$scope.registrationForm.email.$valid || !$scope.registrationForm.password.$valid)
+            $scope.registrationForm.confirmPassword.$valid + " " + $scope.registrationForm.name.$valid + " " + $scope.registrationForm.email.$valid + " " + $scope.registrationForm.password.$valid)
+        if (!$scope.registrationForm.confirmPassword.$valid || !$scope.registrationForm.name.$valid || !$scope.registrationForm.email.$valid || !$scope.registrationForm.password.$valid)
             return;
         $log.info($scope.user);
 

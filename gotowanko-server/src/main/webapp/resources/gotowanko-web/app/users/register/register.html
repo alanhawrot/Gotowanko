@@ -5,7 +5,7 @@
             <input type="text" name="name" class="form-control" id="gotowankoName" placeholder="Enter your name ..." ng-model="user.name"
                    ng-minlength="2" ng-maxlength="30" required>
         </div>
-        <div ng-show="registrationForm.$submitted || registrationForm.email.$touched">
+        <div ng-show="registrationForm.$submitted || registrationForm.name.$touched">
             <alert ng-show="registrationForm.name.$error.required" type="danger">You did not enter your name</alert>
             <alert ng-show="registrationForm.name.$error.minlength" type="danger">Your name need at least 2 characters</alert>
             <alert ng-show="registrationForm.name.$error.maxlength" type="danger">Name can't be longer than 30 characters</alert>
@@ -24,7 +24,7 @@
 
         <div class="form-group">
             <label for="gotowankoPassword">Password</label>
-            <input type="password" id="password" name="password" class="form-control" id="gotowankoPassword" placeholder="Enter password ..." ng-model="user.password"
+            <input type="password" name="password" class="form-control" id="gotowankoPassword" placeholder="Enter password ..." ng-model="user.password"
                    ng-minlength="6" ng-maxlength="30" required>
         </div>
         <div ng-show="registrationForm.$submitted || registrationForm.password.$touched">

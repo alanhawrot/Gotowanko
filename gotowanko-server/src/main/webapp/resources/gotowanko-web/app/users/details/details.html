@@ -1,39 +1,98 @@
-<div class="row">
-    <div class="col-xs-12">
-        <p class="well">
-            Email: {{user.email}}<br>
-            Name: {{user.name}}<br>
-            Registration date: {{user.registrationDate | date:'dd-MM-yyyy'}}<br>
-            Last logged: {{user.lastLogged | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-        </p>
-    </div>
-</div>
+<div>
+    <div class="row well">
+        <form name="detailsForm">
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="detailsGotowankoName">Name</label>
+                    <input type="text" name="name" class="form-control" id="detailsGotowankoName" placeholder="Enter your name" ng-model="user.name"
+                           ng-minlength="2" ng-maxlength="30" required>
+                </div>
+                <div ng-show="detailsForm.$submitted || detailsForm.name.$touched">
+                    <alert ng-show="detailsForm.name.$error.required" type="danger">You did not enter your name</alert>
+                    <alert ng-show="detailsForm.name.$error.minlength" type="danger">Your name need at least 2 characters</alert>
+                    <alert ng-show="detailsForm.name.$error.maxlength" type="danger">Name can't be longer than 30 characters</alert>
+                </div>
 
-<div class="row">
-    <div class="col-xs-6">
-        <h3>Recipes:</h3>
-        <ul>
-            <li ng-repeat="recipe in user.recipes">
+                <div class="form-group">
+                    <label for="detailsGotowankoEmail">Email address</label>
+                    <input type="email" name="email" class="form-control" id="detailsGotowankoEmail" placeholder="Enter email" ng-model="user.email"
+                           ng-minlength="5" ng-maxlength="30" required>
+                </div>
+                <div ng-show="detailsForm.$submitted || detailsForm.email.$touched">
+                    <alert ng-show="detailsForm.email.$error.required" type="danger">You did not enter email</alert>
+                    <alert ng-show="detailsForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
+                    <alert ng-show="detailsForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+                </div>
+
                 <p>
-                    Title: <a href="" ng-href="#/recipes/{{recipe.id}}">{{recipe.title}}</a><br>
-                    Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
-                    Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                    Likes: {{recipe.likesNumber}}
+                    Registration date: {{user.registrationDate | date:'dd-MM-yyyy'}}<br>
+                    Last logged: {{user.lastLogged | date:'dd-MM-yyyy HH:mm:ss'}}
                 </p>
-            </li>
-        </ul>
+            </div>
+
+            <div class="col-xs-3 col-xs-offset-2">
+                <div class="form-group">
+                    <label for="detailsGotowankoPassword">Password</label>
+                    <input type="password" name="password" class="form-control" id="detailsGotowankoPassword" placeholder="Enter password" ng-model="user.password"
+                           ng-minlength="6" ng-maxlength="30" required>
+                </div>
+                <div ng-show="detailsForm.$submitted || detailsForm.password.$touched">
+                    <alert ng-show="detailsForm.password.$error.required" type="danger">You did not enter password</alert>
+                    <alert ng-show="detailsForm.password.$error.minlength" type="danger">Your password need at least 6 characters</alert>
+                    <alert ng-show="detailsForm.password.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+                </div>
+
+                <div class="form-group">
+                    <label for="detailsConfirmPassword">Confirm password</label>
+                    <input type="password" name="confirmPassword" class="form-control" id="detailsConfirmPassword" placeholder="Enter your password again"
+                           ng-model="passwordCheck" valid-password-c required>
+                </div>
+                <div ng-show="detailsForm.$submitted || detailsForm.confirmPassword.$touched">
+                    <alert ng-show="detailsForm.confirmPassword.$error.required" type="danger">You did not confirm password</alert>
+                    <alert ng-show="detailsForm.confirmPassword.$error.noMatch" type="danger">Passwords doesn't match</alert>
+                </div>
+            </div>
+
+            <div class="col-xs-2 col-xs-offset-1">
+                <button type="button" class="btn btn-warning">Edit your profile</button>
+            </div>
+
+            <div class="row">
+                <div ng-repeat="alert in alerts" class="alert-container">
+                    <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="col-xs-6">
-        <h3>Comments:</h3>
-        <ul>
-            <li ng-repeat="comment in user.comments">
-                <p>
-                    Recipe: <a href="" ng-ref="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a><br>
-                    Comment: {{comment.content}}<br>
-                    Last edited: {{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                </p>
-            </li>
-        </ul>
+    <div class="row">
+        <div class="col-xs-6">
+            <h3>Recipes:</h3>
+            <input type="text" class="form-control" placeholder="Filter recipes" ng-model="recipesFilter">
+            <ul>
+                <li ng-repeat="recipe in user.recipes | filter:recipesFilter">
+                    <p>
+                        Title: <a href="" ng-href="#/recipes/{{recipe.id}}">{{recipe.title}}</a><br>
+                        Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
+                        Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                        Likes: {{recipe.likesNumber}}
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-xs-6">
+            <h3>Comments:</h3>
+            <input type="text" class="form-control" placeholder="Filter comments" ng-model="commentsFilter">
+            <ul>
+                <li ng-repeat="comment in user.comments | filter:commentsFilter">
+                    <p>
+                        Recipe: <a href="" ng-ref="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a><br>
+                        Comment: {{comment.content}}<br>
+                        Last edited: {{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                    </p>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
