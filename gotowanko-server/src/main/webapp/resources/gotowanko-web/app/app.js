@@ -9,26 +9,25 @@ var m = angular.module('gotowankoApp', [
     'gotowankoApp.registrationView',
     'gotowankoApp.userDetailsView'
 ]);
+
 m.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/search'});
 }]);
 
-m.controller('NavigationController', ['$scope', '$log', '$location', 'getUser', 'isLogged',
-    function ($scope, $log, $location, getUser, isLogged) {
-        $scope.user = getUser();
-        $scope.isLogged = isLogged;
+m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookieStore',
+    function ($scope, $log, $http, $location, $cookieStore) {
+        $scope.loggedUser = undefined;
+
+        $scope.isLogged = function () {
+            return $scope.loggedUser != undefined
+        };
 
         $scope.isActive = function (viewLocation) {
             var active = (viewLocation === $location.path());
             $log.info($location.path() + ", active: " + active);
             return active;
         };
-    }]);
 
-m.controller('UserStatusController', ['$scope', '$log', '$http', '$location', '$cookieStore', 'isLogged', 'getUser',
-    function ($scope, $log, $http, $location, $cookieStore, isLogged, getUser) {
-        $scope.isLogged = isLogged;
-        $scope.user = getUser();
         $scope.logout = function () {
             $log.info("Logging out");
             $http.delete('/rest/sessions')
@@ -36,10 +35,10 @@ m.controller('UserStatusController', ['$scope', '$log', '$http', '$location', '$
                     $http.defaults.headers.common.Authorization = undefined;
                     $cookieStore.remove('current.user');
                     $cookieStore.remove('JSESSIONID');
+                    $scope.loggedUser = undefined;
                     $log.info(data + " " + status);
                     $scope.alerts = [];
                     $scope.alerts.push({type: 'success', msg: 'Logout successful'});
-                    location.reload();
                     $location.path('/');
                 })
                 .error(function (data, status, headers, config) {
@@ -49,15 +48,3 @@ m.controller('UserStatusController', ['$scope', '$log', '$http', '$location', '$
                 });
         };
     }]);
-
-m.factory('isLogged', ['$log', 'getUser', function ($log, getUser) {
-    return function () {
-        return getUser() != undefined
-    };
-}]);
-
-m.factory('getUser', ['$log', '$cookieStore', function ($log, $cookieStore) {
-    return function () {
-        return $cookieStore.get('current.user');
-    };
-}]);

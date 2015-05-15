@@ -9,8 +9,8 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
         });
     }])
 
-    .controller('LoginController', ['$scope', '$http', '$log', 'base64', '$cookieStore', '$location',
-        function ($scope, $http, $log, base64, $cookieStore, $location) {
+    .controller('LoginController', ['$scope', '$rootScope', '$http', '$log', 'base64', '$cookieStore', '$location',
+        function ($scope, $rootScope, $http, $log, base64, $cookieStore, $location) {
             $scope.gotowankoEmail = undefined;
             $scope.alerts = [
                 /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
@@ -42,8 +42,8 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
                                 $scope.alerts = [];
                                 $scope.alerts.push({type: 'success', msg: 'Login successful'});
                                 $cookieStore.put('current.user', data);
+                                $scope.$parent.loggedUser = data;
                                 $log.info(status + ": " + data);
-                                location.reload();
                                 $location.path("/");
                             })
                             .error(function (data, status, headers, config) {

@@ -21,8 +21,8 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
         }
     })
 
-    .controller('UserDetailsController', ['$scope', '$routeParams', '$http', '$cookieStore', 'base64',
-        function ($scope, $routeParams, $http, $cookieStore, base64) {
+    .controller('UserDetailsController', ['$scope', '$route', '$routeParams', '$http', '$cookieStore', 'base64',
+        function ($scope, $route, $routeParams, $http, $cookieStore, base64) {
         $scope.alerts = [
             /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
              {type: 'success', msg: 'Well done! You successfully read this important alert message.'}*/
@@ -61,8 +61,9 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
                         var encodedLoginData = base64.encode($scope.user.email + ":" + $scope.password);
                         $http.defaults.headers.common.Authorization = 'Basic ' + encodedLoginData;
                         $cookieStore.put('current.user', $scope.user);
+                        $scope.$parent.loggedUser = $scope.user;
 
-                        location.reload();
+                        $route.reload();
                     })
                     .error(function (data) {
                         $scope.alerts = [];
