@@ -5,17 +5,40 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
             <div class="item active" style="padding-left: 150px">
-                <div>
-                    <h1>Jajecznica</h1>                                <p>Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
-                    Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                    Likes: {{recipe.numberOfLikes}}<br>
-                    <address>
-                        Username: <a href=""
-                                     ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
-                        Email: <a href=""
-                                  ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a>
-                    </address>
-                    </p>
+                <div class="container-fluid">
+                    <h1 class="row">Jajecznica</h1>
+
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img src="{{recipe.photoUrl}}"/>
+                        </div>
+
+                        <div class="col-xs-9">
+                            Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
+                            Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                            Likes: {{recipe.likesNumber}}<br>
+                            Owner: <a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
+                        <span ng-if="recipe.approximateCost">
+                            Approximate cost: <a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.approximateCost}}</a>
+                        </span><br>
+                            <span ng-if="recipe.cookingTime">Approximate cooking time: {{recipe.cookingTime | msToDateTime }}</span><br>
+                        </div>
+                    </div>
+                    <div class="row col-xs-8">
+                        <h3>Comments:</h3>
+                        <input type="text" class="form-control input-lg" placeholder="Filter comments" ng-model="commentsFilter"><br/>
+
+                        <div class="panel panel-default" ng-repeat="comment in recipe.comments | filter:commentsFilter">
+                            <div class="panel-heading">
+                                <h4 style="width:100%">{{comment.userName}}
+                                    <small>{{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</small>
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                {{comment.content}}
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -28,11 +51,13 @@
         </div>
 
         <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="background: red; width: 10%;">
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="background: #EE5757; width: 10%;"
+           ng-non-bindable>
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="background: red; width: 10%;">
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="background: #EE5757; width: 10%;"
+           ng-non-bindable>
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>

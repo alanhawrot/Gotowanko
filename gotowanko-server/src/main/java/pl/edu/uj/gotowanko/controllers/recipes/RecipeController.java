@@ -329,9 +329,11 @@ public class RecipeController {
         dto.setLastEdited(recipe.getLastEdited());
         dto.setApproximateCost(recipe.getApproximateCost());
         dto.setLikesNumber(recipe.getUserLikes().size());
-        dto.setCookingTime(Duration.of(recipe.getCookingTimeInMinutes(), ChronoUnit.MINUTES));
+        if (recipe.getCookingTimeInMinutes() != null)
+            dto.setCookingTime(Duration.of(recipe.getCookingTimeInMinutes(), ChronoUnit.MINUTES));
         dto.setPhotoUrl(recipe.getPhotoUrl());
         dto.setUserName(recipe.getUser().getName());
+        dto.setUserId(recipe.getUser().getId());
 
         for (RecipeStep recipeStep : recipe.getRecipeSteps()) {
             GetRecipeStepsResponseDTO recipeStepDto = new GetRecipeStepsResponseDTO();
@@ -350,8 +352,10 @@ public class RecipeController {
                 recipeStepDto.getIngredients().add(recipeStepIngredientDto);
             }
             recipeStepDto.setPhotoUrl(recipeStep.getPhotoUrl());
-            recipeStepDto.setRealizationTime(Duration.of(recipeStep.getRealizationTimeInMinutes(), ChronoUnit.MINUTES));
-            recipeStepDto.setTimerDuration(Duration.of(recipeStep.getTimerDurationInMinutes(), ChronoUnit.MINUTES));
+            if (recipeStep.getRealizationTimeInMinutes() != null)
+                recipeStepDto.setRealizationTime(Duration.of(recipeStep.getRealizationTimeInMinutes(), ChronoUnit.MINUTES));
+            if (recipeStep.getTimerDurationInMinutes() != null)
+                recipeStepDto.setTimerDuration(Duration.of(recipeStep.getTimerDurationInMinutes(), ChronoUnit.MINUTES));
             recipeStepDto.setVideoUrl(recipeStep.getVideoUrl());
 
             dto.getRecipeSteps().add(recipeStepDto);
@@ -359,6 +363,7 @@ public class RecipeController {
 
         for (Comment comment : recipe.getComments()) {
             GetRecipeCommentResponseDTO commentDto = new GetRecipeCommentResponseDTO();
+            commentDto.setUserId(comment.getUser().getId());
             commentDto.setUserName(comment.getUser().getName());
             commentDto.setLastEdited(comment.getLastEdited());
             commentDto.setContent(comment.getContent());

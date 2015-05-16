@@ -19,6 +19,7 @@ public class GetRecipeResponseDTO {
     private Collection<GetRecipeStepsResponseDTO> recipeSteps = new ArrayList<>();
     private Collection<GetRecipeCommentResponseDTO> comments = new ArrayList<>();
     private String userName;
+    private Long userId;
 
     public void setTitle(String title) {
         this.title = title;
@@ -99,5 +100,13 @@ public class GetRecipeResponseDTO {
 
     public String getUserName() {
         return userName;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }
