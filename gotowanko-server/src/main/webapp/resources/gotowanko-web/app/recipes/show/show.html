@@ -4,9 +4,9 @@
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
-            <div class="item active" style="padding-left: 150px">
+            <div class="item active" style="padding-left: 12%; padding-right: 12%">
                 <div class="container-fluid">
-                    <h1 class="row">Jajecznica</h1>
+                    <h2>Jajecznica</h2>
 
                     <div class="row">
                         <div class="col-xs-3">
@@ -14,17 +14,25 @@
                         </div>
 
                         <div class="col-xs-9">
-                            Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
-                            Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                            Likes: {{recipe.likesNumber}}<br>
-                            Owner: <a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
-                        <span ng-if="recipe.approximateCost">
-                            Approximate cost: <a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.approximateCost}}</a>
-                        </span><br>
-                            <span ng-if="recipe.cookingTime">Approximate cooking time: {{recipe.cookingTime | msToDateTime }}</span><br>
+                            <dl class="dl-horizontal">
+                                <dt>last modification</dt>
+                                <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
+                                <dt>Likes</dt>
+                                <dd>{{recipe.likesNumber}}</dd>
+                                <dt>Owner</dt>
+                                <dd><a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a></dd>
+                                <div ng-if="recipe.approximateCost">
+                                    <dt>Approximate cost</dt>
+                                    <dd>{{recipe.approximateCost}}</dd>
+                                </div>
+                                <div ng-if="recipe.cookingTime">
+                                    <dt>cooking time</dt>
+                                    <dd>{{recipe.cookingTime | msToDateTime }}</dd>
+                                </div>
+                            </dl>
                         </div>
                     </div>
-                    <div class="row col-xs-8">
+                    <div class="row col-xs-12">
                         <h3>Comments:</h3>
                         <input type="text" class="form-control input-lg" placeholder="Filter comments" ng-model="commentsFilter"><br/>
 
@@ -51,13 +59,11 @@
         </div>
 
         <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="background: #EE5757; width: 10%;"
-           ng-non-bindable>
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="background: #EE5757; width: 10%;">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="background: #EE5757; width: 10%;"
-           ng-non-bindable>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="background: #EE5757; width: 10%;">
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
