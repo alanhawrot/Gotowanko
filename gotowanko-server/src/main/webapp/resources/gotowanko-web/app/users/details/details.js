@@ -21,57 +21,67 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
         }
     })
 
-    .controller('UserDetailsController', ['$scope', '$route', '$routeParams', '$http', '$cookieStore', 'base64',
-        function ($scope, $route, $routeParams, $http, $cookieStore, base64) {
-        $scope.alerts = [
-            /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
-             {type: 'success', msg: 'Well done! You successfully read this important alert message.'}*/
-        ];
-        $scope.closeAlert = function (index) {
-            $scope.alerts.splice(index, 1);
-        };
+    .controller('UserDetailsController', ['$scope', '$route', '$routeParams', '$http', '$cookieStore', '$location', 'base64',
+        function ($scope, $route, $routeParams, $http, $cookieStore, $location, base64) {
+            $scope.alerts = [
+                /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
+                 {type: 'success', msg: 'Well done! You successfully read this important alert message.'}*/
+            ];
+            $scope.closeAlert = function (index) {
+                $scope.alerts.splice(index, 1);
+            };
 
-        $scope.editButtonText = 'Edit your profile';
-        $scope.isUserEditing = false;
+            $scope.editButtonText = 'Edit your profile';
+            $scope.isUserEditing = false;
 
-        var usersUrl = '/rest/users/' + $routeParams.userId;
+            var usersUrl = '/rest/users/' + $routeParams.userId;
 
-        $http.get(usersUrl).success(function (data) {
-            $scope.user = data;
-        });
+            $http.get(usersUrl).success(function (data) {
+                $scope.user = data;
+            });
 
-        $scope.editProfile = function () {
-            if ($scope.isUserEditing) {
-                $scope.detailsForm.$setSubmitted();
-                $scope.alerts = [];
-                $scope.detailsForm.confirmPassword.$setValidity('parse', true);
+            $scope.editProfile = function () {
+                if ($scope.isUserEditing) {
+                    $scope.detailsForm.$setSubmitted();
+                    $scope.alerts = [];
+                    $scope.detailsForm.confirmPassword.$setValidity('parse', true);
 
-                if (!$scope.detailsForm.confirmPassword.$valid || !$scope.detailsForm.name.$valid || !$scope.detailsForm.email.$valid || !$scope.detailsForm.password.$valid)
-                    return;
+                    if (!$scope.detailsForm.confirmPassword.$valid || !$scope.detailsForm.name.$valid || !$scope.detailsForm.email.$valid || !$scope.detailsForm.password.$valid)
+                        return;
 
-                var putData = {'name': $scope.user.name, 'email': $scope.user.email, 'password': $scope.password};
+                    var putData = {'name': $scope.user.name, 'email': $scope.user.email, 'password': $scope.password};
 
-                $http.put(usersUrl, putData)
-                    .success(function (data) {
-                        $scope.alerts = [];
-                        $scope.alerts.push({type: 'success', msg: 'Changes are saved'});
-                        $scope.isUserEditing = false;
-                        $scope.editButtonText = 'Edit your profile';
+                    $http.put(usersUrl, putData)
+                        .success(function () {
+                            $scope.alerts = [];
+                            $scope.alerts.push({type: 'success', msg: 'Changes are saved'});
+                            $scope.isUserEditing = false;
+                            $scope.editButtonText = 'Edit your profile';
 
-                        var encodedLoginData = base64.encode($scope.user.email + ":" + $scope.password);
-                        $http.defaults.headers.common.Authorization = 'Basic ' + encodedLoginData;
-                        $cookieStore.put('current.user', $scope.user);
-                        $scope.$parent.loggedUser = $scope.user;
+                            var encodedLoginData = base64.encode($scope.user.email + ":" + $scope.password);
+                            $http.defaults.headers.common.Authorization = 'Basic ' + encodedLoginData;
+                            $cookieStore.put('current.user', $scope.user);
+                            $scope.$parent.loggedUser = $scope.user;
 
-                        $route.reload();
-                    })
-                    .error(function (data) {
-                        $scope.alerts = [];
-                        $scope.alerts.push({type: 'danger', msg: data[0].errorMessage});
-                    });
-            } else {
-                $scope.isUserEditing = true;
-                $scope.editButtonText = 'Save changes';
-            }
-        };
-    }]);
+                            $route.reload();
+                        })
+                        .error(function (data) {
+                            $scope.alerts = [];
+                            $scope.alerts.push({type: 'danger', msg: data[0].errorMessage});
+                        });
+                } else {
+                    $scope.isUserEditing = true;
+                    $scope.editButtonText = 'Save changes';
+                }
+            };
+
+            $scope.deleteAccount = function () {
+                $http.delete(usersUrl).success(function () {
+                    $http.defaults.headers.common.Authorization = undefined;
+                    $cookieStore.remove('current.user');
+                    $cookieStore.remove('JSESSIONID');
+                    $scope.$parent.loggedUser = undefined;
+                    $location.path('/');
+                });
+            };
+        }]);

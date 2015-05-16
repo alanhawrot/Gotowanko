@@ -1,27 +1,61 @@
 <div>
+    <div class="modal fade" data-backdrop="false" id="deleteAccountModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this account and all of the recipes connected with it?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteAccount()">Yes,
+                        delete account
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
     <div class="row well">
         <form name="detailsForm">
             <div class="col-xs-4">
                 <div class="form-group">
                     <label for="detailsGotowankoName">Name</label>
-                    <input ng-disabled="!isUserEditing" type="text" name="name" class="form-control" id="detailsGotowankoName" placeholder="Enter your name" ng-model="user.name"
+                    <input ng-disabled="!isUserEditing" type="text" name="name" class="form-control"
+                           id="detailsGotowankoName" placeholder="Enter your name" ng-model="user.name"
                            ng-minlength="2" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.name.$touched">
                     <alert ng-show="detailsForm.name.$error.required" type="danger">You did not enter your name</alert>
-                    <alert ng-show="detailsForm.name.$error.minlength" type="danger">Your name need at least 2 characters</alert>
-                    <alert ng-show="detailsForm.name.$error.maxlength" type="danger">Name can't be longer than 30 characters</alert>
+                    <alert ng-show="detailsForm.name.$error.minlength" type="danger">Your name need at least 2
+                        characters
+                    </alert>
+                    <alert ng-show="detailsForm.name.$error.maxlength" type="danger">Name can't be longer than 30
+                        characters
+                    </alert>
                 </div>
 
                 <div class="form-group">
                     <label for="detailsGotowankoEmail">Email address</label>
-                    <input ng-disabled="!isUserEditing" type="email" name="email" class="form-control" id="detailsGotowankoEmail" placeholder="Enter email" ng-model="user.email"
+                    <input ng-disabled="!isUserEditing" type="email" name="email" class="form-control"
+                           id="detailsGotowankoEmail" placeholder="Enter email" ng-model="user.email"
                            ng-minlength="5" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.email.$touched">
                     <alert ng-show="detailsForm.email.$error.required" type="danger">You did not enter email</alert>
-                    <alert ng-show="detailsForm.email.$error.minlength" type="danger">Your email need at least 5 characters</alert>
-                    <alert ng-show="detailsForm.email.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+                    <alert ng-show="detailsForm.email.$error.minlength" type="danger">Your email need at least 5
+                        characters
+                    </alert>
+                    <alert ng-show="detailsForm.email.$error.maxlength" type="danger">Email can't be longer than 30
+                        characters
+                    </alert>
                 </div>
 
                 <p>
@@ -33,28 +67,42 @@
             <div class="col-xs-3 col-xs-offset-2">
                 <div class="form-group">
                     <label for="detailsGotowankoPassword">Password</label>
-                    <input ng-disabled="!isUserEditing" type="password" name="password" class="form-control" id="detailsGotowankoPassword" placeholder="Enter password" ng-model="password"
+                    <input ng-disabled="!isUserEditing" type="password" name="password" class="form-control"
+                           id="detailsGotowankoPassword" placeholder="Enter password" ng-model="password"
                            ng-minlength="6" ng-maxlength="30" required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.password.$touched">
-                    <alert ng-show="detailsForm.password.$error.required" type="danger">You did not enter password</alert>
-                    <alert ng-show="detailsForm.password.$error.minlength" type="danger">Your password need at least 6 characters</alert>
-                    <alert ng-show="detailsForm.password.$error.maxlength" type="danger">Email can't be longer than 30 characters</alert>
+                    <alert ng-show="detailsForm.password.$error.required" type="danger">You did not enter password
+                    </alert>
+                    <alert ng-show="detailsForm.password.$error.minlength" type="danger">Your password need at least 6
+                        characters
+                    </alert>
+                    <alert ng-show="detailsForm.password.$error.maxlength" type="danger">Email can't be longer than 30
+                        characters
+                    </alert>
                 </div>
 
                 <div class="form-group">
                     <label for="detailsConfirmPassword">Confirm password</label>
-                    <input ng-disabled="!isUserEditing" type="password" name="confirmPassword" class="form-control" id="detailsConfirmPassword" placeholder="Enter your password again"
+                    <input ng-disabled="!isUserEditing" type="password" name="confirmPassword" class="form-control"
+                           id="detailsConfirmPassword" placeholder="Enter your password again"
                            ng-model="passwordCheck" details-valid-password-c required>
                 </div>
                 <div ng-show="detailsForm.$submitted || detailsForm.confirmPassword.$touched">
-                    <alert ng-show="detailsForm.confirmPassword.$error.required" type="danger">You did not confirm password</alert>
-                    <alert ng-show="detailsForm.confirmPassword.$error.noMatch" type="danger">Passwords doesn't match</alert>
+                    <alert ng-show="detailsForm.confirmPassword.$error.required" type="danger">You did not confirm
+                        password
+                    </alert>
+                    <alert ng-show="detailsForm.confirmPassword.$error.noMatch" type="danger">Passwords doesn't match
+                    </alert>
                 </div>
             </div>
 
             <div class="col-xs-2 col-xs-offset-1">
                 <button type="button" class="btn btn-warning" ng-click="editProfile()">{{editButtonText}}</button>
+                <button type="button" class="btn btn-danger margin-top-lg" data-toggle="modal"
+                        data-target="#deleteAccountModal" ng-disabled="!isUserEditing">
+                    Delete account
+                </button>
             </div>
 
             <div class="row">

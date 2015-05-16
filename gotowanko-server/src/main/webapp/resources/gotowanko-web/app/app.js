@@ -16,7 +16,7 @@ m.config(['$routeProvider', function ($routeProvider) {
 
 m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookieStore',
     function ($scope, $log, $http, $location, $cookieStore) {
-        $scope.loggedUser = undefined;
+        $scope.loggedUser = $cookieStore.get('current.user');
 
         $scope.isLogged = function () {
             return $scope.loggedUser != undefined
