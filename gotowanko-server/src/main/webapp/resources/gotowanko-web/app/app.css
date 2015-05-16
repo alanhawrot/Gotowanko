@@ -81,3 +81,17 @@
 .top-bg {
     background-color: #EE5757;
 }
+
+.carousel-indicators li {
+    border: 1px solid #EE5757 !important;
+}
+
+.carousel-indicators .active {
+    background-color: #EE5757 !important;
+    border: 1px solid #EE5757 !important;
+}
+
+.carousel-control {
+    background: #EE5757 !important;
+    width: 10% !important;
+}
