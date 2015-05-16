@@ -28,6 +28,7 @@
     <script src="app.js"></script>
     <script src="services/services.js"></script>
     <script src="recipes/search/search.js"></script>
+    <script src="recipes/show/show.js"></script>
     <script src="users/login/login.js"></script>
     <script src="users/register/register.js"></script>
     <script src="users/details/details.js"></script>
@@ -63,10 +64,16 @@
             <li role="presentation" ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search"><h4>Search for recipe</h4></a></li>
             <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login"><h4>Login</h4></a></li>
             <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register"><h4>Register</h4></a></li>
-            <li role="presentation" ng-if="isLogged()" ng-class="{ active: isActive('/users/{{loggedUser.id}}') }"><a href="" ng-href="#/users/{{loggedUser.id}}"><h4>Profile</h4></a></li>
+            <li role="presentation" ng-if="isLogged()" ng-class="{ active: isActive('/users/{{loggedUser.id}}') }">
+                <a href="" ng-href="#/users/{{loggedUser.id}}"><h4>Profile</h4></a></li>
         </ul>
     </div>
     <div class="col-xs-10" ng-view></div>
+</div>
+
+
+<div ng-repeat="alert in alerts" class="alert-container">
+    <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 </div>
 </body>
 </html>

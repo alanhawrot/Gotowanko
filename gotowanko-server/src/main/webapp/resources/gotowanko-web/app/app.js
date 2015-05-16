@@ -5,6 +5,7 @@ var m = angular.module('gotowankoApp', [
     'ngRoute',
     'ngCookies',
     'gotowankoApp.searchView',
+    'gotowankoApp.showRecipeView',
     'gotowankoApp.loginView',
     'gotowankoApp.registrationView',
     'gotowankoApp.userDetailsView'
@@ -37,14 +38,14 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
                     $cookieStore.remove('JSESSIONID');
                     $scope.loggedUser = undefined;
                     $log.info(data + " " + status);
-                    $scope.alerts = [];
-                    $scope.alerts.push({type: 'success', msg: 'Logout successful'});
+                    $scope.$parent.alerts = [];
+                    $scope.$parent.alerts.push({type: 'success', msg: 'Logout successful'});
                     $location.path('/');
                 })
                 .error(function (data, status, headers, config) {
                     $log.info(data + " " + status);
-                    $scope.alerts = [];
-                    $scope.alerts.push({type: 'danger', msg: data});
+                    $scope.$parent.alerts = [];
+                    $scope.$parent.alerts.push({type: 'danger', msg: data});
                 });
         };
     }]);

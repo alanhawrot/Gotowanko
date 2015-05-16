@@ -12,18 +12,18 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
     .controller('LoginController', ['$scope', '$rootScope', '$http', '$log', 'base64', '$cookieStore', '$location',
         function ($scope, $rootScope, $http, $log, base64, $cookieStore, $location) {
             $scope.gotowankoEmail = undefined;
-            $scope.alerts = [
+            $scope.$parent.alerts = [
                 /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
                  {type: 'success', msg: 'Well done! You successfully read this important alert message.'}*/
             ];
 
-            $scope.closeAlert = function (index) {
-                $scope.alerts.splice(index, 1);
+            $scope.$parent.closeAlert = function (index) {
+                $scope.$parent.alerts.splice(index, 1);
             };
 
             $scope.gotowankoLogin = function (email, password) {
                 $scope.registrationForm.$setSubmitted();
-                $scope.alerts = [];
+                $scope.$parent.alerts = [];
                 $log.info($scope);
                 $log.info("email errors:" + angular.toJson($scope.registrationForm.email.$error));
                 $log.info("pass errors:" + angular.toJson($scope.registrationForm.password.$error));
@@ -39,8 +39,8 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
                     .success(function (data, status, headers, config) {
                         $http.get('/rest/users/currently_logged')
                             .success(function (data, status, headers, config) {
-                                $scope.alerts = [];
-                                $scope.alerts.push({type: 'success', msg: 'Login successful'});
+                                $scope.$parent.alerts = [];
+                                $scope.$parent.alerts.push({type: 'success', msg: 'Login successful'});
                                 $cookieStore.put('current.user', data);
                                 $scope.$parent.loggedUser = data;
                                 $log.info(status + ": " + data);
@@ -52,8 +52,8 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap'
                     })
                     .error(function (data, status, headers, config) {
                         $log.info(data + " " + status);
-                        $scope.alerts = [];
-                        $scope.alerts.push({type: 'danger', msg: 'Invalid email or password'});
+                        $scope.$parent.alerts = [];
+                        $scope.$parent.alerts.push({type: 'danger', msg: 'Invalid email or password'});
                     });
             };
         }]);

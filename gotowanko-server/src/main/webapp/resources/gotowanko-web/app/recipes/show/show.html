@@ -1,0 +1,47 @@
+<div class="well well-lg">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="false" data-wrap="false">
+
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" style="padding-left: 150px">
+                <div>
+                    <h1>Jajecznica</h1>                                <p>Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
+                    Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                    Likes: {{recipe.numberOfLikes}}<br>
+                    <address>
+                        Username: <a href=""
+                                     ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a><br>
+                        Email: <a href=""
+                                  ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a>
+                    </address>
+                    </p>
+
+                </div>
+            </div>
+            <div class="item" style="padding-left: 150px">
+                <div>
+                    <h1>Jajecznica</h1>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="background: red; width: 10%;">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="background: red; width: 10%;">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators" style="position: relative; bottom: 0px;">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        </ol>
+
+    </div>
+</div>
