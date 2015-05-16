@@ -4,9 +4,9 @@
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
-            <div class="item active" style="padding-left: 12%; padding-right: 12%">
+            <div class="item active">
                 <div class="container-fluid">
-                    <h2>Jajecznica</h2>
+                    <h3>{{recipe.title}}</h3>
 
                     <div class="row">
                         <div class="col-xs-3">
@@ -50,9 +50,57 @@
 
                 </div>
             </div>
-            <div class="item" style="padding-left: 150px">
+            <div class="item container-fluid" ng-repeat="step in recipe.recipeSteps">
+                <h3 class="row">{{recipe.title}}</h3>
+
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img src="{{step.photoUrl}}" ng-show="{{step.photoUrl}}"/>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4 class="text-center">{{step.title}}</h4>
+
+                        <p>{{step.description}}</p>
+                        <dl ng-show="step.videoUrl">
+                            <dt>Zobacz film</dt>
+                            <dd><a href="{{step.videoUrl}}">{{step.videoUrl}}</a></dd>
+                        </dl>
+                    </div>
+                </div>
+
                 <div>
-                    <h1>Jajecznica</h1>
+                    <div class="floating-left" ng-repeat="ingredient in step.ingredients">
+                        <div class="floating-left">
+                            <img src="{{ingredient.iconUrl}}"/>
+                        </div>
+                        <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
+                            <h4>{{ingredient.name}}</h4>
+                            {{ingredient.amount}} {{ingredient.unitName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <br/>
+
+                <div ng-show="{{step.realizationTime}}">
+                    <div class="floating-left">
+                        <img src="images/recipe/clock.png"/>
+                    </div>
+                    <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
+                        <h5>Approximate realization time</h5>
+
+                        <div class="text-center"><strong>{{step.realizationTime | msToDateTime}}</strong></div>
+                    </div>
+                </div>
+                <div ng-show="{{step.timerDuration}}">
+                    <div class="floating-left">
+                        <img src="images/recipe/alarm.png"/>
+                    </div>
+                    <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
+                        <h5>Run alarm after</h5>
+
+                        <div class="text-center"><strong>{{step.timerDuration | msToDateTime}}</strong></div>
+                    </div>
                 </div>
             </div>
 
@@ -71,7 +119,7 @@
         <!-- Indicators -->
         <ol class="carousel-indicators" style="position: relative; bottom: 0px;">
             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="{{$index+1}}" ng-repeat="step in recipe.recipeSteps"></li>
         </ol>
 
     </div>

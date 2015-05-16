@@ -95,3 +95,8 @@
     background: #EE5757 !important;
     width: 10% !important;
 }
+
+.carousel-inner .item {
+    padding-left: 14% !important;
+    padding-right: 14% !important;
+}
