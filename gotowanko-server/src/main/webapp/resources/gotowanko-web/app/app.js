@@ -60,18 +60,30 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
 
         $scope.alerts = [];
 
-        $scope.setAlert = function(alert) {
+        $scope.setAlert = function (alert) {
             $scope.alerts = [];
             $scope.addAlert(alert);
 
         };
-        $scope.addAlert = function(alert) {
+        $scope.addAlert = function (alert) {
             $scope.alerts.push(alert);
 
         };
 
         $scope.closeAlert = function (index) {
             $scope.alerts.splice(index, 1);
+        };
+
+        $scope.getCurrentlyLoggedUser = function () {
+            $http.get('/rest/users/currently_logged')
+                .success(function (data, status, headers, config) {
+                    $cookieStore.put('current.user', data);
+                    $scope.$parent.loggedUser = data;
+                    $log.info(status + ": " + data);
+                })
+                .error(function (data, status, headers, config) {
+                    $log.warn(status + ": " + data);
+                });
         };
 
     }]);

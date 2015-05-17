@@ -35,7 +35,7 @@
 
                         <div class="col-xs-9">
                             <dl class="dl-horizontal">
-                                <dt>last modification</dt>
+                                <dt>Last modification</dt>
                                 <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
                                 <dt>Likes</dt>
                                 <dd>{{recipe.likesNumber}}</dd>
@@ -46,14 +46,24 @@
                                     <dd>{{recipe.approximateCost}}</dd>
                                 </div>
                                 <div ng-if="recipe.cookingTime">
-                                    <dt>cooking time</dt>
+                                    <dt>Cooking time</dt>
                                     <dd>{{recipe.cookingTime | msToDateTime }}</dd>
                                 </div>
                             </dl>
                         </div>
                     </div>
                     <div class="row col-xs-12">
-                        <h3>Comments:</h3>
+                        <div>
+                            <h3 class="col-xs-11">Comments:</h3>
+                            <div class="col-xs-1">
+                                <button class="floating-right" type="button" ng-if="canLike()" ng-click="like()">
+                                    <span class="glyphicon glyphicon-thumbs-up padding-sm" aria-hidden="true"></span>
+                                </button>
+                                <button class="floating-right" type="button" ng-if="canDislike()" ng-click="dislike()">
+                                    <span class="glyphicon glyphicon-thumbs-down padding-sm" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
                         <input type="text" class="form-control input-lg" placeholder="Filter comments" ng-model="commentsFilter"><br/>
 
                         <div class="panel panel-default" ng-repeat="comment in recipe.comments | filter:commentsFilter">

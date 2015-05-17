@@ -28,17 +28,9 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ngCookies'])
                 $http.defaults.headers.common['Authorization'] = 'Basic ' + encodedLoginData;
                 $http.post('/rest/sessions')
                     .success(function (data, status, headers, config) {
-                        $http.get('/rest/users/currently_logged')
-                            .success(function (data, status, headers, config) {
-                                $scope.setAlert({type: 'success', msg: 'Login successful'});
-                                $cookieStore.put('current.user', data);
-                                $scope.$parent.loggedUser = data;
-                                $log.info(status + ": " + data);
-                                $location.path("/");
-                            })
-                            .error(function (data, status, headers, config) {
-                                $log.warn(status + ": " + data);
-                            });
+                        $scope.setAlert({type: 'success', msg: 'Login successful'});
+                        $scope.getCurrentlyLoggedUser();
+                        $location.path("/");
                     })
                     .error(function (data, status, headers, config) {
                         $log.info(data + " " + status);

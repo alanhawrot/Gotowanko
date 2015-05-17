@@ -132,6 +132,9 @@ public class UserController {
 
             userResponseDTO.getComments().add(commentResponseDTO);
         });
+        user.getRecipeLikes().forEach(r -> {
+            userResponseDTO.getRecipeLikes().add(r.getId());
+        });
 
         return userResponseDTO;
     }
@@ -166,6 +169,9 @@ public class UserController {
             commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
             currentlyLoggedUser.getComments().add(commentResponseDTO);
+        });
+        user.getRecipeLikes().forEach(r -> {
+            currentlyLoggedUser.getRecipeLikes().add(r.getId());
         });
 
         return currentlyLoggedUser;
