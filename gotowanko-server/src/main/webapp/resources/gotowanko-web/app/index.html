@@ -50,6 +50,8 @@
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
 -->
+
+
 <div class="top-bg floating-left" style="width: 100%;">
     <div class="floating-left margin-left-lg"><h2><b>Gotowanko</b></h2></div>
     <div class="margin-right-lg floating-right">
@@ -72,9 +74,13 @@
     <div class="col-xs-10" ng-view></div>
 </div>
 
-
-<div ng-repeat="alert in alerts" class="alert-container">
-    <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+<div class="alert-container ">
+    <div class="container-fluid">
+        <div ng-repeat="alert in alerts" class="col-xs-6 col-xs-offset-3">
+            <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+        </div>
+    </div>
 </div>
+
 </body>
 </html>
