@@ -96,7 +96,6 @@ public class UserController {
         userRepository.delete(modifiedUser);
     }
 
-    @Secured(value = "ROLE_USER")
     @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public GetUserResponseDTO getUser(@PathVariable Long id) throws NoSuchResourceException {
@@ -119,6 +118,7 @@ public class UserController {
             recipeResponseDTO.setDateAdded(r.getDateAdded());
             recipeResponseDTO.setLastEdited(r.getLastEdited());
             recipeResponseDTO.setLikesNumber(r.getUserLikes().size());
+            recipeResponseDTO.setPhotoUrl(r.getPhotoUrl());
 
             userResponseDTO.getRecipes().add(recipeResponseDTO);
         });
@@ -131,6 +131,9 @@ public class UserController {
             commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
             userResponseDTO.getComments().add(commentResponseDTO);
+        });
+        user.getRecipeLikes().forEach(r -> {
+            userResponseDTO.getRecipeLikes().add(r.getId());
         });
 
         return userResponseDTO;
@@ -166,6 +169,9 @@ public class UserController {
             commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
             currentlyLoggedUser.getComments().add(commentResponseDTO);
+        });
+        user.getRecipeLikes().forEach(r -> {
+            currentlyLoggedUser.getRecipeLikes().add(r.getId());
         });
 
         return currentlyLoggedUser;

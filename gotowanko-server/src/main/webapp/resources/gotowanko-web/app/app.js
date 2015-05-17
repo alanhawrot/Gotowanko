@@ -35,33 +35,55 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
             $log.info("Logging out");
             $http.delete('/rest/sessions')
                 .success(function (data, status, headers, config) {
-                    $http.defaults.headers.common.Authorization = undefined;
-                    $cookieStore.remove('current.user');
-                    $cookieStore.remove('JSESSIONID');
-                    $scope.loggedUser = undefined;
+                    $scope.clearSession();
                     $log.info(data + " " + status);
                     $scope.setAlert({type: 'success', msg: 'Logout successful'});
                     $location.path('/search');
                 })
                 .error(function (data, status, headers, config) {
-                    $log.info(data + " " + status);
-                    $scope.setAlert({type: 'danger', msg: data});
+                    if (status == 401) {
+                        $scope.clearSession();
+                        $location.path('/search');
+                    } else {
+                        $log.info(data + " " + status);
+                        $scope.setAlert({type: 'danger', msg: data});
+                    }
                 });
         };
+
+        $scope.clearSession = function () {
+            $http.defaults.headers.common.Authorization = undefined;
+            $cookieStore.remove('current.user');
+            $cookieStore.remove('JSESSIONID');
+            $scope.loggedUser = undefined;
+        };
+
         $scope.alerts = [];
 
-        $scope.setAlert = function(alert) {
+        $scope.setAlert = function (alert) {
             $scope.alerts = [];
             $scope.addAlert(alert);
 
         };
-        $scope.addAlert = function(alert) {
+        $scope.addAlert = function (alert) {
             $scope.alerts.push(alert);
 
         };
 
         $scope.closeAlert = function (index) {
             $scope.alerts.splice(index, 1);
+        };
+
+        $scope.getCurrentlyLoggedUser = function () {
+            $http.get('/rest/users/currently_logged')
+                .success(function (data, status, headers, config) {
+                    $cookieStore.put('current.user', data);
+                    $scope.$parent.loggedUser = data;
+                    $log.info(status + ": " + data);
+                })
+                .error(function (data, status, headers, config) {
+                    $log.warn(status + ": " + data);
+                });
         };
 
     }]);

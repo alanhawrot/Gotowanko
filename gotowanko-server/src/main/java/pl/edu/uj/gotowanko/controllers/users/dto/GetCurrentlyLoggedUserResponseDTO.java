@@ -16,6 +16,7 @@ public class GetCurrentlyLoggedUserResponseDTO {
     private Collection<GetUserCommentResponseDTO> comments = new HashSet<>();
     private Calendar registrationDate;
     private Calendar lastLogged;
+    private Collection<Long> recipeLikes = new HashSet<>();
 
     public long getId() {
         return id;
@@ -71,5 +72,13 @@ public class GetCurrentlyLoggedUserResponseDTO {
 
     public String getName() {
         return name;
+    }
+
+    public Collection<Long> getRecipeLikes() {
+        return recipeLikes;
+    }
+
+    public void setRecipeLikes(Collection<Long> recipeLikes) {
+        this.recipeLikes = recipeLikes;
     }
 }
