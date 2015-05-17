@@ -34,37 +34,9 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
         return index != -1;
     };
 
-    $scope.like = function () {
-        var likeRecipeUrl = '/rest/recipes/' + $scope.recipeId + '/liked';
-        $http.get(likeRecipeUrl)
-            .success(function () {
-                $http.get('/rest/users/currently_logged')
-                    .success(function (data, status, headers, config) {
-                        $cookieStore.put('current.user', data);
-                        $scope.$parent.loggedUser = data;
-                        $log.info(status + ": " + data);
-                        $route.reload();
-                    })
-                    .error(function (data, status, headers, config) {
-                        $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
-                        if (status == 401) {
-                            $scope.clearSession();
-                            $location.path('/login');
-                        }
-                    });
-            })
-            .error(function (data, status) {
-                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
-                if (status == 401) {
-                    $scope.clearSession();
-                    $location.path('/login');
-                }
-            });
-    };
-
-    $scope.dislike = function () {
-        var dislikeRecipeUrl = '/rest/recipes/' + $scope.recipeId + '/disliked';
-        $http.get(dislikeRecipeUrl)
+    $scope.likeOrDislike = function (likeOrDislike) {
+        var likeOrDislikeRecipeUrl = '/rest/recipes/' + $scope.recipeId + likeOrDislike;
+            $http.get(likeOrDislikeRecipeUrl)
             .success(function () {
                 $http.get('/rest/users/currently_logged')
                     .success(function (data, status, headers, config) {
