@@ -62,8 +62,13 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
 
                             $route.reload();
                         })
-                        .error(function (data) {
+                        .error(function (data, status) {
+                            $log.info(data + " " + status);
                             $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                            if (status == 401) {
+                                $scope.clearSession();
+                                $location.path('/login');
+                            }
                         });
                 } else {
                     $scope.isUserEditing = true;
@@ -74,13 +79,15 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
             $scope.deleteAccount = function () {
                 $http.delete(usersUrl)
                     .success(function () {
-                        $http.defaults.headers.common.Authorization = undefined;
-                        $cookieStore.remove('current.user');
-                        $cookieStore.remove('JSESSIONID');
-                        $scope.$parent.loggedUser = undefined;
-                        $location.path('/');
-                    }).error(function (data) {
+                        $scope.clearSession();
+                        $location.path('/search');
+                    })
+                    .error(function (data, status) {
                         $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        }
                     });
             };
         }]);

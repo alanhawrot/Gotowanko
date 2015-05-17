@@ -35,19 +35,29 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
             $log.info("Logging out");
             $http.delete('/rest/sessions')
                 .success(function (data, status, headers, config) {
-                    $http.defaults.headers.common.Authorization = undefined;
-                    $cookieStore.remove('current.user');
-                    $cookieStore.remove('JSESSIONID');
-                    $scope.loggedUser = undefined;
+                    $scope.clearSession();
                     $log.info(data + " " + status);
                     $scope.setAlert({type: 'success', msg: 'Logout successful'});
                     $location.path('/search');
                 })
                 .error(function (data, status, headers, config) {
-                    $log.info(data + " " + status);
-                    $scope.setAlert({type: 'danger', msg: data});
+                    if (status == 401) {
+                        $scope.clearSession();
+                        $location.path('/search');
+                    } else {
+                        $log.info(data + " " + status);
+                        $scope.setAlert({type: 'danger', msg: data});
+                    }
                 });
         };
+
+        $scope.clearSession = function () {
+            $http.defaults.headers.common.Authorization = undefined;
+            $cookieStore.remove('current.user');
+            $cookieStore.remove('JSESSIONID');
+            $scope.loggedUser = undefined;
+        };
+
         $scope.alerts = [];
 
         $scope.setAlert = function(alert) {

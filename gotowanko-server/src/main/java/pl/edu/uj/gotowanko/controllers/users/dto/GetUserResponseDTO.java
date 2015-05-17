@@ -19,6 +19,7 @@ public class GetUserResponseDTO {
     private Collection<GetUserCommentResponseDTO> comments = new HashSet<>();
     private Calendar registrationDate;
     private Calendar lastLogged;
+    private Collection<Get>
 
     public long getId() {
         return id;
