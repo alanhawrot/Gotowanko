@@ -23,13 +23,7 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
 
     .controller('UserDetailsController', ['$scope', '$route', '$routeParams', '$http', '$cookieStore', '$location', 'base64',
         function ($scope, $route, $routeParams, $http, $cookieStore, $location, base64) {
-            $scope.$parent.alerts = [
-                /*            {type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.'},
-                 {type: 'success', msg: 'Well done! You successfully read this important alert message.'}*/
-            ];
-            $scope.closeAlert = function (index) {
-                $scope.alerts.splice(index, 1);
-            };
+
 
             $scope.editButtonText = 'Edit your profile';
             $scope.isUserEditing = false;
@@ -43,7 +37,6 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
             $scope.editProfile = function () {
                 if ($scope.isUserEditing) {
                     $scope.detailsForm.$setSubmitted();
-                    $scope.$parent.alerts = [];
                     $scope.detailsForm.confirmPassword.$setValidity('parse', true);
 
                     if (!$scope.detailsForm.confirmPassword.$valid || !$scope.detailsForm.name.$valid || !$scope.detailsForm.email.$valid || !$scope.detailsForm.password.$valid)
@@ -53,8 +46,7 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
 
                     $http.put(usersUrl, putData)
                         .success(function () {
-                            $scope.$parent.alerts = [];
-                            $scope.$parent.alerts.push({type: 'success', msg: 'Changes are saved'});
+                            $scope.setAlert({type: 'success', msg: 'Changes are saved'});
                             $scope.isUserEditing = false;
                             $scope.editButtonText = 'Edit your profile';
 
@@ -66,8 +58,7 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
                             $route.reload();
                         })
                         .error(function (data) {
-                            $scope.$parent.alerts = [];
-                            $scope.$parent.alerts.push({type: 'danger', msg: data[0].errorMessage});
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                         });
                 } else {
                     $scope.isUserEditing = true;

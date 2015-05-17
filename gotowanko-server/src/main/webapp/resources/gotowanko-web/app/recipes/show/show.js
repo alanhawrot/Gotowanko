@@ -17,7 +17,6 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
         })
         .error(function (data, status, headers, config) {
             $log.warn(status + ": " + data);
-            $scope.$parent.alerts = [];
-            $scope.$parent.alerts.push({type: 'danger', msg: data.errorMessage});
+            $scope.setAlert({type: 'danger', msg: data.errorMessage});
         });
 }]);

@@ -38,14 +38,28 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
                     $cookieStore.remove('JSESSIONID');
                     $scope.loggedUser = undefined;
                     $log.info(data + " " + status);
-                    $scope.$parent.alerts = [];
-                    $scope.$parent.alerts.push({type: 'success', msg: 'Logout successful'});
+                    $scope.setAlert({type: 'success', msg: 'Logout successful'});
                     $location.path('/');
                 })
                 .error(function (data, status, headers, config) {
                     $log.info(data + " " + status);
-                    $scope.$parent.alerts = [];
-                    $scope.$parent.alerts.push({type: 'danger', msg: data});
+                    $scope.setAlert({type: 'danger', msg: data});
                 });
         };
+        $scope.alerts = [];
+
+        $scope.setAlert = function(alert) {
+            $scope.alerts = [];
+            $scope.addAlert(alert);
+
+        };
+        $scope.addAlert = function(alert) {
+            $scope.alerts.push(alert);
+
+        };
+
+        $scope.closeAlert = function (index) {
+            $scope.alerts.splice(index, 1);
+        };
+
     }]);
