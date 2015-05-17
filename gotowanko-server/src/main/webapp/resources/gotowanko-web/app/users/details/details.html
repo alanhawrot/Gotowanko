@@ -140,11 +140,11 @@
 
             <div class="panel panel-default" ng-repeat="comment in user.comments | filter:commentsFilter">
                 <div class="panel-heading">
-                    <h4 style="width:100%"><a href="" ng-href="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a>
-                        <small>{{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</small>
+                    <h4 style="width:100%"><a href="" ng-href="#/recipes/{{comment.recipeId}}">Recipe: {{comment.recipeTitle}}</a>
                     </h4>
                 </div>
                 <div class="panel-body">
+                    <small>{{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</small><br>
                     {{comment.content}}
                 </div>
             </div>
