@@ -1,6 +1,6 @@
 'use strict';
 
-var m = angular.module('gotowankoApp.registrationView', ['ngRoute', 'ui.bootstrap', 'gotowankoApp.loginView'])
+var m = angular.module('gotowankoApp.registrationView', ['ngRoute', 'gotowankoApp.loginView'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/register', {

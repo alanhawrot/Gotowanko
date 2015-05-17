@@ -15,6 +15,7 @@ public class GetRecipeStepsResponseDTO {
     private String videoUrl;
     private Duration realizationTime;
     private Duration timerDuration;
+    private Long stepNumber;
 
     public void setTitle(String title) {
         this.title = title;
@@ -72,5 +73,11 @@ public class GetRecipeStepsResponseDTO {
         return timerDuration;
     }
 
+    public void setStepNumber(Long stepNumber) {
+        this.stepNumber = stepNumber;
+    }
 
+    public Long getStepNumber() {
+        return stepNumber;
+    }
 }

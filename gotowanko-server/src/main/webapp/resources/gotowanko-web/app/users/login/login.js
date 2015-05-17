@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ui.bootstrap', 'ngCookies'])
+angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ngCookies'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/login', {

@@ -339,6 +339,7 @@ public class RecipeController {
             GetRecipeStepsResponseDTO recipeStepDto = new GetRecipeStepsResponseDTO();
             recipeStepDto.setTitle(recipeStep.getTitle());
             recipeStepDto.setDescription(recipeStep.getDescription());
+            recipeStepDto.setStepNumber(recipeStep.getStepNumber());
             for (IngredientAmount ingredientAmount : recipeStep.getIngredients()) {
                 GetRecipeStepIngredientResponseDTO recipeStepIngredientDto = new GetRecipeStepIngredientResponseDTO();
                 recipeStepIngredientDto.setId(ingredientAmount.getIngredient().getId());

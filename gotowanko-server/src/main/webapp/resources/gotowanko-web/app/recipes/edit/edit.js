@@ -1,15 +1,15 @@
 'use strict';
 
-var m = angular.module('gotowankoApp.showRecipeView', ['ngRoute', 'dateFilters'])
+var m = angular.module('gotowankoApp.editRecipeView', ['ngRoute', 'dateFilters'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/recipes/:recipeId', {
-            templateUrl: '/recipes/show/show.html',
-            controller: 'ShowRecipeController'
+        $routeProvider.when('/recipes/:recipeId/edit', {
+            templateUrl: '/recipes/edit/edit.html',
+            controller: 'EditRecipeController'
         });
     }]);
 
-m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams', '$location', function ($scope, $http, $log, $routeParams, $location) {
+m.controller('EditRecipeController', ['$scope', '$http', '$log', '$routeParams', '$location', function ($scope, $http, $log, $routeParams, $location) {
     $scope.recipeId = $routeParams.recipeId;
 
     $scope.canEdit = function () {

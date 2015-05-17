@@ -69,12 +69,32 @@
     padding: 30px;
 }
 
-.padding-left {
+.padding-left-lg {
     padding-left: 30px;
 }
 
+.padding-sm {
+    padding: 10px;
+}
+
 .margin-sm {
-    margin: 0px;
+    margin: 10px;
+}
+
+.margin-right-sm {
+    margin-right: 10px;
+}
+
+.margin-left-sm {
+    margin-left-sm: 10px;
+}
+
+.margin-bottom-sm {
+    margin-bottom-sm: 10px;
+}
+
+.margin-top-sm {
+    margin-top-sm: 10px;
 }
 
 .top-bg {
@@ -98,4 +118,10 @@
 .carousel-inner .item {
     padding-left: 14% !important;
     padding-right: 14% !important;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
 }

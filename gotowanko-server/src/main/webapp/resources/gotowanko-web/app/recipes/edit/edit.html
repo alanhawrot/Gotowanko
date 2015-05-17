@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-3">
-                            <img ng-src="{{recipe.photoUrl}}"/>
+                            <img src="{{recipe.photoUrl}}"/>
                         </div>
 
                         <div class="col-xs-9">
@@ -91,7 +91,7 @@
 
                 <div class="row">
                     <div class="col-xs-3">
-                        <img ng-src="{{step.photoUrl}}" ng-if="step.photoUrl"/>
+                        <img src="{{step.photoUrl}}" ng-if="step.photoUrl"/>
                     </div>
                     <div class="col-xs-8">
                         <h4 class="text-center">{{step.title}}</h4>
@@ -107,7 +107,7 @@
                 <div>
                     <div class="floating-left" ng-repeat="ingredient in step.ingredients">
                         <div class="floating-left">
-                            <img ng-src="{{ingredient.iconUrl}}" alt=""/>
+                            <img src="{{ingredient.iconUrl}}"/>
                         </div>
                         <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
                             <h4>{{ingredient.name}}</h4>
@@ -120,7 +120,7 @@
 
                 <div ng-if="step.realizationTime">
                     <div class="floating-left">
-                        <img ng-src="images/recipe/clock.png"/>
+                        <img src="images/recipe/clock.png"/>
                     </div>
                     <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
                         <h5>Approximate realization time</h5>
@@ -130,7 +130,7 @@
                 </div>
                 <div ng-if="step.timerDuration">
                     <div class="floating-left">
-                        <img ng-src="images/recipe/alarm.png"/>
+                        <img src="images/recipe/alarm.png"/>
                     </div>
                     <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
                         <h5>Run alarm after</h5>

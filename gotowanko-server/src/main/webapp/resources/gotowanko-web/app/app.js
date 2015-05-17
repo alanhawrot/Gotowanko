@@ -4,11 +4,13 @@
 var m = angular.module('gotowankoApp', [
     'ngRoute',
     'ngCookies',
+    'ui.bootstrap',
     'gotowankoApp.searchView',
     'gotowankoApp.showRecipeView',
     'gotowankoApp.loginView',
     'gotowankoApp.registrationView',
-    'gotowankoApp.userDetailsView'
+    'gotowankoApp.userDetailsView',
+    'gotowankoApp.editRecipeView'
 ]);
 
 m.config(['$routeProvider', function ($routeProvider) {
@@ -39,7 +41,7 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
                     $scope.loggedUser = undefined;
                     $log.info(data + " " + status);
                     $scope.setAlert({type: 'success', msg: 'Logout successful'});
-                    $location.path('/');
+                    $location.path('/search');
                 })
                 .error(function (data, status, headers, config) {
                     $log.info(data + " " + status);
