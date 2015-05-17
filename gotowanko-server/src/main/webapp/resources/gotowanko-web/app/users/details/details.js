@@ -23,16 +23,21 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
 
     .controller('UserDetailsController', ['$scope', '$route', '$routeParams', '$http', '$cookieStore', '$location', 'base64',
         function ($scope, $route, $routeParams, $http, $cookieStore, $location, base64) {
-
-
             $scope.editButtonText = 'Edit your profile';
             $scope.isUserEditing = false;
 
-            var usersUrl = '/rest/users/' + $routeParams.userId;
+            var userIdParam = $routeParams.userId;
 
-            $http.get(usersUrl).success(function (data) {
-                $scope.user = data;
-            });
+            $scope.isOwner = $scope.$parent.loggedUser !== undefined && $scope.$parent.loggedUser.id == userIdParam;
+
+            var usersUrl = '/rest/users/' + userIdParam;
+
+            $http.get(usersUrl)
+                .success(function (data) {
+                    $scope.user = data;
+                }).error(function (data) {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                });
 
             $scope.editProfile = function () {
                 if ($scope.isUserEditing) {
@@ -67,12 +72,15 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
             };
 
             $scope.deleteAccount = function () {
-                $http.delete(usersUrl).success(function () {
-                    $http.defaults.headers.common.Authorization = undefined;
-                    $cookieStore.remove('current.user');
-                    $cookieStore.remove('JSESSIONID');
-                    $scope.$parent.loggedUser = undefined;
-                    $location.path('/');
-                });
+                $http.delete(usersUrl)
+                    .success(function () {
+                        $http.defaults.headers.common.Authorization = undefined;
+                        $cookieStore.remove('current.user');
+                        $cookieStore.remove('JSESSIONID');
+                        $scope.$parent.loggedUser = undefined;
+                        $location.path('/');
+                    }).error(function (data) {
+                        $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                    });
             };
         }]);

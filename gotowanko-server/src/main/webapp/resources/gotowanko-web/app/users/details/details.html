@@ -98,9 +98,9 @@
             </div>
 
             <div class="col-xs-2 col-xs-offset-1">
-                <button type="button" class="btn btn-warning" ng-click="editProfile()">{{editButtonText}}</button>
+                <button type="button" class="btn btn-warning" ng-show="isOwner" ng-click="editProfile()">{{editButtonText}}</button>
                 <button type="button" class="btn btn-danger margin-top-lg" data-toggle="modal"
-                        data-target="#deleteAccountModal" ng-disabled="!isUserEditing">
+                        data-target="#deleteAccountModal" ng-disabled="!isUserEditing" ng-show="isOwner">
                     Delete account
                 </button>
             </div>
@@ -112,30 +112,42 @@
         <div class="col-xs-6">
             <h3>Recipes:</h3>
             <input type="text" class="form-control" placeholder="Filter recipes" ng-model="recipesFilter">
-            <ul>
+            <ul class="media-list">
                 <li ng-repeat="recipe in user.recipes | filter:recipesFilter">
-                    <p>
-                        Title: <a href="" ng-href="#/recipes/{{recipe.id}}">{{recipe.title}}</a><br>
-                        Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
-                        Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                        Likes: {{recipe.likesNumber}}
-                    </p>
+                    <div class="media">
+                        <div class="media-heading">
+                            <a href="" ng-href="#/recipes/{{recipe.id}}"><h3>{{recipe.title}}</h3></a>
+                        </div>
+                        <div class="media-left media-middle">
+                            <a href="" ng-href="#/recipes/{{recipe.id}}">
+                                <img class="media-object" ng-src="{{recipe.photoUrl}}" alt="Image">
+                            </a>
+                        </div>
+                        <div class="media-body padding-left-lg">
+                            <p>Date added: {{recipe.dateAdded | date:'dd-MM-yyyy'}}<br>
+                                Last edited: {{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+                                Likes: {{recipe.likesNumber}}
+                            </p>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
 
         <div class="col-xs-6">
             <h3>Comments:</h3>
-            <input type="text" class="form-control" placeholder="Filter comments" ng-model="commentsFilter">
-            <ul>
-                <li ng-repeat="comment in user.comments | filter:commentsFilter">
-                    <p>
-                        Recipe: <a href="" ng-ref="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a><br>
-                        Comment: {{comment.content}}<br>
-                        Last edited: {{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}<br>
-                    </p>
-                </li>
-            </ul>
+            <input type="text" class="form-control" placeholder="Filter comments" ng-model="commentsFilter"><br/>
+
+            <div class="panel panel-default" ng-repeat="comment in user.comments | filter:commentsFilter">
+                <div class="panel-heading">
+                    <h4 style="width:100%"><a href="" ng-href="#/recipes/{{comment.recipeId}}">{{comment.recipeTitle}}</a>
+                        <small>{{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</small>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    {{comment.content}}
+                </div>
+            </div>
         </div>
     </div>
 </div>

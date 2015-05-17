@@ -12,6 +12,7 @@ public class GetUserRecipeResponseDTO {
     private Calendar dateAdded;
     private Calendar lastEdited;
     private Integer likesNumber;
+    private String photoUrl;
 
     public Long getId() {
         return id;
@@ -51,5 +52,13 @@ public class GetUserRecipeResponseDTO {
 
     public void setLikesNumber(Integer likesNumber) {
         this.likesNumber = likesNumber;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

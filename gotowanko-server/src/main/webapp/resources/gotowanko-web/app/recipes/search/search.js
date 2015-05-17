@@ -44,11 +44,14 @@ angular.module('gotowankoApp.searchView', ['ngRoute'])
 
             var searchUrl = '/rest/recipes?query=' + encodedQuery + '&sort=' + sort + '&page=' + page + '&size=' + size;
 
-            $http.get(searchUrl).success(function (data) {
-                $scope.recipes = data.content;
-                $scope.totalPagesCollection = new Array(data.pageMetadata.totalPages);
-                $scope.currentPage = data.pageMetadata.number;
-            });
+            $http.get(searchUrl)
+                .success(function (data) {
+                    $scope.recipes = data.content;
+                    $scope.totalPagesCollection = new Array(data.pageMetadata.totalPages);
+                    $scope.currentPage = data.pageMetadata.number;
+                }).error(function (data) {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                });
         };
 
         $scope.sendEmail = function (email) {
