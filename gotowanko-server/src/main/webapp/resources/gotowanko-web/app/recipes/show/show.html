@@ -76,6 +76,13 @@
                                 {{comment.content}}
                             </div>
                         </div>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Add comment..." ng-model="newComment">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="addComment()">Add</button>
+                            </span>
+                        </div><!-- /input-group -->
                     </div>
 
                 </div>

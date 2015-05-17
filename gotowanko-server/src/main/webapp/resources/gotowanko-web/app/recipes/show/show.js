@@ -62,6 +62,21 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
             });
     };
 
+    $scope.addComment = function () {
+        var addCommentUrl = '/rest/recipes/' + $scope.recipeId + '/comments';
+        $http.post(addCommentUrl, {'content': $scope.newComment})
+            .success(function () {
+                $route.reload();
+            })
+            .error(function () {
+                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                if (status == 401) {
+                    $scope.clearSession();
+                    $location.path('/login');
+                }
+            });
+    };
+
     $scope.canEdit = function () {
         return true;
     };
