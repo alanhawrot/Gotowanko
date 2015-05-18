@@ -97,6 +97,10 @@
     margin-top-sm: 10px;
 }
 
+.modal-open {
+    overflow: scroll;
+}
+
 .top-bg {
     background-color: #EE5757;
 }

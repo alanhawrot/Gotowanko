@@ -74,16 +74,4 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
             $scope.alerts.splice(index, 1);
         };
 
-        $scope.getCurrentlyLoggedUser = function () {
-            $http.get('/rest/users/currently_logged')
-                .success(function (data, status, headers, config) {
-                    $cookieStore.put('current.user', data);
-                    $scope.$parent.loggedUser = data;
-                    $log.info(status + ": " + data);
-                })
-                .error(function (data, status, headers, config) {
-                    $log.warn(status + ": " + data);
-                });
-        };
-
     }]);

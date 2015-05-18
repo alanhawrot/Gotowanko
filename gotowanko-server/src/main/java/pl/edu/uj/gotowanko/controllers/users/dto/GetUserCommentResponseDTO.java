@@ -10,6 +10,7 @@ public class GetUserCommentResponseDTO {
     private Long id;
     private String content;
     private Calendar lastEdited;
+    private Calendar dateAdded;
     private Long recipeId;
     private String recipeTitle;
 
@@ -35,6 +36,14 @@ public class GetUserCommentResponseDTO {
 
     public void setLastEdited(Calendar lastEdited) {
         this.lastEdited = lastEdited;
+    }
+
+    public Calendar getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Calendar dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public Long getRecipeId() {

@@ -12,6 +12,80 @@ var m = angular.module('gotowankoApp.showRecipeView', ['ngRoute', 'dateFilters']
 m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams', '$route', '$location', '$cookieStore', function ($scope, $http, $log, $routeParams, $route, $location, $cookieStore) {
     $scope.recipeId = $routeParams.recipeId;
 
+    $scope.canEditComment = function (commentId) {
+        if ($scope.$parent.loggedUser === undefined) {
+            return false;
+        }
+
+        var comments = $scope.$parent.loggedUser.comments;
+
+        for (var i = 0; i < comments.length; i++) {
+            if (comments[i].id == commentId) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    $scope.editComment = function (comment) {
+        var editCommentUrl = '/rest/recipes/' + $routeParams.recipeId + '/comments/' + comment.id;
+        $http.put(editCommentUrl, {'content': comment.content})
+            .success(function () {
+                $http.get('/rest/users/currently_logged')
+                    .success(function (data, status, headers, config) {
+                        $cookieStore.put('current.user', data);
+                        $scope.$parent.loggedUser = data;
+                        $route.reload();
+                    })
+                    .error(function (data, status, headers, config) {
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        }
+                    });
+            })
+            .error(function (data, status) {
+                if (status == 401) {
+                    $scope.clearSession();
+                    $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                }
+            });
+    };
+
+    $scope.deleteComment = function (comment) {
+        var deleteCommentUrl = '/rest/recipes/' + $routeParams.recipeId + '/comments/' + comment.id;
+        $http.delete(deleteCommentUrl)
+            .success(function () {
+                $http.get('/rest/users/currently_logged')
+                    .success(function (data, status, headers, config) {
+                        $cookieStore.put('current.user', data);
+                        $scope.$parent.loggedUser = data;
+                        $route.reload();
+                    })
+                    .error(function (data, status, headers, config) {
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        }
+                    });
+            })
+            .error(function (data, status) {
+                if (status == 401) {
+                    $scope.clearSession();
+                    $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                }
+            });
+    };
+
     $scope.canLike = function () {
         if ($scope.$parent.loggedUser === undefined) {
             return false;
@@ -36,7 +110,7 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
 
     $scope.likeOrDislike = function (likeOrDislike) {
         var likeOrDislikeRecipeUrl = '/rest/recipes/' + $scope.recipeId + likeOrDislike;
-            $http.get(likeOrDislikeRecipeUrl)
+        $http.get(likeOrDislikeRecipeUrl)
             .success(function () {
                 $http.get('/rest/users/currently_logged')
                     .success(function (data, status, headers, config) {
@@ -46,18 +120,20 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
                         $route.reload();
                     })
                     .error(function (data, status, headers, config) {
-                        $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                         if (status == 401) {
                             $scope.clearSession();
                             $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                         }
                     });
             })
             .error(function (data, status) {
-                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                 if (status == 401) {
                     $scope.clearSession();
                     $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                 }
             });
     };
@@ -66,24 +142,39 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
         var addCommentUrl = '/rest/recipes/' + $scope.recipeId + '/comments';
         $http.post(addCommentUrl, {'content': $scope.newComment})
             .success(function () {
-                $route.reload();
+                $http.get('/rest/users/currently_logged')
+                    .success(function (data, status, headers, config) {
+                        $cookieStore.put('current.user', data);
+                        $scope.$parent.loggedUser = data;
+                        $log.info(status + ": " + data);
+                        $route.reload();
+                    })
+                    .error(function (data, status, headers, config) {
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        }
+                    });
             })
-            .error(function () {
-                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+            .error(function (data, status) {
                 if (status == 401) {
                     $scope.clearSession();
                     $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                 }
             });
     };
 
     $scope.canEdit = function () {
         return $cookieStore.get('current.user').id == $scope.recipe.userId;
-    }
+    };
 
     $scope.canDelete = function () {
         return $cookieStore.get('current.user').id == $scope.recipe.userId;
-    }
+    };
 
     $scope.editRecipe = function () {
         if (!$scope.canEdit())
@@ -104,8 +195,12 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
                 $location.path("/");
             })
             .error(function (data, status, headers, config) {
-                $log.warn(status + ": " + data);
-                $scope.setAlert({type: 'danger', msg: data.errorMessage});
+                if (status == 401) {
+                    $scope.clearSession();
+                    $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                }
             });
     };
 

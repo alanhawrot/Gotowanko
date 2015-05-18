@@ -127,6 +127,7 @@ public class UserController {
             commentResponseDTO.setId(c.getId());
             commentResponseDTO.setContent(c.getContent());
             commentResponseDTO.setLastEdited(c.getLastEdited());
+            commentResponseDTO.setDateAdded(c.getDateAdded());
             commentResponseDTO.setRecipeId(c.getRecipe().getId());
             commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 
@@ -165,6 +166,7 @@ public class UserController {
             commentResponseDTO.setId(c.getId());
             commentResponseDTO.setContent(c.getContent());
             commentResponseDTO.setLastEdited(c.getLastEdited());
+            commentResponseDTO.setDateAdded(c.getDateAdded());
             commentResponseDTO.setRecipeId(c.getRecipe().getId());
             commentResponseDTO.setRecipeTitle(c.getRecipe().getTitle());
 

@@ -64,10 +64,11 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
                         })
                         .error(function (data, status) {
                             $log.info(data + " " + status);
-                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                             if (status == 401) {
                                 $scope.clearSession();
                                 $location.path('/login');
+                            } else {
+                                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                             }
                         });
                 } else {
@@ -83,10 +84,86 @@ angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base
                         $location.path('/search');
                     })
                     .error(function (data, status) {
-                        $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                         if (status == 401) {
                             $scope.clearSession();
                             $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        }
+                    });
+            };
+
+            $scope.canEditComment = function (commentId) {
+                if ($scope.$parent.loggedUser === undefined) {
+                    return false;
+                }
+
+                var comments = $scope.$parent.loggedUser.comments;
+
+                for (var i = 0; i < comments.length; i++) {
+                    if (comments[i].id == commentId) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            $scope.editComment = function (comment) {
+                var editCommentUrl = '/rest/recipes/' + comment.recipeId + '/comments/' + comment.id;
+                console.log(comment.content);
+                $http.put(editCommentUrl, {'content': comment.content})
+                    .success(function () {
+                        $http.get('/rest/users/currently_logged')
+                            .success(function (data, status, headers, config) {
+                                $cookieStore.put('current.user', data);
+                                $scope.$parent.loggedUser = data;
+                                $route.reload();
+                            })
+                            .error(function (data, status, headers, config) {
+                                if (status == 401) {
+                                    $scope.clearSession();
+                                    $location.path('/login');
+                                } else {
+                                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                                }
+                            });
+                    })
+                    .error(function (data, status) {
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                        }
+                    });
+            };
+
+            $scope.deleteComment = function (comment) {
+                var deleteCommentUrl = '/rest/recipes/' + comment.recipeId + '/comments/' + comment.id;
+                $http.delete(deleteCommentUrl)
+                    .success(function () {
+                        $http.get('/rest/users/currently_logged')
+                            .success(function (data, status, headers, config) {
+                                $cookieStore.put('current.user', data);
+                                $scope.$parent.loggedUser = data;
+                                $route.reload();
+                            })
+                            .error(function (data, status, headers, config) {
+                                if (status == 401) {
+                                    $scope.clearSession();
+                                    $location.path('/login');
+                                } else {
+                                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                                }
+                            });
+                    })
+                    .error(function (data, status) {
+                        if (status == 401) {
+                            $scope.clearSession();
+                            $location.path('/login');
+                        } else {
+                            $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
                         }
                     });
             };

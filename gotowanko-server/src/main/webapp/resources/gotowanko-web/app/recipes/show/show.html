@@ -66,15 +66,47 @@
                         </div>
                         <input type="text" class="form-control input-lg" placeholder="Filter comments" ng-model="commentsFilter"><br/>
 
-                        <div class="panel panel-default" ng-repeat="comment in recipe.comments | filter:commentsFilter">
+                        <div class="panel panel-default" ng-repeat="comment in recipe.comments | filter:commentsFilter | orderBy:dateAdded">
                             <div class="panel-heading">
-                                <h4 style="width:100%">{{comment.userName}}
-                                    <small>{{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</small>
-                                </h4>
+                                <a href="" ng-href="#/users/{{comment.userId}}"><h4 style="width:100%">{{comment.userName}}</h4></a>
+                                    <small>
+                                        Date added: {{comment.dateAdded | date:'dd-MM-yyyy'}}<br>
+                                        Last edited: {{comment.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}
+                                    </small>
                             </div>
                             <div class="panel-body">
                                 {{comment.content}}
                             </div>
+                            <div class="panel-footer" ng-if="canEditComment(comment.id)">
+                                <span>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCommentModal{{comment.id}}">Edit</button>
+                                    <button type="button" class="btn btn-danger" ng-click="deleteComment(comment)">Delete</button>
+                                </span>
+                            </div>
+
+                            <div class="modal fade" data-backdrop="false" id="editCommentModal{{comment.id}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Editing comment</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <textarea class="form-control" rows="6" ng-model="comment.content"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="editComment(comment)">
+                                                Save changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- /.modal -->
                         </div>
 
                         <div>

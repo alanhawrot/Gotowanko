@@ -366,6 +366,7 @@ public class RecipeController {
             GetRecipeCommentResponseDTO commentDto = new GetRecipeCommentResponseDTO();
             commentDto.setUserId(comment.getUser().getId());
             commentDto.setUserName(comment.getUser().getName());
+            commentDto.setDateAdded(comment.getDateAdded());
             commentDto.setLastEdited(comment.getLastEdited());
             commentDto.setContent(comment.getContent());
             commentDto.setId(comment.getId());
@@ -549,6 +550,7 @@ public class RecipeController {
         }
 
         comment.setContent(addCommentRequestDTO.getContent());
+        comment.setLastEdited(Calendar.getInstance());
         commentRepository.save(comment);
     }
 
