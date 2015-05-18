@@ -95,7 +95,7 @@
 
                     <div class="row">
                         <div class="col-xs-3">
-                            <img src="{{step.photoUrl}}" ng-if="step.photoUrl"/>
+                            <img ng-src="{{step.photoUrl}}" ng-if="step.photoUrl"/>
                         </div>
                         <div class="col-xs-8">
                             <h4 class="text-center">{{step.title}}</h4>
@@ -111,7 +111,7 @@
                     <div>
                         <div class="floating-left" ng-repeat="ingredient in step.ingredients">
                             <div class="floating-left">
-                                <img src="{{ingredient.iconUrl}}"/>
+                                <img ng-src="{{ingredient.iconUrl}}"/>
                             </div>
                             <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
                                 <h4>{{ingredient.name}}</h4>
@@ -147,11 +147,11 @@
             </div>
             <br/><br/><br/><br/>
             <!-- Controls -->
-            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" ng-non-bindable>
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" ng-non-bindable>
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
