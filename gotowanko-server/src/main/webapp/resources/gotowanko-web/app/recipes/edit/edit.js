@@ -9,55 +9,88 @@ var m = angular.module('gotowankoApp.editRecipeView', ['ngRoute', 'dateFilters']
         });
     }]);
 
-m.controller('EditRecipeController', ['$scope', '$http', '$log', '$routeParams', '$location', function ($scope, $http, $log, $routeParams, $location) {
+m.controller('EditRecipeController', ['$scope', '$cookieStore', '$http', '$log', '$routeParams', '$location', function ($scope, $cookieStore, $http, $log, $routeParams, $location) {
     $scope.recipeId = $routeParams.recipeId;
 
-    $scope.canEdit = function () {
-        return true;
-    }
-
-    $scope.canDelete = function () {
-        return true;
-    }
-
-    $scope.editRecipe = function () {
-        if (!$scope.canEdit())
-            return;
-
-        $location.path("/recipes/" + $scope.recipeId + "/edit")
+    $('#popover').popover({
+        html: true,
+        container: 'body',
+        title: function () {
+            return $("#popover-head").html();
+        },
+        content: function () {
+            return $("#popover-content").html();
+        }
+    });
+    $scope.closePopover = function() {
+        $log.info("got click");
+        $('[data-toggle="popover"]').each(function () {
+            $log.info("got popover")
+            $(this).popover('hide');
+        });
     };
 
-    $scope.deleteRecipe = function () {
-        if (!$scope.canDelete())
-            return;
-
-        $http.delete('/rest/recipes/' + $routeParams.recipeId)
-            .success(function (data, status, headers, config) {
-                $log.info(status + ": " + data);
-                $scope.recipe = data;
-                $scope.setAlert({type: 'success', msg: "Recipe removed successfully"});
-                $location.path("/");
-            })
-            .error(function (data, status, headers, config) {
-                $log.warn(status + ": " + data);
-                $scope.setAlert({type: 'danger', msg: data.errorMessage});
-            });
-    };
-
-    $scope.editRecipeStep = function (stepNumber) {
-        if (!$scope.canEdit())
-            return;
-
-        $location.path("/recipes/" + $scope.recipeId + "/edit/" + stepNumber)
-    };
 
     $http.get('/rest/recipes/' + $routeParams.recipeId)
         .success(function (data, status, headers, config) {
             $log.info(status + ": " + data);
             $scope.recipe = data;
+
+
+            $scope.canEdit = function () {
+                return true;
+            }
+
+            $scope.canDelete = function () {
+                return $cookieStore.get('current.user').id = $scope.recipe.id;
+
+            }
+
+            $scope.editRecipe = function () {
+                if (!$scope.canEdit())
+                    return;
+
+                $location.path("/recipes/" + $scope.recipeId + "/edit/")
+            };
+
+            $scope.editRecipeStep = function (stepNumber) {
+                if (!$scope.canEdit())
+                    return;
+
+                $location.path("/recipes/" + $scope.recipeId + "/edit/" + stepNumber)
+            };
+
+            $scope.deleteRecipe = function () {
+                if (!$scope.canDelete())
+                    return;
+
+                $http.delete('/rest/recipes/' + $routeParams.recipeId)
+                    .success(function (data, status, headers, config) {
+                        $log.info(status + ": " + data);
+                        $scope.recipe = data;
+                        $scope.setAlert({type: 'success', msg: "Recipe removed successfully"});
+                        $location.path("/");
+                    })
+                    .error(function (data, status, headers, config) {
+                        $log.warn(status + ": " + data);
+                        $scope.setAlert({type: 'danger', msg: data.errorMessage});
+                    });
+            };
+
         })
         .error(function (data, status, headers, config) {
             $log.warn(status + ": " + data);
             $scope.setAlert({type: 'danger', msg: data.errorMessage});
         });
 }]);
+
+m.controller('RealizationTimeController', function ($scope, $log) {
+    var d = new Date();
+    d.setHours(1);
+    d.setMinutes(0);
+    $scope.mytime = d;
+
+    $scope.changed = function () {
+        $log.log('Time changed to: ' + $scope.mytime);
+    };
+});

@@ -78,12 +78,12 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
     };
 
     $scope.canEdit = function () {
-        return true;
-    };
+        return $cookieStore.get('current.user').id == $scope.recipe.userId;
+    }
 
     $scope.canDelete = function () {
-        return true;
-    };
+        return $cookieStore.get('current.user').id == $scope.recipe.userId;
+    }
 
     $scope.editRecipe = function () {
         if (!$scope.canEdit())
