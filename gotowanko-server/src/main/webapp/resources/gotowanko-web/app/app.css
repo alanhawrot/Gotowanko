@@ -129,3 +129,7 @@
     vertical-align: middle;
     float: none;
 }
+
+.position-fixed {
+    position: fixed;
+}
