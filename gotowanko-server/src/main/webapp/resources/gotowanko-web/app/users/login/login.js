@@ -34,11 +34,11 @@ angular.module('gotowankoApp.loginView', ['ngRoute', 'ab-base64', 'ngCookies'])
                                 $cookieStore.put('current.user', data);
                                 $scope.$parent.loggedUser = data;
                                 $log.info(status + ": " + data);
+                                $location.path("/");
                             })
                             .error(function (data, status, headers, config) {
                                 $log.warn(status + ": " + data);
                             });
-                        $location.path("/");
                     })
                     .error(function (data, status, headers, config) {
                         $log.info(data + " " + status);
