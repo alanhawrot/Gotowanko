@@ -1,0 +1,130 @@
+<div>
+    <div class="text-center"><button class="btn btn-success" type="submit">Save recipe</button></div>
+
+    <div class="margin-top-lg"><tabset>
+        <tab heading="{{recipeInfo.title}}">
+            <form class="margin-top-sm">
+                <div class="form-group">
+                    <label for="recipeInfoTitle">Title</label>
+                    <input type="text" class="form-control" id="recipeInfoTitle" placeholder="Title"
+                           ng-model="recipeInfo.title">
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label for="recipeInfoApproximateCost">Approximate cost</label>
+                        <input type="number" class="form-control" id="recipeInfoApproximateCost"
+                               placeholder="Approximate cost" ng-model="recipeInfo.approximateCost">
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="recipeInfoCookingTime">Cooking time (minutes)</label>
+                        <input type="number" class="form-control" id="recipeInfoCookingTime"
+                               placeholder="Cooking time (minutes)" ng-model="recipeInfo.cookingTime">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="recipeInfoPhotoUrl">Photo URL</label>
+                    <input type="url" class="form-control" id="recipeInfoPhotoUrl" placeholder="Photo URL"
+                           ng-model="recipeInfo.photoUrl">
+                </div>
+            </form>
+        </tab>
+
+        <tab ng-repeat="recipeStep in recipeSteps track by $index"
+             active=recipeStep.active>
+            <tab-heading>
+                {{recipeStep.title}}
+                <a ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href=""><i
+                        class="glyphicon glyphicon-minus"></i></a>
+            </tab-heading>
+            <div>
+                <form class="margin-top-sm">
+                    <div class="form-group">
+                        <label for="recipeStepTitle">Title</label>
+                        <input type="text" class="form-control" id="recipeStepTitle" placeholder="Title"
+                               ng-model="recipeStep.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeStepDescription">Description</label>
+                        <textarea ng-model="recipeStep.description" id="recipeStepDescription" class="form-control"
+                                  rows="8"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label for="recipeStepTimerDuration">Timer duration (seconds)</label>
+                            <input type="number" class="form-control" id="recipeStepTimerDuration"
+                                   placeholder="Timer duration (seconds)" ng-model="recipeStep.timerDuration">
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="recipeStepRealizationTime">Realization time (minutes)</label>
+                            <input type="number" class="form-control" id="recipeStepRealizationTime"
+                                   placeholder="Realization time (minutes)" ng-model="recipeStep.realizationTime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeStepPhotoUrl">Photo URL</label>
+                        <input type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Photo URL"
+                               ng-model="recipeStep.photoUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeStepVideoUrl">Video URL</label>
+                        <input type="url" class="form-control" id="recipeStepVideoUrl" placeholder="Video URL"
+                               ng-model="recipeStep.videoUrl">
+                    </div>
+                </form>
+
+                <h4 class="text-center margin-top-lg">Add ingredients needed in this step</h4>
+
+                <input type="text" class="form-control margin-top-lg" placeholder="Filter ingredients"
+                       ng-model="ingredientsFilter">
+
+                <div>
+                    <ul class="list-group media-list">
+                        <li class="list-group-item col-xs-4" ng-repeat="ingredient in recipeStep.ingredients | filter:ingredientsFilter">
+                            <div class="media-left media-middle">
+                                <a href="">
+                                    <img class="media-object" ng-src="{{ingredient.iconUrl}}" alt="ingredient.name">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div class="checkbox">
+                                    <h4 class="media-heading">
+                                        <label class="media-heading">
+                                            <input type="checkbox" value="" ng-model="ingredient.isChecked">
+                                            {{ingredient.name}}
+                                        </label>
+                                    </h4>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-xs-6">
+                                        <label for="ingredientAmount">Amount</label>
+                                        <input type="number" class="form-control" id="ingredientAmount"
+                                               placeholder="Amount"
+                                               ng-model="ingredient.amount">
+                                    </div>
+
+                                    <div class="form-group col-xs-6">
+                                        <label for="ingredientUnit">Unit</label>
+                                        <select id="ingredientUnit" class="form-control"
+                                                ng-model="ingredient.chosenUnit">
+                                            <option ng-repeat="ingredientUnit in ingredient.units">
+                                                {{ingredientUnit.name}}
+                                                ({{ingredientUnit.shortName}})
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </tab>
+
+        <tab select="addRecipeStep()">
+            <tab-heading>
+                <i class="glyphicon glyphicon-plus"></i>
+            </tab-heading>
+        </tab>
+    </tabset></div>
+</div>

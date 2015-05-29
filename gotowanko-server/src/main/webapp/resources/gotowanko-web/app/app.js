@@ -10,7 +10,8 @@ var m = angular.module('gotowankoApp', [
     'gotowankoApp.loginView',
     'gotowankoApp.registrationView',
     'gotowankoApp.userDetailsView',
-    'gotowankoApp.editRecipeView'
+    'gotowankoApp.editRecipeView',
+    'gotowankoApp.createRecipeView'
 ]);
 
 m.config(['$routeProvider', function ($routeProvider) {
