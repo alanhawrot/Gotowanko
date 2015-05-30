@@ -45,15 +45,15 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
 
     $http.get('/rest/ingredients/list')
         .success(function (responseData) {
-            $log.info("/rest/ingredients/list " + responseData)
+            $log.info("/rest/ingredients/list " + angular.toJson(responseData, true))
             $scope.ingredients = responseData;
         });
 
     $http.get('/rest/ingredients/units')
         .success(function (responseData) {
-            $log.info("/rest/ingredients/units " + responseData)
+            $log.info("/rest/ingredients/units " + angular.toJson(responseData, true))
 
-            $scope.ingredientUnits = responseData;
+            $scope.ingredientUnits = responseData.ingredientUnits;
         });
 
 
@@ -87,6 +87,10 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
 
     $scope.saveRecipe = function () {
         $log.info(angular.toJson($scope.recipe, true));
+
+        /*if TODO: check if forms are valid before sending request
+        (!$scope.recipeForm.$valid)
+            return;*/
         $http.post('/rest/recipes', $scope.recipe)
             .success(function (responseData) {
                 $log.info("responseData " + responseData);

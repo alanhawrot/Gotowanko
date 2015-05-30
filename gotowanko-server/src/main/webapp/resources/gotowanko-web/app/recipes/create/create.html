@@ -1,43 +1,43 @@
 <div>
     <div class="margin-top-lg">
         <tabset id="recipeTab">
-            <tab heading="{{recipe.title}}"  active="tabs[0].active">
-            <form name="recipeForm" class="margin-top-sm">
-                <div class="form-group">
-                    <label for="recipeTitle">Title</label>
-                    <input name="title" type="text" class="form-control" id="recipeTitle" placeholder="Enter recipe title..."
-                           ng-model="recipe.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
-                </div>
-                <div ng-show="recipeForm.$submitted || recipeForm.name.$touched">
-                    <alert ng-show="recipeForm.title.$error.required" type="danger">You did not enter title</alert>
-                    <alert ng-show="recipeForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
-                    <alert ng-show="recipeForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
-                </div>
-                <div class="row">
-                    <div class="form-group col-xs-6">
-                        <label for="recipeApproximateCost">Approximate cost</label>
-                        <input type="number" class="form-control" id="recipeApproximateCost"
-                               placeholder="How much cost realization of this recipe?" ng-model="recipe.approximateCost" min="0">
+            <tab heading="{{recipe.title}}" active="tabs[0].active">
+                <form name="recipeForm" class="margin-top-sm">
+                    <div class="form-group">
+                        <label for="recipeTitle">Title</label>
+                        <input name="title" type="text" class="form-control" id="recipeTitle" placeholder="Enter recipe title..."
+                               ng-model="recipe.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label for="recipeCookingTime">Cooking time (minutes)</label>
-                        <input type="number" class="form-control" id="recipeCookingTime" name="recipeCookingTime"
-                               placeholder="How much it takes to realize recipe?" ng-model="recipe.cookingTime" min="0">
+                    <div ng-show="recipeForm.$submitted || recipeForm.name.$touched">
+                        <alert ng-show="recipeForm.title.$error.required" type="danger">You did not enter title</alert>
+                        <alert ng-show="recipeForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
+                        <alert ng-show="recipeForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="recipePhotoUrl">Photo URL</label>
-                    <input name="urlPhoto" type="url" class="form-control" id="recipePhotoUrl" placeholder="Provide us with URL address representing recipe"
-                           ng-model="recipe.photoUrl">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label for="recipeApproximateCost">Approximate cost</label>
+                            <input type="number" class="form-control" id="recipeApproximateCost"
+                                   placeholder="How much cost realization of this recipe?" ng-model="recipe.approximateCost" min="0">
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label for="recipeCookingTime">Cooking time (minutes)</label>
+                            <input type="number" class="form-control" id="recipeCookingTime" name="recipeCookingTime"
+                                   placeholder="How much it takes to realize recipe?" ng-model="recipe.cookingTime" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipePhotoUrl">Photo URL</label>
+                        <input name="urlPhoto" type="url" class="form-control" id="recipePhotoUrl" placeholder="Provide us with URL address representing recipe"
+                               ng-model="recipe.photoUrl">
 
-                    <div ng-show="recipeForm.$submitted || recipeForm.urlPhoto.$touched">
-                        <alert ng-show="recipeForm.urlPhoto.$error.url" type="danger">Not a valid url address</alert>
+                        <div ng-show="recipeForm.$submitted || recipeForm.urlPhoto.$touched">
+                            <alert ng-show="recipeForm.urlPhoto.$error.url" type="danger">Not a valid url address</alert>
+                        </div>
                     </div>
-                </div>
-                <div class="text-right margin-lg">
-                    <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
-                </div>
-            </form>
+                    <div class="text-right margin-lg">
+                        <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
+                    </div>
+                </form>
 
             </tab>
 
@@ -135,11 +135,9 @@
 
                                         <div class="form-group col-xs-6">
                                             <label for="ingredientUnit">Unit</label>
-                                            <select id="ingredientUnit" class="form-control"
-                                                    ng-model="ingredient.chosenUnit">
-                                                <option ng-repeat="ingredientUnits">
+                                            <select id="ingredientUnit" class="form-control" ng-model="ingredient.chosenUnit">
+                                                <option ng-repeat="ingredientUnit in ingredientUnits">
                                                     {{ingredientUnit.name}}
-                                                    ({{ingredientUnit.shortName}})
                                                 </option>
                                             </select>
                                         </div>
