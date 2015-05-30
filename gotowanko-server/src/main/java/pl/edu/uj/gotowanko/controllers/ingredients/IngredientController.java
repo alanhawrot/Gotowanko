@@ -111,6 +111,17 @@ public class IngredientController {
 
     @Secured("ROLE_USER")
     @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Collection<GetIngredientDTO> getIngredientsList() {
+        Collection<Ingredient> ingredients = ingredientRepository.findAll();
+
+        return ingredients.stream()
+                .map(ingredient -> new GetIngredientDTO(ingredient))
+                .collect(Collectors.toList());
+    }
+
+    @Secured("ROLE_USER")
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.GET)
     public Collection<GetHierarchyItemResponseDTO> getIngredientHierarchy(@RequestParam MultiValueMap<String, String> params)
             throws NoSuchResourceException {
