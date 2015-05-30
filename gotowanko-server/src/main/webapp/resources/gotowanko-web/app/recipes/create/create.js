@@ -9,25 +9,23 @@ m.config(['$routeProvider', function ($routeProvider) {
     });
 }])
 
-m.controller('CreateRecipeController', ['$scope', '$http', function ($scope, $http) {
-    $scope.saveRecipe = function () {
-
-    }
+m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($scope, $http, $log) {
 
     $scope.recipeInfo = {title: "Main", photoUrl: '', active: true};
 
     $scope.recipeSteps =
         [
             {
-                stepNumber: 1, photoUrl: '', videoUrl: '',  title: 'New step', description: '', active: false, ingredients: []
+                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'New step', description: '', active: false, ingredients: []
             }
         ];
 
     var ingredients = [];
-    $http.get('/rest/ingredients')
+    $http.get('/rest/ingredients/list')
         .success(function (dataResponseIngredients) {
             $http.get('/rest/ingredients/units')
                 .success(function (dataResponseIngredientUnits) {
+                    $log.info("dataResponseIngredientUnits" + dataResponseIngredientUnits)
                     angular.forEach(dataResponseIngredients, function (ingredient) {
                         ingredient.amount = 0;
                         ingredient.units = [];
@@ -35,7 +33,7 @@ m.controller('CreateRecipeController', ['$scope', '$http', function ($scope, $ht
                         angular.copy(dataResponseIngredientUnits.ingredientUnits, ingredient.units);
                     });
                     ingredients = dataResponseIngredients;
-                    angular.copy(ingredients, $scope.recipeSteps[0].ingredients);
+                    //angular.copy(ingredients, $scope.recipeSteps[0].ingredients);
                 });
         });
 
@@ -49,9 +47,9 @@ m.controller('CreateRecipeController', ['$scope', '$http', function ($scope, $ht
     var addNewRecipeStep = function () {
         var newStepNumber = $scope.recipeSteps.length + 1;
         var copyIngredients = [];
-        angular.copy(ingredients, copyIngredients);
+        //angular.copy(ingredients, copyIngredients);
         $scope.recipeSteps.push({
-            stepNumber: newStepNumber, photoUrl: '', videoUrl: '',  title: 'New step', description: '', active: true, ingredients: copyIngredients
+            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'New step', description: '', active: true, ingredients: copyIngredients
         });
     };
 
@@ -74,8 +72,17 @@ m.controller('CreateRecipeController', ['$scope', '$http', function ($scope, $ht
         }
     };
 
-    $scope.saveRecipe = function () {
 
+    $scope.saveRecipe = function () {
+        $log.info(angular.toJson($scope.recipeSteps,true));
+        $http.post('/rest/recipes', $scope.recipeSteps )
+            .success(function (responseData) {
+                $log.info("dataResponseIngredientUnits" + responseData);
+
+            }).error(function (responseData) {
+                $log.warn(responseData);
+                $scope.setAlert({type: 'danger', msg: responseData.errorMessage});
+            });
     };
 
     $scope.ingredientsFilter = '';
