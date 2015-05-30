@@ -1,34 +1,42 @@
 <div>
-    <div class="text-center">
-        <button class="btn btn-success" type="submit">Save recipe</button>
-    </div>
-
     <div class="margin-top-lg"><tabset>
         <tab heading="{{recipeInfo.title}}">
-            <form class="margin-top-sm">
+            <form name="recipeForm" class="margin-top-sm">
                 <div class="form-group">
                     <label for="recipeInfoTitle">Title</label>
-                    <input type="text" class="form-control" id="recipeInfoTitle" placeholder="Title"
-                           ng-model="recipeInfo.title">
+                    <input name="title" type="text" class="form-control" id="recipeInfoTitle" placeholder="Enter recipe title..."
+                           ng-model="recipeInfo.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
+                </div>
+                <div ng-show="recipeForm.$submitted || recipeForm.name.$touched">
+                    <alert ng-show="recipeForm.title.$error.required" type="danger">You did not enter title</alert>
+                    <alert ng-show="recipeForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
+                    <alert ng-show="recipeForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
                 </div>
                 <div class="row">
                     <div class="form-group col-xs-6">
                         <label for="recipeInfoApproximateCost">Approximate cost</label>
                         <input type="number" class="form-control" id="recipeInfoApproximateCost"
-                               placeholder="Approximate cost" ng-model="recipeInfo.approximateCost">
+                               placeholder="How much cost realization of this recipe?" ng-model="recipeInfo.approximateCost" min="0">
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="recipeInfoCookingTime">Cooking time (minutes)</label>
-                        <input type="number" class="form-control" id="recipeInfoCookingTime"
-                               placeholder="Cooking time (minutes)" ng-model="recipeInfo.cookingTime">
+                        <input type="number" class="form-control" id="recipeInfoCookingTime" name="recipeInfoCookingTime"
+                               placeholder="How much it takes to realize recipe?" ng-model="recipeInfo.cookingTime" min="0">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="recipeInfoPhotoUrl">Photo URL</label>
-                    <input type="url" class="form-control" id="recipeInfoPhotoUrl" placeholder="Photo URL"
+                    <input name="urlPhoto" type="url" class="form-control" id="recipeInfoPhotoUrl" placeholder="Provide us with URL address representing recipe"
                            ng-model="recipeInfo.photoUrl">
+                    <div ng-show="recipeForm.$submitted || recipeForm.urlPhoto.$touched">
+                        <alert ng-show="recipeForm.urlPhoto.$error.url" type="danger">Not a valid url address</alert>
+                    </div>
+                </div>
+                <div class="text-right margin-lg">
+                    <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
                 </div>
             </form>
+
         </tab>
 
         <tab ng-repeat="recipeStep in recipeSteps track by $index"
@@ -39,38 +47,52 @@
                         class="glyphicon glyphicon-minus"></i></a>
             </tab-heading>
             <div>
-                <form class="margin-top-sm">
+                <form name="recipeStepForm" class="margin-top-sm">
                     <div class="form-group">
                         <label for="recipeStepTitle">Title</label>
-                        <input type="text" class="form-control" id="recipeStepTitle" placeholder="Title"
-                               ng-model="recipeStep.title">
+                        <input name="title" type="text" class="form-control" id="recipeStepTitle" placeholder="Enter recipe step title..."
+                               ng-model="recipeStep.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
+                        <div ng-show="recipeStepForm.$submitted || recipeStepForm.name.$touched">
+                            <alert ng-show="recipeStepForm.title.$error.required" type="danger">You did not enter title</alert>
+                            <alert ng-show="recipeStepForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
+                            <alert ng-show="recipeStepForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="recipeStepDescription">Description</label>
-                        <textarea ng-model="recipeStep.description" id="recipeStepDescription" class="form-control"
-                                  rows="8"></textarea>
+                        <textarea name="description" ng-model="recipeStep.description" id="recipeStepDescription" class="form-control"
+                                  rows="8" placeholder="Recipe step description should tell how to realize current step"
+                                  ng-minlength="3" ng-maxlength="1000" ng-required="true"></textarea>
+                        <div ng-show="recipeStepForm.$submitted || recipeStepForm.description.$touched">
+                            <alert ng-show="recipeStepForm.description.$error.required" type="danger">You did not enter description</alert>
+                            <alert ng-show="recipeStepForm.description.$error.minlength" type="danger">Description need at least 3 characters</alert>
+                            <alert ng-show="recipeStepForm.description.$error.maxlength" type="danger">Description can't be longer than 1000 characters</alert>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-6">
                             <label for="recipeStepTimerDuration">Timer duration (seconds)</label>
                             <input type="number" class="form-control" id="recipeStepTimerDuration"
-                                   placeholder="Timer duration (seconds)" ng-model="recipeStep.timerDuration">
+                                   placeholder="Enter Timer duration in seconds, when timer expire, you will be notified" ng-model="recipeStep.timerDuration">
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="recipeStepRealizationTime">Realization time (minutes)</label>
                             <input type="number" class="form-control" id="recipeStepRealizationTime"
-                                   placeholder="Realization time (minutes)" ng-model="recipeStep.realizationTime">
+                                   placeholder="Enter recipe realization time in minutes" ng-model="recipeStep.realizationTime">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="recipeStepPhotoUrl">Photo URL</label>
-                        <input type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Photo URL"
+                        <input type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Provide us with URL address representing recipe step"
                                ng-model="recipeStep.photoUrl">
                     </div>
                     <div class="form-group">
                         <label for="recipeStepVideoUrl">Video URL</label>
-                        <input type="url" class="form-control" id="recipeStepVideoUrl" placeholder="Video URL"
+                        <input type="url" class="form-control" id="recipeStepVideoUrl" placeholder="Provide us with URL video address explaining recipe step"
                                ng-model="recipeStep.videoUrl">
+                    </div>
+                    <div class="text-right margin-lg">
+                        <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
                     </div>
                 </form>
 
@@ -102,7 +124,7 @@
                                         <label for="ingredientAmount">Amount</label>
                                         <input type="number" class="form-control" id="ingredientAmount"
                                                placeholder="Amount"
-                                               ng-model="ingredient.amount">
+                                               ng-model="ingredient.amount" min="0">
                                     </div>
 
                                     <div class="form-group col-xs-6">
