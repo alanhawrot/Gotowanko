@@ -13,12 +13,12 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
 
     // Tworzony przez użytkownika Request Body
     $scope.recipe = {
-        title: "Main",
+        title: "Recipe title",
         photoUrl: '',
         active: true,
         recipeSteps: [
             {
-                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'New step', description: '', ingredients: []
+                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'First step', description: '', ingredients: []
             }
         ]
     };
@@ -61,7 +61,7 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
 
         var newStepNumber = $scope.recipe.recipeSteps.length + 1;
         $scope.recipe.recipeSteps.push({
-            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'New step', description: '', ingredients: []
+            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'Next step', description: '', ingredients: []
         });
         addNewTab();
         setAllTabsInactive();
