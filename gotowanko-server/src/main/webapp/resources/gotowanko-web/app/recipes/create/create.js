@@ -11,76 +11,88 @@ m.config(['$routeProvider', function ($routeProvider) {
 
 m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($scope, $http, $log) {
 
-    $scope.recipeInfo = {title: "Main", photoUrl: '', active: true};
-
-    $scope.recipeSteps =
-        [
+    // Tworzony przez użytkownika Request Body
+    $scope.recipe = {
+        title: "Main",
+        photoUrl: '',
+        active: true,
+        recipeSteps: [
             {
-                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'New step', description: '', active: false, ingredients: []
+                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'New step', description: '', ingredients: []
             }
-        ];
+        ]
+    };
 
-    var ingredients = [];
+    // Pozostałe informacje związane z kartami
+    $scope.tabs = [
+        {active: true},
+        {active: false}
+    ];
+    var setAllTabsInactive = function () {
+        for (var i = 0; i < $scope.tabs[i].length; i++) {
+            $scope.tabs[i].active = false;
+        }
+    };
+    var activateTab = function (index) {
+        $scope.tabs[index].active = true;
+    };
+    var removeTab = function (index) {
+        $scope.tabs.splice(index, 1);
+    };
+    var addNewTab = function () {
+        $scope.tabs.push({active: true});
+    };
+
     $http.get('/rest/ingredients/list')
-        .success(function (dataResponseIngredients) {
-            $http.get('/rest/ingredients/units')
-                .success(function (dataResponseIngredientUnits) {
-                    $log.info("dataResponseIngredientUnits" + dataResponseIngredientUnits)
-                    angular.forEach(dataResponseIngredients, function (ingredient) {
-                        ingredient.amount = 0;
-                        ingredient.units = [];
-                        ingredient.isChecked = false;
-                        angular.copy(dataResponseIngredientUnits.ingredientUnits, ingredient.units);
-                    });
-                    ingredients = dataResponseIngredients;
-                    //angular.copy(ingredients, $scope.recipeSteps[0].ingredients);
-                });
+        .success(function (responseData) {
+            $log.info("/rest/ingredients/list " + responseData)
+            $scope.ingredients = responseData;
         });
 
-    var setAllInactive = function () {
-        $scope.recipeInfo.active = false;
-        angular.forEach($scope.recipeSteps, function (recipeStep) {
-            recipeStep.active = false;
-        });
-    };
+    $http.get('/rest/ingredients/units')
+        .success(function (responseData) {
+            $log.info("/rest/ingredients/units " + responseData)
 
-    var addNewRecipeStep = function () {
-        var newStepNumber = $scope.recipeSteps.length + 1;
-        var copyIngredients = [];
-        //angular.copy(ingredients, copyIngredients);
-        $scope.recipeSteps.push({
-            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'New step', description: '', active: true, ingredients: copyIngredients
+            $scope.ingredientUnits = responseData;
         });
-    };
+
 
     $scope.addRecipeStep = function () {
-        setAllInactive();
-        addNewRecipeStep();
+
+        var newStepNumber = $scope.recipe.recipeSteps.length + 1;
+        $scope.recipe.recipeSteps.push({
+            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'New step', description: '', ingredients: []
+        });
+        addNewTab();
+        setAllTabsInactive();
+        activateTab($scope.tabs.length - 1);
     };
 
     $scope.removeRecipeStep = function (index) {
-        setAllInactive();
-        $scope.recipeSteps.splice(index, 1);
-        for (var i = index; i < $scope.recipeSteps.length; i++) {
-            $scope.recipeSteps[i].stepNumber--;
+        setAllTabsInactive();
+        removeTab(index + 1);
+
+        var recipeSteps = $scope.recipe.recipeSteps;
+        recipeSteps.splice(index, 1);
+        for (var i = index; i < recipeSteps.length; i++) {
+            recipeSteps[i].stepNumber--;
         }
 
-        if (index < $scope.recipeSteps.length) {
-            $scope.recipeSteps[index].active = true;
+        if (index < recipeSteps.length) {
+            activateTab(index + 1);
         } else {
-            $scope.recipeSteps[$scope.recipeSteps.length - 1].active = true;
+            activateTab(recipeSteps.length);
         }
     };
 
-
     $scope.saveRecipe = function () {
-        $log.info(angular.toJson($scope.recipeSteps,true));
-        $http.post('/rest/recipes', $scope.recipeSteps )
+        $log.info(angular.toJson($scope.recipe, true));
+        $http.post('/rest/recipes', $scope.recipe)
             .success(function (responseData) {
-                $log.info("dataResponseIngredientUnits" + responseData);
+                $log.info("responseData " + responseData);
 
             }).error(function (responseData) {
-                $log.warn(responseData);
+                $log.warn("responseData " + responseData);
                 $scope.setAlert({type: 'danger', msg: responseData.errorMessage});
             });
     };
