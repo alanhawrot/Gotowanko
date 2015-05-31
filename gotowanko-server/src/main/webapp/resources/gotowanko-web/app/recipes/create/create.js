@@ -7,7 +7,7 @@ m.config(['$routeProvider', function ($routeProvider) {
         templateUrl: '/recipes/create/create.html',
         controller: 'CreateRecipeController'
     });
-}]);
+}])
 
 m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', function ($scope, $http, $log, $location) {
     $scope.form = {};
@@ -75,7 +75,7 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
 
 
     $scope.addRecipeStep = function () {
-
+        $log.info("Adding step")
         var newStepNumber = $scope.recipe.recipeSteps.length + 1;
         $scope.recipe.recipeSteps.push({
             stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'Next step', description: '', ingredients: []
@@ -139,5 +139,40 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
             });
     };
 
+    $scope.addIngredient = function (tabId, ingredientId) {
+        $log.info("tabId " + tabId + "  ingredientId" + ingredientId);
+        $log.info(angular.toJson($scope.tabs, true));
+        if (!$scope.tabs[tabId].ingredients)
+            return;
+
+        var ingredientToAdd = $scope.tabs[tabId].ingredients[ingredientId];
+        if (!ingredientToAdd || !ingredientToAdd.ingredientUnitId || !ingredientToAdd.ingredientAmount)
+            return;
+
+        ingredientToAdd.ingredientId = ingredientId;
+
+        $log.info(angular.toJson(ingredientToAdd));
+        $scope.recipe.recipeSteps[tabId - 1].ingredients.push(ingredientToAdd);
+        $scope.tabs[tabId].ingredients[ingredientId] = undefined;
+    }
+
+    $scope.removeIngredient = function (tabId, ingredientIndex) {
+        $log.info("tabId, ingredientIndex" + tabId + ", " + ingredientIndex);
+        $scope.recipe.recipeSteps[tabId - 1].ingredients.splice(ingredientIndex, 1);
+    }
+
+    $scope.ingredientName = function (ingredientId) {
+        for (var i = 0; i < $scope.ingredients.length; i++) {
+            if ($scope.ingredients[i].id == ingredientId)
+                return $scope.ingredients[i].name;
+        }
+    };
+
+    $scope.ingredientIconUrl = function (ingredientId) {
+        for (var i = 0; i < $scope.ingredients.length; i++) {
+            if ($scope.ingredients[i].id == ingredientId)
+                return $scope.ingredients[i].iconUrl;
+        }
+    };
     $scope.ingredientsFilter = '';
 }]);
