@@ -6,7 +6,8 @@
                     <div class="form-group">
                         <label for="recipeTitle">Title</label>
                         <input name="title" type="text" class="form-control" id="recipeTitle" placeholder="Enter recipe title..."
-                               ng-model="recipe.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
+                               ng-model="recipe.title" ng-minlength="3" ng-maxlength="50" ng-required="true"
+                               tooltip="Enter recipe title" tooltip-placement="bottom" tooltip-trigger="focus">
                     </div>
                     <div ng-show="form.recipeForm.$submitted || form.recipeForm.title.$touched">
                         <alert ng-show="form.recipeForm.title.$error.required" type="danger">You did not enter title</alert>
@@ -17,18 +18,21 @@
                         <div class="form-group col-xs-6">
                             <label for="recipeApproximateCost">Approximate cost</label>
                             <input type="number" class="form-control" id="recipeApproximateCost"
-                                   placeholder="How much cost realization of this recipe?" ng-model="recipe.approximateCost" min="0">
+                                   placeholder="How much cost realization of this recipe?" ng-model="recipe.approximateCost" min="0"
+                                    tooltip="How much cost realization of this recipe?" tooltip-placement="bottom" tooltip-trigger="focus">
                         </div>
                         <div class="form-group col-xs-6">
                             <label for="recipeCookingTime">Cooking time (minutes)</label>
                             <input type="number" class="form-control" id="recipeCookingTime" name="recipeCookingTime"
-                                   placeholder="How much it takes to realize recipe?" ng-model="recipe.cookingTime" min="0">
+                                   placeholder="How much it takes to realize recipe?" ng-model="recipe.cookingTime" min="0"
+                                   tooltip="How much it takes to realize recipe?" tooltip-placement="bottom" tooltip-trigger="focus">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="recipePhotoUrl">Photo URL</label>
                         <input name="photoUrl" type="url" class="form-control" id="recipePhotoUrl" placeholder="Provide us with URL address representing recipe"
-                               ng-model="recipe.photoUrl">
+                               ng-model="recipe.photoUrl"
+                               tooltip="Provide us with URL address representing recipe" tooltip-placement="bottom" tooltip-trigger="focus">
 
                         <div ng-show="form.recipeForm.$submitted || form.recipeForm.photoUrl.$touched">
                             <alert ng-show="form.recipeForm.photoUrl.$error.url" type="danger">Not a valid url address</alert>
@@ -52,7 +56,8 @@
                         <div class="form-group">
                             <label for="recipeStepTitle">Title</label>
                             <input name="title" type="text" class="form-control" id="recipeStepTitle" placeholder="Enter recipe step title..."
-                                   ng-model="recipeStep.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
+                                   ng-model="recipeStep.title" ng-minlength="3" ng-maxlength="50" ng-required="true"
+                                   tooltip="Enter recipe step title" tooltip-placement="bottom" tooltip-trigger="focus">
 
                             <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).title.$touched">
                                 <alert ng-show="$eval('form.recipeStepForm_' + $index).title.$error.required" type="danger">You did not enter title</alert>
@@ -64,7 +69,8 @@
                             <label for="recipeStepDescription">Description</label>
                         <textarea name="description" ng-model="recipeStep.description" id="recipeStepDescription" class="form-control"
                                   rows="8" placeholder="Recipe step description should tell how to realize current step"
-                                  ng-minlength="3" ng-maxlength="1000" ng-required="true"></textarea>
+                                  ng-minlength="3" ng-maxlength="1000" ng-required="true"
+                                  tooltip="Recipe step description should tell how to realize current step" tooltip-placement="bottom" tooltip-trigger="focus"></textarea>
 
                             <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).description.$touched">
                                 <alert ng-show="$eval('form.recipeStepForm_' + $index).description.$error.required" type="danger">You did not enter description</alert>
@@ -77,19 +83,22 @@
                             <div class="form-group col-xs-6">
                                 <label for="recipeStepTimerDuration">Timer duration (seconds)</label>
                                 <input type="number" class="form-control" id="recipeStepTimerDuration"
-                                       placeholder="Enter Timer duration in seconds, when timer expire, you will be notified"
-                                       ng-model="recipeStep.timerDuration">
+                                       placeholder="Enter timer duration in seconds, when timer expire, you will be notified"
+                                       ng-model="recipeStep.timerDuration"
+                                       tooltip="Enter timer duration in seconds, when timer expire, you will be notified" tooltip-placement="bottom" tooltip-trigger="focus">
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="recipeStepRealizationTime">Realization time (minutes)</label>
                                 <input type="number" class="form-control" id="recipeStepRealizationTime"
-                                       placeholder="Enter recipe realization time in minutes" ng-model="recipeStep.realizationTime">
+                                       placeholder="Enter recipe realization time in minutes" ng-model="recipeStep.realizationTime"
+                                       tooltip="Enter recipe realization time in minutes" tooltip-placement="bottom" tooltip-trigger="focus">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="recipeStepPhotoUrl">Photo URL</label>
                             <input name="photoUrl" type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Provide us with URL address representing recipe step"
-                                   ng-model="recipeStep.photoUrl">
+                                   ng-model="recipeStep.photoUrl"
+                                   tooltip="Provide us with URL address representing recipe step" tooltip-placement="bottom" tooltip-trigger="focus">
 
                             <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).photoUrl.$touched">
                                 <alert ng-show="$eval('form.recipeStepForm_' + $index).photoUrl.$error.url" type="danger">Not a valid url address</alert>
@@ -100,7 +109,8 @@
                             <label for="recipeStepVideoUrl">Video URL</label>
                             <input name="videoUrl" type="url" class="form-control" id="recipeStepVideoUrl"
                                    placeholder="Provide us with URL video address explaining recipe step"
-                                   ng-model="recipeStep.videoUrl">
+                                   ng-model="recipeStep.videoUrl"
+                                   tooltip="Provide us with URL video address explaining recipe step" tooltip-placement="bottom" tooltip-trigger="focus">
 
                             <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).videoUrl.$touched">
                                 <alert ng-show="$eval('form.recipeStepForm_' + $index).videoUrl.$error.url" type="danger">Not a valid url address</alert>
