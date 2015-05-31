@@ -7,9 +7,10 @@ m.config(['$routeProvider', function ($routeProvider) {
         templateUrl: '/recipes/create/create.html',
         controller: 'CreateRecipeController'
     });
-}])
+}]);
 
-m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($scope, $http, $log) {
+m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', function ($scope, $http, $log, $location) {
+    $scope.form = {};
 
     // Tworzony przez użytkownika Request Body
     $scope.recipe = {
@@ -45,13 +46,13 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
 
     $http.get('/rest/ingredients/list')
         .success(function (responseData) {
-            $log.info("/rest/ingredients/list " + angular.toJson(responseData, true))
+            $log.info("/rest/ingredients/list " + angular.toJson(responseData, true));
             $scope.ingredients = responseData;
         });
 
     $http.get('/rest/ingredients/units')
         .success(function (responseData) {
-            $log.info("/rest/ingredients/units " + angular.toJson(responseData, true))
+            $log.info("/rest/ingredients/units " + angular.toJson(responseData, true));
 
             $scope.ingredientUnits = responseData.ingredientUnits;
         });
@@ -88,13 +89,29 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', function ($sc
     $scope.saveRecipe = function () {
         $log.info(angular.toJson($scope.recipe, true));
 
-        /*if TODO: check if forms are valid before sending request
-        (!$scope.recipeForm.$valid)
-            return;*/
-        $http.post('/rest/recipes', $scope.recipe)
+        if (!$scope.form.recipeForm.$valid) return;
+        var lastErrorTabIndex = 0;
+        var isErrorInRecipeStep = false;
+        for (var i = 0; i < $scope.recipe.recipeSteps.length; i++) {
+            var recipeStepForm = $scope.$eval('form.recipeStepForm_' + i);
+            if (!recipeStepForm.$valid) {
+                recipeStepForm.$submitted = true;
+                lastErrorTabIndex = i + 1;
+                isErrorInRecipeStep = true;
+            }
+        }
+        if (isErrorInRecipeStep) {
+            setAllTabsInactive();
+            activateTab(lastErrorTabIndex);
+            return;
+        }
+
+        var createRecipeRequest = angular.copy($scope.recipe);
+        delete createRecipeRequest.active;
+        $http.post('/rest/recipes', createRecipeRequest)
             .success(function (responseData) {
                 $log.info("responseData " + responseData);
-
+                $location('/recipes/' + responseData.recipeId);
             }).error(function (responseData) {
                 $log.warn("responseData " + responseData);
                 $scope.setAlert({type: 'danger', msg: responseData.errorMessage});

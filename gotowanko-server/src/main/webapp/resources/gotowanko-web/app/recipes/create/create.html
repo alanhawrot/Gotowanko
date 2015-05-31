@@ -2,16 +2,16 @@
     <div class="margin-top-lg">
         <tabset id="recipeTab">
             <tab heading="{{recipe.title}}" active="tabs[0].active">
-                <form name="recipeForm" class="margin-top-sm">
+                <form name="form.recipeForm" class="margin-top-sm">
                     <div class="form-group">
                         <label for="recipeTitle">Title</label>
                         <input name="title" type="text" class="form-control" id="recipeTitle" placeholder="Enter recipe title..."
                                ng-model="recipe.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
                     </div>
-                    <div ng-show="recipeForm.$submitted || recipeForm.name.$touched">
-                        <alert ng-show="recipeForm.title.$error.required" type="danger">You did not enter title</alert>
-                        <alert ng-show="recipeForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
-                        <alert ng-show="recipeForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
+                    <div ng-show="form.recipeForm.$submitted || form.recipeForm.title.$touched">
+                        <alert ng-show="form.recipeForm.title.$error.required" type="danger">You did not enter title</alert>
+                        <alert ng-show="form.recipeForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
+                        <alert ng-show="form.recipeForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-6">
@@ -27,11 +27,11 @@
                     </div>
                     <div class="form-group">
                         <label for="recipePhotoUrl">Photo URL</label>
-                        <input name="urlPhoto" type="url" class="form-control" id="recipePhotoUrl" placeholder="Provide us with URL address representing recipe"
+                        <input name="photoUrl" type="url" class="form-control" id="recipePhotoUrl" placeholder="Provide us with URL address representing recipe"
                                ng-model="recipe.photoUrl">
 
-                        <div ng-show="recipeForm.$submitted || recipeForm.urlPhoto.$touched">
-                            <alert ng-show="recipeForm.urlPhoto.$error.url" type="danger">Not a valid url address</alert>
+                        <div ng-show="form.recipeForm.$submitted || form.recipeForm.photoUrl.$touched">
+                            <alert ng-show="form.recipeForm.photoUrl.$error.url" type="danger">Not a valid url address</alert>
                         </div>
                     </div>
                     <div class="text-right margin-lg">
@@ -48,16 +48,16 @@
                         <i class="glyphicon glyphicon-minus"></i></a>
                 </tab-heading>
                 <div>
-                    <form name="recipeStepForm" class="margin-top-sm">
+                    <form name="form.recipeStepForm_{{$index}}" class="margin-top-sm">
                         <div class="form-group">
                             <label for="recipeStepTitle">Title</label>
                             <input name="title" type="text" class="form-control" id="recipeStepTitle" placeholder="Enter recipe step title..."
                                    ng-model="recipeStep.title" ng-minlength="3" ng-maxlength="50" ng-required="true">
 
-                            <div ng-show="recipeStepForm.$submitted || recipeStepForm.name.$touched">
-                                <alert ng-show="recipeStepForm.title.$error.required" type="danger">You did not enter title</alert>
-                                <alert ng-show="recipeStepForm.title.$error.minlength" type="danger">Title need at least 3 characters</alert>
-                                <alert ng-show="recipeStepForm.title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
+                            <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).title.$touched">
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).title.$error.required" type="danger">You did not enter title</alert>
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).title.$error.minlength" type="danger">Title need at least 3 characters</alert>
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).title.$error.maxlength" type="danger">Title can't be longer than 50 characters</alert>
                             </div>
                         </div>
                         <div class="form-group">
@@ -66,10 +66,10 @@
                                   rows="8" placeholder="Recipe step description should tell how to realize current step"
                                   ng-minlength="3" ng-maxlength="1000" ng-required="true"></textarea>
 
-                            <div ng-show="recipeStepForm.$submitted || recipeStepForm.description.$touched">
-                                <alert ng-show="recipeStepForm.description.$error.required" type="danger">You did not enter description</alert>
-                                <alert ng-show="recipeStepForm.description.$error.minlength" type="danger">Description need at least 3 characters</alert>
-                                <alert ng-show="recipeStepForm.description.$error.maxlength" type="danger">Description can't be longer than 1000 characters
+                            <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).description.$touched">
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).description.$error.required" type="danger">You did not enter description</alert>
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).description.$error.minlength" type="danger">Description need at least 3 characters</alert>
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).description.$error.maxlength" type="danger">Description can't be longer than 1000 characters
                                 </alert>
                             </div>
                         </div>
@@ -88,15 +88,25 @@
                         </div>
                         <div class="form-group">
                             <label for="recipeStepPhotoUrl">Photo URL</label>
-                            <input type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Provide us with URL address representing recipe step"
+                            <input name="photoUrl" type="url" class="form-control" id="recipeStepPhotoUrl" placeholder="Provide us with URL address representing recipe step"
                                    ng-model="recipeStep.photoUrl">
+
+                            <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).photoUrl.$touched">
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).photoUrl.$error.url" type="danger">Not a valid url address</alert>
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label for="recipeStepVideoUrl">Video URL</label>
-                            <input type="url" class="form-control" id="recipeStepVideoUrl"
+                            <input name="videoUrl" type="url" class="form-control" id="recipeStepVideoUrl"
                                    placeholder="Provide us with URL video address explaining recipe step"
                                    ng-model="recipeStep.videoUrl">
+
+                            <div ng-show="$eval('form.recipeStepForm_' + $index).$submitted || $eval('form.recipeStepForm_' + $index).videoUrl.$touched">
+                                <alert ng-show="$eval('form.recipeStepForm_' + $index).videoUrl.$error.url" type="danger">Not a valid url address</alert>
+                            </div>
                         </div>
+
                         <div class="text-right margin-lg">
                             <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
                         </div>
