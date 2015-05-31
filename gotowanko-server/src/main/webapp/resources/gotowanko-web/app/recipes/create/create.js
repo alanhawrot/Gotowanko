@@ -48,6 +48,14 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
         .success(function (responseData) {
             $log.info("/rest/ingredients/list " + angular.toJson(responseData, true));
             $scope.ingredients = responseData;
+        }).error(function (responseData, status) {
+            $log.warn("responseData " + responseData);
+            if (status == 401) {
+                $scope.clearSession();
+                $location.path('/login');
+            } else {
+                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+            }
         });
 
     $http.get('/rest/ingredients/units')
@@ -55,6 +63,14 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
             $log.info("/rest/ingredients/units " + angular.toJson(responseData, true));
 
             $scope.ingredientUnits = responseData.ingredientUnits;
+        }).error(function (responseData, status) {
+            $log.warn("responseData " + responseData);
+            if (status == 401) {
+                $scope.clearSession();
+                $location.path('/login');
+            } else {
+                $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+            }
         });
 
 
@@ -111,10 +127,15 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
         $http.post('/rest/recipes', createRecipeRequest)
             .success(function (responseData) {
                 $log.info("responseData " + responseData);
-                $location('/recipes/' + responseData.recipeId);
-            }).error(function (responseData) {
+                $location.path('/recipes/' + responseData.recipeId);
+            }).error(function (responseData, status) {
                 $log.warn("responseData " + responseData);
-                $scope.setAlert({type: 'danger', msg: responseData.errorMessage});
+                if (status == 401) {
+                    $scope.clearSession();
+                    $location.path('/login');
+                } else {
+                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                }
             });
     };
 
