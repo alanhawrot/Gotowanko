@@ -53,6 +53,10 @@
     margin-right: 30px;
 }
 
+.margin-bottom-lg {
+    margin-bottom: 30px;
+}
+
 .margin-top-lg {
     margin-top: 30px;
 }
@@ -73,12 +77,24 @@
     padding-left: 30px;
 }
 
+.padding-right-lg {
+    padding-right: 30px;
+}
+
+.padding-bottom-lg {
+    padding-bottom: 30px;
+}
+
 .padding-sm {
     padding: 10px;
 }
 
 .margin-sm {
     margin: 10px;
+}
+
+.padding-left-xlg {
+    padding-left: 100px;
 }
 
 .margin-right-sm {

@@ -1,5 +1,6 @@
-<div class="well well-lg">
-    <form name="registrationForm">
+<h1>Login</h1>
+<div class="well well-lg margin-right-lg margin-left-lg">
+    <form name="registrationForm" class="padding-left-lg padding-right-lg">
 
         <div class="form-group">
             <label for="gotowankoEmail">Email address</label>
@@ -26,7 +27,8 @@
         </div>
 
 
-        <button class="btn btn-primary" name="loginButton" type="button" ng-click="gotowankoLogin(gotowankoEmail, gotowankoPassword)">Sign in</button>
-        <br/>
+        <div class="text-right">
+            <button class="btn btn-primary btn-lg margin-lg name="loginButton" type="button" ng-click="gotowankoLogin(gotowankoEmail, gotowankoPassword)">Sign in</button>
+        </div>
     </form>
 </div>

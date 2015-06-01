@@ -52,31 +52,42 @@
 -->
 
 
-<div class="top-bg floating-left" style="width: 100%;">
-    <div class="floating-left margin-left-lg"><h2><b>Gotowanko</b></h2></div>
-    <div class="margin-right-lg floating-right">
-        <div ng-show="isLogged()">
-            <a type="button" class="btn btn-default navbar-btn" ng-click="logout()">Wyloguj <b>{{loggedUser.name}}</b></a>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Gotowanko</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/search"><strong>Gotowanko</strong></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search">Search for recipe</a></li>
+                <li ng-class="{ active: isActive('/users/{{loggedUser.id}}') }" ng-if="isLogged()">
+                    <a href="" ng-href="#/users/{{loggedUser.id}}">Profile</a></li>
+                <li ng-class="{ active: isActive('/recipes_create') }" ng-if="isLogged()">
+                    <a href="" ng-href="#/recipes_create">Create recipe</a></li>
+            </ul>
+            <ul class="nav navbar-nav floating-right">
+                <li ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login">Login</a></li>
+                <li ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register">Register</a></li>
+                <a ng-show="isLogged()" type="button" class="btn btn-default navbar-btn" ng-click="logout()">Wyloguj <b>{{loggedUser.name}}</b></a>
+            </ul>
         </div>
     </div>
-</div>
-<div class="clear"></div>
-<div class="row padding-lg">
-    <div class="col-xs-2">
-        <ul class="nav nav-pills nav-stacked floating-left">
-            <li role="presentation" ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search"><h4>Search for recipe</h4></a></li>
-            <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login"><h4>Login</h4></a></li>
-            <li role="presentation" ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register"><h4>Register</h4></a></li>
-            <li role="presentation" ng-if="isLogged()" ng-class="{ active: isActive('/users/{{loggedUser.id}}') }">
-                <a href="" ng-href="#/users/{{loggedUser.id}}"><h4>Profile</h4></a></li>
-            <li role="presentation" ng-if="isLogged()" ng-class="{ active: isActive('/recipes_create') }">
-                <a href="" ng-href="#/recipes_create"><h4>Create recipe</h4></a></li>
-        </ul>
     </div>
-    <div class="col-xs-10" ng-view></div>
+    <div class="top-bg" style="width: 100%; height: 5px; position: relative; top:5px">
+    </div>
+</nav>
+<div class="clear"></div>
+<div class="row padding-left-lg padding-right-lg">
+    <div class="col-xs-12" ng-view></div>
 </div>
 
-<div class="alert-container ">
+<div class="alert-container " style="z-index:99999">
     <div class="container-fluid">
         <div ng-repeat="alert in alerts" class="col-xs-6 col-xs-offset-3">
             <alert type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

@@ -256,5 +256,13 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         $scope.recipe.recipeSteps[tabId - 1].ingredients.splice(ingredientIndex, 1);
     };
 
+    $scope.isAdded = function () {
+        return $routeParams.recipeId == undefined
+    }
+
+    $scope.isModified = function () {
+        return $routeParams.recipeId != undefined
+    }
+
     $scope.ingredientsFilter = '';
 }]);

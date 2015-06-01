@@ -1,5 +1,6 @@
-<div class="well well-lg">
-    <form name="registrationForm">
+<h1>Register</h1>
+<div class="well well-lg margin-right-lg margin-left-lg">
+    <form name="registrationForm" class="padding-left-lg padding-right-lg">
         <div class="form-group">
             <label for="gotowankoName">Name</label>
             <input type="text" name="name" class="form-control" id="gotowankoName" placeholder="Enter your name ..." ng-model="user.name"
@@ -43,7 +44,8 @@
             <alert ng-show="registrationForm.confirmPassword.$error.noMatch" type="danger">Passwords doesn't match</alert>
         </div>
 
-        <button class="btn btn-primary" name="loginButton" type="button" ng-click="register()">Register</button>
-        <br/>
+        <div class="text-right">
+            <button class="btn btn-primary btn-lg margin-lg" name="loginButton" type="button" ng-click="register()">Register</button>
+        </div>
     </form>
 </div>

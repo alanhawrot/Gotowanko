@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base64'])
+angular.module('gotowankoApp.userDetailsView', ['ngRoute', 'ngCookies', 'ab-base64', 'imageFilters'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/users/:userId', {
