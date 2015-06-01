@@ -60,6 +60,8 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
     if (recipeId !== undefined) {
         $http.get('/rest/recipes/' + recipeId)
             .success(function (data) {
+                $log.info(angular.toJson(data, true));
+
                 var recipe = $scope.recipe;
 
                 recipe.title = data.title;

@@ -89,7 +89,7 @@ public class RecipeController {
                 recipeStepBuilder.withIngredient(
                         recipeFactory.builderForIngredientAmount()
                                 .withAmount(ingredientDto.getIngredientAmount())
-                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredient(ingredientDto.getIngredientId())
                                 .withIngredientUnit(ingredientDto.getIngredientUnitId())
                                 .build());
             }
@@ -139,7 +139,7 @@ public class RecipeController {
                 recipeStepBuilder.withIngredient(
                         recipeFactory.builderForIngredientAmount()
                                 .withAmount(ingredientDto.getIngredientAmount())
-                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredient(ingredientDto.getIngredientId())
                                 .withIngredientUnit(ingredientDto.getIngredientUnitId())
                                 .build());
             }
@@ -186,7 +186,7 @@ public class RecipeController {
                 recipeStepBuilder.withIngredient(
                         recipeFactory.builderForIngredientAmount()
                                 .withAmount(ingredientDto.getIngredientAmount())
-                                .withIngredient(ingredientDto.getIngredientUnitId())
+                                .withIngredient(ingredientDto.getIngredientId())
                                 .withIngredientUnit(ingredientDto.getIngredientUnitId())
                                 .build());
             }
