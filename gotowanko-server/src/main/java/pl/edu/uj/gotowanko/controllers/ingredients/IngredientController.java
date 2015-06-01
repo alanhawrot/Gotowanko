@@ -1,6 +1,5 @@
 package pl.edu.uj.gotowanko.controllers.ingredients;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +116,7 @@ public class IngredientController {
         Collection<Ingredient> ingredients = ingredientRepository.findAll();
 
         return ingredients.stream()
+                .filter(ingredient -> !(ingredient instanceof IngredientCategory))
                 .map(ingredient -> new GetIngredientDTO(ingredient))
                 .collect(Collectors.toList());
     }
@@ -151,10 +151,6 @@ public class IngredientController {
             }
 
         return ingredients.stream()
-                .filter(ingredient -> {
-                    logger.warn("Hibernate.getClass(ingredient)" + Hibernate.getClass(ingredient).getCanonicalName());
-                    return ! IngredientCategory.class.isAssignableFrom(Hibernate.getClass(ingredient));
-                })
                 .map(ingredient -> new GetHierarchyItemResponseDTO(ingredient))
                 .collect(Collectors.toList());
     }
