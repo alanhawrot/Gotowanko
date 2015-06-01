@@ -10,7 +10,6 @@ var m = angular.module('gotowankoApp', [
     'gotowankoApp.loginView',
     'gotowankoApp.registrationView',
     'gotowankoApp.userDetailsView',
-    'gotowankoApp.editRecipeView',
     'gotowankoApp.createRecipeView'
 ]);
 

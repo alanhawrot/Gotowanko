@@ -4,7 +4,7 @@ var m = angular.module('gotowankoApp.createRecipeView', ['ngRoute']);
 
 m.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/recipes_create', {
-        templateUrl: '/recipes/create/create.html',
+        templateUrl: '/recipes/addedit/addedit.html',
         controller: 'CreateRecipeController'
     });
 }])
