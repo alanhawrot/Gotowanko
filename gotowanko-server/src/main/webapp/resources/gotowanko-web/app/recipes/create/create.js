@@ -134,7 +134,7 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
                     $scope.clearSession();
                     $location.path('/login');
                 } else {
-                    $scope.setAlert({type: 'danger', msg: data[0].errorMessage});
+                    $scope.setAlert({type: 'danger', msg: responseData[0].errorMessage});
                 }
             });
     };
