@@ -156,7 +156,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
     };
 
     $scope.saveRecipe = function () {
-        $log.info(angular.toJson($scope.recipe, true));
+        $log.info("recipe to send " + angular.toJson($scope.recipe, true));
 
         if (!$scope.form.recipeForm.$valid) return;
         var lastErrorTabIndex = 0;

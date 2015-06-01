@@ -14,7 +14,7 @@ m.controller('ShowRecipeController', ['$scope', '$http', '$log', '$routeParams',
 
     $http.get('/rest/recipes/' + $routeParams.recipeId)
         .success(function (data, status, headers, config) {
-            $log.info(status + ": " + data);
+            $log.info(status + ", data:" + angular.toJson(data, true));
             $scope.recipe = data;
 
             $scope.canEditComment = function (commentId) {

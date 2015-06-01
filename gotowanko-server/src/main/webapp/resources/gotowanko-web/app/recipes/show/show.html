@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-3">
-                            <img ng-src="{{recipe.photoUrl}}"/>
+                            <img ng-src="{{recipe.photoUrl | defaultImageFilter}}"/>
                         </div>
 
                         <div class="col-xs-9">
@@ -135,7 +135,7 @@
 
                 <div class="row">
                     <div class="col-xs-3">
-                        <img ng-src="{{step.photoUrl}}" ng-if="step.photoUrl"/>
+                        <img ng-src="{{step.photoUrl | defaultImageFilter}}"/>
                     </div>
                     <div class="col-xs-8">
                         <h4 class="text-center">{{step.title}}</h4>
@@ -151,7 +151,7 @@
                 <div>
                     <div class="floating-left" ng-repeat="ingredient in step.ingredients">
                         <div class="floating-left">
-                            <img ng-src="{{ingredient.iconUrl}}" alt=""/>
+                            <img ng-src="{{ingredient.iconUrl }}" alt=""/>
                         </div>
                         <div class="floating-left" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
                             <h4>{{ingredient.name}}</h4>

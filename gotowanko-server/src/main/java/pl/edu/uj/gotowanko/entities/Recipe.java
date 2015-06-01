@@ -14,8 +14,6 @@ import java.util.HashSet;
 @Entity(name = "Recipes")
 public class Recipe {
 
-    private static final String DEFAULT_RECIPE_IMAGE = "/images/recipe/noImage.png";
-
     public enum RecipeState {
         NORMAL, UPDATE_PROPOSITION;
     }
@@ -32,7 +30,6 @@ public class Recipe {
     private String title;
 
     @Column(nullable = false)
-    @ColumnDefault(value = "'" + DEFAULT_RECIPE_IMAGE + "'")
     private String photoUrl;
 
     @Column
@@ -85,7 +82,7 @@ public class Recipe {
     }
 
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl == null || photoUrl.trim().isEmpty() ? Recipe.DEFAULT_RECIPE_IMAGE : photoUrl;
+        this.photoUrl = photoUrl == null || photoUrl.trim().isEmpty() ? null : photoUrl;
     }
 
     public Integer getCookingTimeInMinutes() {
