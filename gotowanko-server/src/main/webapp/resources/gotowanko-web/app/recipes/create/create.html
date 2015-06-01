@@ -2,7 +2,7 @@
     <div class="margin-top-lg">
         <tabset id="recipeTab">
             <tab heading="{{recipe.title}}" active="tabs[0].active">
-                <form name="form.recipeForm" class="margin-top-sm">
+                <form name="form.recipeForm" class="margin-top-sm well">
                     <div class="form-group">
                         <label for="recipeTitle">Title</label>
                         <input name="title" type="text" class="form-control" id="recipeTitle" placeholder="Enter recipe title..."
@@ -38,7 +38,7 @@
                             <alert ng-show="form.recipeForm.photoUrl.$error.url" type="danger">Not a valid url address</alert>
                         </div>
                     </div>
-                    <div class="text-right margin-lg">
+                    <div class="text-right margin-top-lg margin-right-lg">
                         <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
                     </div>
                 </form>
@@ -52,7 +52,7 @@
                         <i class="glyphicon glyphicon-minus"></i></a>
                 </tab-heading>
                 <div>
-                    <form name="form.recipeStepForm_{{recipeStepIndex}}" class="margin-top-sm">
+                    <form name="form.recipeStepForm_{{recipeStepIndex}}" class="margin-top-sm well">
                         <div class="form-group">
                             <label for="recipeStepTitle">Title</label>
                             <input name="title" type="text" class="form-control" id="recipeStepTitle" placeholder="Enter recipe step title..."
@@ -135,14 +135,14 @@
                             </div>
                         </div>
 
-                        <div class="text-right margin-lg">
+                        <div class="text-right margin-top-lg margin-right-lg">
                             <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
                         </div>
                     </form>
 
                     <h4 class="text-center margin-top-lg" ng-if="recipeStep.ingredients.length > 0">Choosen ingredients</h4>
 
-                    <div class="row">
+                    <div>
                         <ul class="list-group media-list">
                             <li class="list-group-item col-xs-4" ng-repeat="ingredient in recipeStep.ingredients track by $index"
                                 ng-init="ingredientIndex = $index;">
@@ -152,13 +152,7 @@
                                     </div>
 
                                     <div class="media-body">
-                                        <div class="checkbox">
-                                            <h4 class="media-heading">
-                                                <label class="media-heading">
-                                                    {{ingredientName(ingredient.ingredientId)}}
-                                                </label>
-                                            </h4>
-                                        </div>
+                                        <h4 class="media-heading">{{ingredientName(ingredient.ingredientId)}}</h4>
 
                                         <div class="row">
                                             <div class="form-group col-xs-6">
@@ -176,12 +170,12 @@
                                                         ng-options="ingredientUnit.id as ingredientUnit.name for ingredientUnit in ingredientUnits"></select>
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <button class="btn btn-danger" type="button" name="addIngredientButton"
-                                                    ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
-                                                <i class="glyphicon glyphicon-minus"></i> Remove
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <div class="media-right">
+                                        <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
+                                                ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
+                                            <i class="glyphicon glyphicon-minus"></i>
+                                        </button>
                                     </div>
                                 </form>
                             </li>
@@ -201,20 +195,13 @@
                                     <img class="media-object" ng-src="{{ingredient.iconUrl}}" alt="ingredient.name">
                                 </div>
                                 <div class="media-body">
-                                    <div class="checkbox">
-                                        <h4 class="media-heading">
-                                            <label class="media-heading">
-                                                {{ingredient.name}}
-                                            </label>
-                                        </h4>
-                                    </div>
+                                    <h4 class="media-heading">{{ingredient.name}}</h4>
 
                                     <div class="row">
                                         <div class="form-group col-xs-6">
                                             <label for="ingredientAmount{{ingredient.id}}">Amount</label>
                                             <input type="number" class="form-control" name="ingredientAmount" id="ingredientAmount{{ingredient.id}}"
-                                                   ng-model="tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount"
-                                                   placeholder="Amount" min="0">
+                                                   ng-model="tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount" min="0">
                                         </div>
 
                                         <div class="form-group col-xs-6">
@@ -224,13 +211,13 @@
                                                     ng-options="ingredientUnit.id as ingredientUnit.name for ingredientUnit in ingredientUnits"></select>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <button class="btn btn-success" type="button" name="addIngredientButton"
-                                                ng-click="addIngredient(recipeStepIndex+1, ingredient.id)"
-                                                ng-disabled="!tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount || !tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientUnitId">
-                                            <i class="glyphicon glyphicon-plus margin-right-sm"></i>Add
-                                        </button>
-                                    </div>
+                                </div>
+                                <div class="media-right">
+                                    <button class="btn btn-sm btn-success" type="button" name="addIngredientButton"
+                                            ng-click="addIngredient(recipeStepIndex+1, ingredient.id)"
+                                            ng-disabled="!tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount || !tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientUnitId">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
                                 </div>
                             </form>
                         </li>
