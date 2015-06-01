@@ -15,11 +15,10 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
     // Tworzony przez użytkownika Request Body
     $scope.recipe = {
         title: "Recipe title",
-        photoUrl: '',
         active: true,
         recipeSteps: [
             {
-                stepNumber: 1, photoUrl: '', videoUrl: '', title: 'First step', description: '', ingredients: []
+                stepNumber: 1, title: 'First step', description: '', ingredients: []
             }
         ]
     };
@@ -78,7 +77,7 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
         $log.info("Adding step")
         var newStepNumber = $scope.recipe.recipeSteps.length + 1;
         $scope.recipe.recipeSteps.push({
-            stepNumber: newStepNumber, photoUrl: '', videoUrl: '', title: 'Next step', description: '', ingredients: []
+            stepNumber: newStepNumber, title: 'Next step', description: '', ingredients: []
         });
         addNewTab();
         setAllTabsInactive();
@@ -129,12 +128,12 @@ m.controller('CreateRecipeController', ['$scope', '$http', '$log', '$location', 
                 $log.info("responseData " + responseData);
                 $location.path('/recipes/' + responseData.recipeId);
             }).error(function (responseData, status) {
-                $log.warn("responseData " + responseData);
+                $log.warn("responseData " + angular.toJson(responseData));
                 if (status == 401) {
                     $scope.clearSession();
                     $location.path('/login');
                 } else {
-                    $scope.setAlert({type: 'danger', msg: responseData[0].errorMessage});
+                    $scope.setAlert({type: 'danger', msg: responseData.errorMessage});
                 }
             });
     };

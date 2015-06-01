@@ -2,6 +2,7 @@ package pl.edu.uj.gotowanko.controllers.recipes.builders;
 
 import pl.edu.uj.gotowanko.entities.IngredientAmount;
 import pl.edu.uj.gotowanko.entities.RecipeStep;
+import pl.edu.uj.gotowanko.exceptions.businesslogic.IngredientsMayNotNotBeEmptyException;
 
 import java.time.Duration;
 
@@ -31,12 +32,18 @@ public class RecipeStepBuilder {
     }
 
     public RecipeStepBuilder withPhotoUrl(String photoUrl) {
-        recipeStep.setPhotoUrl(photoUrl);
+        if (photoUrl != null && photoUrl.trim().isEmpty())
+            recipeStep.setPhotoUrl(null);
+        else
+            recipeStep.setPhotoUrl(photoUrl);
         return this;
     }
 
     public RecipeStepBuilder withVideoUrl(String videoUrl) {
-        recipeStep.setVideoUrl(videoUrl);
+        if (videoUrl != null && videoUrl.trim().isEmpty())
+            recipeStep.setVideoUrl(null);
+        else
+            recipeStep.setVideoUrl(videoUrl);
         return this;
     }
 
@@ -58,7 +65,7 @@ public class RecipeStepBuilder {
         return this;
     }
 
-    public RecipeStep build() {
+    public RecipeStep build() throws IngredientsMayNotNotBeEmptyException {
         if (recipeStep == null)
             throw new IllegalStateException("RecipeStepBuilder may not be reused");
         if (recipeStep.getTitle() == null)
@@ -66,7 +73,7 @@ public class RecipeStepBuilder {
         if (recipeStep.getDescription() == null)
             throw new IllegalStateException("description must be set before building recipe step");
         if (recipeStep.getIngredients() == null || recipeStep.getIngredients().isEmpty())
-            throw new IllegalStateException("atleast one ingredient must be set before building recipe step");
+            throw new IngredientsMayNotNotBeEmptyException();
 
         RecipeStep result = this.recipeStep;
         this.recipeStep = null;

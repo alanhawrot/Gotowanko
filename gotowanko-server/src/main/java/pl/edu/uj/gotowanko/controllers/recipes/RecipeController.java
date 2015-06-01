@@ -68,7 +68,7 @@ public class RecipeController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateRecipeResponseDTO createRecipe(@Valid @RequestBody CreateRecipeRequestDTO dto)
-            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient {
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, IngredientsMayNotNotBeEmptyException {
 
         RecipeBuilder recipeBuilder = recipeFactory.builderForRecipe()
                 .withTitle(dto.getTitle())
@@ -106,7 +106,7 @@ public class RecipeController {
     @Transactional
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void updateRecipeRequest(@Valid @RequestBody UpdateRecipeRequestDTO dto, @PathVariable Long id)
-            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException, IngredientsMayNotNotBeEmptyException {
 
         Recipe recipe = recipeRepository.findOne(id);
 
@@ -154,7 +154,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/{id}/proposition", method = RequestMethod.POST)
     public RecipeUpdatePropositionResponseDTO updateProposition(@Valid @RequestBody UpdatePropositionRequestDTO dto, @PathVariable Long id)
-            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException {
+            throws NoSuchIngredientUnit, InvalidIngredientAmount, NoSuchIngredient, NoSuchResourceException, PermissionDeniedException, IngredientsMayNotNotBeEmptyException {
 
         Recipe currentRecipe = recipeRepository.findOne(id);
 

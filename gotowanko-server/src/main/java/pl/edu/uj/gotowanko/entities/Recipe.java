@@ -85,7 +85,7 @@ public class Recipe {
     }
 
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl == null ? Recipe.DEFAULT_RECIPE_IMAGE : photoUrl;
+        this.photoUrl = photoUrl == null || photoUrl.trim().isEmpty() ? Recipe.DEFAULT_RECIPE_IMAGE : photoUrl;
     }
 
     public Integer getCookingTimeInMinutes() {
