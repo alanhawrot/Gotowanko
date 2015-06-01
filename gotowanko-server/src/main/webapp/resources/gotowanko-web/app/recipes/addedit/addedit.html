@@ -24,7 +24,7 @@
                         <div class="form-group col-xs-6">
                             <label for="recipeCookingTime">Cooking time (minutes)</label>
                             <input type="number" class="form-control" id="recipeCookingTime" name="recipeCookingTime"
-                                   placeholder="How much it takes to realize recipe?" ng-model="recipe.cookingTime" min="0"
+                                   placeholder="How much it takes to realize recipe?" ng-model="tabs[0].cookingTime" min="0"
                                    tooltip="How much it takes to realize recipe?" tooltip-placement="bottom" tooltip-trigger="focus">
                         </div>
                     </div>
@@ -96,14 +96,14 @@
                                 <label for="recipeStepTimerDuration">Timer duration (seconds)</label>
                                 <input type="number" class="form-control" id="recipeStepTimerDuration"
                                        placeholder="Enter timer duration in seconds, when timer expire, you will be notified"
-                                       ng-model="recipeStep.timerDuration"
+                                       ng-model="tabs[recipeStepIndex+1].timerDuration"
                                        tooltip="Enter timer duration in seconds, when timer expire, you will be notified" tooltip-placement="bottom"
                                        tooltip-trigger="focus" min="0">
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="recipeStepRealizationTime">Realization time (minutes)</label>
                                 <input type="number" class="form-control" id="recipeStepRealizationTime"
-                                       placeholder="Enter recipe step realization time in minutes" ng-model="recipeStep.realizationTime"
+                                       placeholder="Enter recipe step realization time in minutes" ng-model="tabs[recipeStepIndex+1].realizationTime"
                                        tooltip="Enter recipe step realization time in minutes" tooltip-placement="bottom" tooltip-trigger="focus" min="0">
                             </div>
                         </div>

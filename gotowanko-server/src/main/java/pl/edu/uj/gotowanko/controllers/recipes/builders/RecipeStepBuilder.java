@@ -47,15 +47,15 @@ public class RecipeStepBuilder {
         return this;
     }
 
-    public RecipeStepBuilder withRealizationTime(Duration realizationTime) {
+    public RecipeStepBuilder withRealizationTimeInMinutes(Duration realizationTime) {
         if (realizationTime != null)
             recipeStep.setRealizationTimeInMinutes((int) realizationTime.toMinutes());
         return this;
     }
 
-    public RecipeStepBuilder withTimerDurationInMinutes(Duration remindAfterPeriod) {
+    public RecipeStepBuilder withTimerDurationInSeconds(Duration remindAfterPeriod) {
         if (remindAfterPeriod != null)
-            recipeStep.setTimerDurationInMinutes((int) remindAfterPeriod.toMinutes());
+            recipeStep.setTimerDurationInSeconds((int) remindAfterPeriod.toMillis() / 1000);
         return this;
     }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var m = angular.module('gotowankoApp.showRecipeView', ['ngRoute', 'dateFilters'])
+var m = angular.module('gotowankoApp.showRecipeView', ['ngRoute', 'dateFilters', 'imageFilters'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/recipes/:recipeId', {

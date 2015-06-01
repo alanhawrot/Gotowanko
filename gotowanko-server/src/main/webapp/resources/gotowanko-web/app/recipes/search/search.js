@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gotowankoApp.searchView', ['ngRoute'])
+angular.module('gotowankoApp.searchView', ['ngRoute', 'imageFilters'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/search', {

@@ -8,7 +8,7 @@ m.config(['$routeProvider', function ($routeProvider) {
             templateUrl: '/recipes/addedit/addedit.html',
             controller: 'AddEditRecipeController'
         }).
-        when('/recipes/:recipeId/edit', {
+        when('/recipes/:recipeId/edit/:recipeStepNumber?', {
             templateUrl: '/recipes/addedit/addedit.html',
             controller: 'AddEditRecipeController'
         });
@@ -21,6 +21,20 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         .success(function (responseData) {
             $log.info("/rest/ingredients/list " + angular.toJson(responseData, true));
             $scope.ingredients = responseData;
+
+            $scope.ingredientName = function (ingredientId) {
+                for (var i = 0; i < $scope.ingredients.length; i++) {
+                    if ($scope.ingredients[i].id == ingredientId)
+                        return $scope.ingredients[i].name;
+                }
+            };
+
+            $scope.ingredientIconUrl = function (ingredientId) {
+                for (var i = 0; i < $scope.ingredients.length; i++) {
+                    if ($scope.ingredients[i].id == ingredientId)
+                        return $scope.ingredients[i].iconUrl;
+                }
+            };
         }).error(function (responseData, status) {
             $log.warn("responseData " + responseData);
             if (status == 401) {
@@ -34,7 +48,6 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
     $http.get('/rest/ingredients/units')
         .success(function (responseData) {
             $log.info("/rest/ingredients/units " + angular.toJson(responseData, true));
-
             $scope.ingredientUnits = responseData.ingredientUnits;
         }).error(function (responseData, status) {
             $log.warn("responseData " + responseData);
@@ -67,7 +80,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
                 recipe.title = data.title;
                 recipe.approximateCost = data.approximateCost;
                 recipe.photoUrl = data.photoUrl;
-                recipe.cookingTime = data.cookingTime;
+                $scope.tabs[0].cookingTime = data.cookingTime / 1000 / 60; // ms to minutes
 
                 recipe.recipeSteps = [];
                 for (var i = 0; i < data.recipeSteps.length; i++) {
@@ -81,20 +94,29 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
                             }
                         );
                     }
-
+                    $scope.tabs[i + 1] = {
+                        timerDuration: data.recipeSteps[i].timerDuration / 1000, // ms to seconds
+                        realizationTime: data.recipeSteps[i].realizationTime / 1000 / 60, // ms to minutes
+                        active: false
+                    }
                     recipe.recipeSteps.push(
                         {
                             stepNumber: i + 1,
                             title: data.recipeSteps[i].title,
                             photoUrl: data.recipeSteps[i].photoUrl,
                             videoUrl: data.recipeSteps[i].videoUrl,
-                            timerDuration: data.recipeSteps[i].timerDuration,
-                            realizationTime: data.recipeSteps[i].realizationTime,
                             description: data.recipeSteps[i].description,
                             ingredients: recipeStepIngredients
                         }
                     );
                 }
+
+                var stepNumber = $routeParams.recipeStepNumber;
+                if (stepNumber && stepNumber >= 1 && stepNumber <= recipe.recipeSteps.length) {
+                    setAllTabsInactive();
+                    activateTab(stepNumber);
+                }
+                $log.info("recipe initialized for modyfication " + angular.toJson(data, true));
             }).
             error(function (data, status) {
                 $log.warn("responseData " + angular.toJson(responseData));
@@ -156,7 +178,6 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
     };
 
     $scope.saveRecipe = function () {
-        $log.info("recipe to send " + angular.toJson($scope.recipe, true));
 
         if (!$scope.form.recipeForm.$valid) return;
         var lastErrorTabIndex = 0;
@@ -174,6 +195,13 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
             activateTab(lastErrorTabIndex);
             return;
         }
+        $scope.recipe.cookingTime = $scope.tabs[0].cookingTime * 1000 * 60; // minutes to ms
+        for (var i = 0; i < $scope.recipe.recipeSteps.length; i++) {
+            $scope.recipe.recipeSteps[i].timerDuration = $scope.tabs[i + 1].timerDuration * 1000;  //seconds to ms
+            $scope.recipe.recipeSteps[i].realizationTime = $scope.tabs[i + 1].realizationTime * 1000 * 60 //minutes to ms
+
+        }
+        $log.info("recipe to send " + angular.toJson($scope.recipe, true));
 
         if (recipeId !== undefined) {
             $http.put('/rest/recipes/' + recipeId, $scope.recipe)
@@ -226,20 +254,6 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
     $scope.removeIngredient = function (tabId, ingredientIndex) {
         $log.info("tabId, ingredientIndex" + tabId + ", " + ingredientIndex);
         $scope.recipe.recipeSteps[tabId - 1].ingredients.splice(ingredientIndex, 1);
-    };
-
-    $scope.ingredientName = function (ingredientId) {
-        for (var i = 0; i < $scope.ingredients.length; i++) {
-            if ($scope.ingredients[i].id == ingredientId)
-                return $scope.ingredients[i].name;
-        }
-    };
-
-    $scope.ingredientIconUrl = function (ingredientId) {
-        for (var i = 0; i < $scope.ingredients.length; i++) {
-            if ($scope.ingredients[i].id == ingredientId)
-                return $scope.ingredients[i].iconUrl;
-        }
     };
 
     $scope.ingredientsFilter = '';

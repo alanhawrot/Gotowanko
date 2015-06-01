@@ -82,8 +82,8 @@ public class RecipeController {
                     .withDescription(stepDto.getDescription())
                     .withPhotoUrl(stepDto.getPhotoUrl())
                     .withVideoUrl(stepDto.getVideoUrl())
-                    .withRealizationTime(stepDto.getRealizationTime())
-                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
+                    .withRealizationTimeInMinutes(stepDto.getRealizationTime())
+                    .withTimerDurationInSeconds(stepDto.getTimerDuration());
 
             for (CreateRecipeIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
                 recipeStepBuilder.withIngredient(
@@ -132,8 +132,8 @@ public class RecipeController {
                     .withDescription(stepDto.getDescription())
                     .withPhotoUrl(stepDto.getPhotoUrl())
                     .withVideoUrl(stepDto.getVideoUrl())
-                    .withRealizationTime(stepDto.getRealizationTime())
-                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
+                    .withRealizationTimeInMinutes(stepDto.getRealizationTime())
+                    .withTimerDurationInSeconds(stepDto.getTimerDuration());
 
             for (UpdateRecipeIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
                 recipeStepBuilder.withIngredient(
@@ -179,8 +179,8 @@ public class RecipeController {
                     .withDescription(stepDto.getDescription())
                     .withPhotoUrl(stepDto.getPhotoUrl())
                     .withVideoUrl(stepDto.getVideoUrl())
-                    .withRealizationTime(stepDto.getRealizationTime())
-                    .withTimerDurationInMinutes(stepDto.getTimerDuration());
+                    .withRealizationTimeInMinutes(stepDto.getRealizationTime())
+                    .withTimerDurationInSeconds(stepDto.getTimerDuration());
 
             for (UpdateRecipePropositionIngredientRequestDTO ingredientDto : stepDto.getIngredients()) {
                 recipeStepBuilder.withIngredient(
@@ -355,8 +355,8 @@ public class RecipeController {
             recipeStepDto.setPhotoUrl(recipeStep.getPhotoUrl());
             if (recipeStep.getRealizationTimeInMinutes() != null)
                 recipeStepDto.setRealizationTime(Duration.of(recipeStep.getRealizationTimeInMinutes(), ChronoUnit.MINUTES));
-            if (recipeStep.getTimerDurationInMinutes() != null)
-                recipeStepDto.setTimerDuration(Duration.of(recipeStep.getTimerDurationInMinutes(), ChronoUnit.MINUTES));
+            if (recipeStep.getTimerDurationInSeconds() != null)
+                recipeStepDto.setTimerDuration(Duration.of(recipeStep.getTimerDurationInSeconds(), ChronoUnit.SECONDS));
             recipeStepDto.setVideoUrl(recipeStep.getVideoUrl());
 
             dto.getRecipeSteps().add(recipeStepDto);

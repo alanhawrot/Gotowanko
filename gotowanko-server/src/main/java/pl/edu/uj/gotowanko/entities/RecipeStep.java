@@ -33,7 +33,7 @@ public class RecipeStep {
     private Integer realizationTimeInMinutes;
 
     @Column
-    private Integer timerDurationInMinutes;
+    private Integer timerDurationInSeconds;
 
     @OneToMany(targetEntity = IngredientAmount.class, mappedBy = "recipeStep", cascade = CascadeType.ALL)
     private Collection<IngredientAmount> ingredients = new ArrayList<>();
@@ -85,8 +85,8 @@ public class RecipeStep {
         return realizationTimeInMinutes;
     }
 
-    public void setRealizationTimeInMinutes(Integer realizationTimeInMinutes) {
-        this.realizationTimeInMinutes = realizationTimeInMinutes;
+    public void setRealizationTimeInMinutes(Integer realizationTimeInSeconds) {
+        this.realizationTimeInMinutes = realizationTimeInSeconds;
     }
 
     public Collection<IngredientAmount> getIngredients() {
@@ -105,12 +105,12 @@ public class RecipeStep {
         this.recipe = recipe;
     }
 
-    public Integer getTimerDurationInMinutes() {
-        return timerDurationInMinutes;
+    public Integer getTimerDurationInSeconds() {
+        return timerDurationInSeconds;
     }
 
-    public void setTimerDurationInMinutes(Integer timerDurationInMinutes) {
-        this.timerDurationInMinutes = timerDurationInMinutes;
+    public void setTimerDurationInSeconds(Integer timerDurationInMinutes) {
+        this.timerDurationInSeconds = timerDurationInMinutes;
     }
 
     public void addIngredient(IngredientAmount ingredientAmount) {

@@ -1,7 +1,5 @@
 package pl.edu.uj.gotowanko.entities;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +27,7 @@ public class Recipe {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private String photoUrl;
 
     @Column
