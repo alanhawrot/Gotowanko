@@ -152,7 +152,19 @@
                                     </div>
 
                                     <div class="media-body">
-                                        <h4 class="media-heading">{{ingredientName(ingredient.ingredientId)}}</h4>
+                                        <div>
+                                            <div class="floating-left">
+                                                <h4 class="media-heading">{{ingredientName(ingredient.ingredientId)}}</h4>
+                                            </div>
+
+                                            <div class="text-right floating-right">
+                                                <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
+                                                        ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
+                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="form-group col-xs-6">
@@ -170,12 +182,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="media-right">
-                                        <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
-                                                ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
-                                            <i class="glyphicon glyphicon-minus"></i>
-                                        </button>
-                                    </div>
                                 </form>
                             </li>
                         </ul>
@@ -188,13 +194,27 @@
 
                 <div>
                     <ul class="list-group media-list">
-                        <li class="list-group-item col-xs-4" ng-repeat="ingredient in ingredients | filter:ingredientsFilter" tooltip="Write amount, choose unit and click plus button to add ingredient to recipe step">
+                        <li class="list-group-item col-xs-4" ng-repeat="ingredient in ingredients | filter:ingredientsFilter"
+                            tooltip="Write amount, choose unit and click plus button to add ingredient to recipe step">
                             <form>
                                 <div class="media-left media-middle">
                                     <img class="media-object" ng-src="{{ingredient.iconUrl}}" alt="ingredient.name">
                                 </div>
                                 <div class="media-body">
-                                    <h4 class="media-heading">{{ingredient.name}}</h4>
+                                    <div>
+                                        <div class="floating-left">
+                                            <h4 class="media-heading">{{ingredient.name}}</h4>
+                                        </div>
+
+                                        <div class="text-right floating-right">
+                                            <button class="btn btn-sm btn-success" type="button" name="addIngredientButton"
+                                                    ng-click="addIngredient(recipeStepIndex+1, ingredient.id)"
+                                                    ng-disabled="!tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount || !tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientUnitId">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="form-group col-xs-6">
@@ -210,13 +230,6 @@
                                                     ng-options="ingredientUnit.id as ingredientUnit.name for ingredientUnit in ingredientUnits"></select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="media-right">
-                                    <button class="btn btn-sm btn-success" type="button" name="addIngredientButton"
-                                            ng-click="addIngredient(recipeStepIndex+1, ingredient.id)"
-                                            ng-disabled="!tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientAmount || !tabs[recipeStepIndex+1].ingredients[ingredient.id].ingredientUnitId">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                    </button>
                                 </div>
                             </form>
                         </li>
