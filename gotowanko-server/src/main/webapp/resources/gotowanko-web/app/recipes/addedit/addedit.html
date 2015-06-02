@@ -2,7 +2,13 @@
     <div>
         <h1 ng-if="isAdded()"><span class="glyphicon glyphicon-blackboard"></span> Create recipe
             <span>
-                <button id="helpButtonAdd" class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
+                <button id="helpButtonAdd" class="btn btn-info pull-right" tooltip-html-unsafe="
+                    <p>Gotowanko recipe contain <strong>main card</strong> and <strong>steps</strong>.</p>
+                    <p><strong>Main card</strong> contains general information about recipe. At least title must be set.</p>
+                    <p>Every gotowanko recipe should be split into <strong>steps</strong>, so it become be easy to realize using mobile devices.</p>"
+                        tooltip-placement="left" tooltip-trigger="focus">
+                    help
+                </button>
             </span>
         </h1>
         <h1 ng-if="isModified()">Modify recipe

@@ -101,11 +101,11 @@
 
             <div class="col-xs-2 col-xs-offset-1">
                 <button type="button" class="btn btn-warning" ng-show="isOwner" ng-click="editProfile()">
-                    {{editButtonText}}
+                    <span class="glyphicon glyphicon-edit"></span> {{editButtonText}}
                 </button>
                 <button type="button" class="btn btn-danger margin-top-lg" data-toggle="modal"
                         data-target="#deleteAccountModal" ng-disabled="!isUserEditing" ng-show="isOwner">
-                    Delete account
+                    <span class="glyphicon glyphicon-remove"></span> Delete account
                 </button>
             </div>
 
