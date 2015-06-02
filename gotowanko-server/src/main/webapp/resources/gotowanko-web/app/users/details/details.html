@@ -159,10 +159,12 @@
                 <div class="panel-body">
                     {{comment.content}}
                 </div>
-                <div class="panel-footer" ng-if="canEditComment(comment.id)">
+                <div class="panel-footer text-right " ng-if="canEditComment(comment.id)">
                     <span>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCommentModal{{comment.id}}">Edit</button>
-                        <button type="button" class="btn btn-danger" ng-click="deleteComment(comment)">Delete</button>
+                        <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#editCommentModal{{comment.id}}">
+                            <span class="glyphicon glyphicon-edit"></span> Edit</button>
+                        <button type="button" class="btn btn-xs btn-danger" ng-click="deleteComment(comment)">
+                            <span class="glyphicon glyphicon-remove"></span> Delete</button>
                     </span>
                 </div>
 
@@ -176,7 +178,7 @@
                                 <textarea class="form-control" rows="6" ng-model="comment.content"></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="editComment(comment)">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editComment(comment)">
                                     Save changes
                                 </button>
                             </div>

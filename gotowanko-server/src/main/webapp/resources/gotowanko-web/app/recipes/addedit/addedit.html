@@ -11,7 +11,8 @@
             </span>
         </h1>
         <tabset id="recipeTab">
-            <tab heading="{{getRecipeTabTitle()}}" active="tabs[0].active">
+            <tab active="tabs[0].active">
+                <tab-heading><span class="glyphicon glyphicon-th-list"></span> {{getRecipeTabTitle()}}</tab-heading>
                 <form name="form.recipeForm" class="margin-top-sm well">
                     <div class="form-group">
                         <label for="recipeTitle">Title</label>
@@ -49,7 +50,7 @@
                         </div>
                     </div>
                     <div class="text-right margin-top-lg margin-right-lg">
-                        <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
+                        <button class="btn btn-success btn-lg" type="submit" ng-click="saveRecipe()"><span class="glyphicon glyphicon-ok-sign"></span> Save recipe</button>
                     </div>
                 </form>
 
@@ -57,8 +58,8 @@
 
             <tab ng-repeat="recipeStep in recipe.recipeSteps track by $index" ng-init="recipeStepIndex = $index;" active="tabs[$index+1].active">
                 <tab-heading>
-                    {{getRecipeStepTabTitle($index)}}
-                    <a class="btn btn-danger" ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href="">
+                    <span class="badge">{{recipeStepIndex+1}}</span> {{getRecipeStepTabTitle(recipeStepIndex)}}
+                    <a class="btn btn-xs btn-danger margin-left-sm" ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href="">
                         <i class="glyphicon glyphicon-trash"></i></a>
                 </tab-heading>
                 <div class="margin-top-sm well">
@@ -145,57 +146,57 @@
                             </div>
                         </div>
 
-                    <h4 class="text-center margin-top-lg" ng-if="recipeStep.ingredients.length > 0">Chosen ingredients</h4>
+                        <h4 class="text-center margin-top-lg" ng-if="recipeStep.ingredients.length > 0">Chosen ingredients</h4>
 
-                    <div class="row padding-lg">
-                        <ul class="list-group media-list">
-                            <li class="list-group-item col-xs-3 margin-right-lg margin-bottom-lg" ng-repeat="ingredient in recipeStep.ingredients track by $index"
-                                ng-init="ingredientIndex = $index;" tooltip="Click minus button to remove ingredient from recipe step or change values">
-                                <form name="form.addedIngredientForm_{{ingredient.ingredientId}}">
-                                    <div class="media-left media-middle">
-                                        <img class="media-object" ng-src="{{ingredientIconUrl(ingredient.ingredientId)}}" alt="ingredient.name">
-                                    </div>
-
-                                    <div class="media-body">
-                                        <div>
-                                            <div class="floating-left">
-                                                <h4 class="media-heading">{{ingredientName(ingredient.ingredientId)}}</h4>
-                                            </div>
-
-                                            <div class="text-right floating-right">
-                                                <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
-                                                        ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
-                                                    <i class="glyphicon glyphicon-trash"></i>
-                                                </button>
-                                            </div>
-                                            <div class="clear"></div>
+                        <div class="row padding-lg">
+                            <ul class="list-group media-list">
+                                <li class="list-group-item col-xs-3 margin-right-lg margin-bottom-lg"
+                                    ng-repeat="ingredient in recipeStep.ingredients track by $index"
+                                    ng-init="ingredientIndex = $index;" tooltip="Click minus button to remove ingredient from recipe step or change values">
+                                    <form name="form.addedIngredientForm_{{ingredient.ingredientId}}">
+                                        <div class="media-left media-middle">
+                                            <img class="media-object" ng-src="{{ingredientIconUrl(ingredient.ingredientId)}}" alt="ingredient.name">
                                         </div>
 
-                                        <div class="row">
-                                            <div class="form-group col-xs-6">
-                                                <label for="addedIngredientAmount{{ingredient.ingredientId}}">Amount</label>
-                                                <input type="number" class="form-control" name="ingredientAmount"
-                                                       id="addedIngredientAmount{{ingredient.ingredientId}}"
-                                                       ng-model="ingredient.ingredientAmount" min="0">
+                                        <div class="media-body">
+                                            <div>
+                                                <div class="floating-left">
+                                                    <h4 class="media-heading">{{ingredientName(ingredient.ingredientId)}}</h4>
+                                                </div>
+
+                                                <div class="text-right floating-right">
+                                                    <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
+                                                            ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
+                                                        <i class="glyphicon glyphicon-trash"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="clear"></div>
                                             </div>
 
-                                            <div class="form-group col-xs-6">
-                                                <label for="addedIngredientUnit{{ingredient.ingredientId}}">Unit</label>
-                                                <select ng-model="ingredient.ingredientUnitId"
-                                                        class="form-control" id="addedIngredientUnit{{ingredient.ingredientId}}"
-                                                        ng-options="ingredientUnit.id as ingredientUnit.name for ingredientUnit in ingredientUnits"></select>
+                                            <div class="row">
+                                                <div class="form-group col-xs-6">
+                                                    <label for="addedIngredientAmount{{ingredient.ingredientId}}">Amount</label>
+                                                    <input type="number" class="form-control" name="ingredientAmount"
+                                                           id="addedIngredientAmount{{ingredient.ingredientId}}"
+                                                           ng-model="ingredient.ingredientAmount" min="0">
+                                                </div>
+
+                                                <div class="form-group col-xs-6">
+                                                    <label for="addedIngredientUnit{{ingredient.ingredientId}}">Unit</label>
+                                                    <select ng-model="ingredient.ingredientUnitId"
+                                                            class="form-control" id="addedIngredientUnit{{ingredient.ingredientId}}"
+                                                            ng-options="ingredientUnit.id as ingredientUnit.name for ingredientUnit in ingredientUnits"></select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
 
 
                         <div class="text-right margin-right-lg">
-                            <button class="btn btn-success" type="submit" ng-click="saveRecipe()">Save recipe</button>
+                            <button class="btn btn-success btn-lg" type="submit" ng-click="saveRecipe()"><span class="glyphicon glyphicon-ok-sign"></span> Save recipe</button>
                         </div>
                     </form>
 
@@ -250,9 +251,9 @@
                 </div>
             </tab>
 
-            <tab select="addRecipeStep()">
-                <tab-heading>
-                    <i class="glyphicon glyphicon-plus"></i>
+            <tab select="addRecipeStep()" active="false" style="">
+                <tab-heading class="btn btn-success btn-xs margin-xsm" style="">
+                    <i class="glyphicon glyphicon-plus" style=" outline: 0 !important "></i> Add step
                 </tab-heading>
             </tab>
         </tabset>

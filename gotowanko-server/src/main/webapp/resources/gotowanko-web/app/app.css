@@ -89,6 +89,15 @@
     padding: 10px;
 }
 
+
+.padding-xsm {
+    padding:5px;
+}
+
+.padding-left-xsm {
+    padding-left:5px;
+}
+
 .margin-sm {
     margin: 10px;
 }
