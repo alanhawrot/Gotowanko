@@ -179,18 +179,21 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
 
     $scope.saveRecipe = function () {
 
-        if (!$scope.form.recipeForm.$valid) return;
+        var isErrorInRecipe = false;
         var lastErrorTabIndex = 0;
-        var isErrorInRecipeStep = false;
+        if (!$scope.form.recipeForm.$valid) {
+            $scope.form.recipeForm.$submitted = true;
+            isErrorInRecipe = true;
+        }
         for (var i = 0; i < $scope.recipe.recipeSteps.length; i++) {
             var recipeStepForm = $scope.$eval('form.recipeStepForm_' + i);
             if (!recipeStepForm.$valid) {
                 recipeStepForm.$submitted = true;
                 lastErrorTabIndex = i + 1;
-                isErrorInRecipeStep = true;
+                isErrorInRecipe = true;
             }
         }
-        if (isErrorInRecipeStep) {
+        if (isErrorInRecipe) {
             setAllTabsInactive();
             activateTab(lastErrorTabIndex);
             return;
