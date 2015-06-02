@@ -281,5 +281,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         } else {
             return 'Recipe step';
         }
-    }
+    };
+
+    $scope.isHelpCollapsed = false;
 }]);
