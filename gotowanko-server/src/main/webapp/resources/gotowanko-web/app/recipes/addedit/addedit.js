@@ -273,7 +273,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         if ($scope.recipe.title !== undefined && $scope.recipe.title.length > 0) {
             return $scope.recipe.title;
         } else {
-            return 'Recipe title';
+            return 'Main card';
         }
     };
 
