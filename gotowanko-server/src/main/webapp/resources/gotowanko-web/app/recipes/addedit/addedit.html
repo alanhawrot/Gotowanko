@@ -1,6 +1,6 @@
 <div>
     <div>
-        <h1 ng-if="isAdded()">Create recipe
+        <h1 ng-if="isAdded()"><span class="glyphicon glyphicon-blackboard"></span> Create recipe
             <span>
                 <button id="helpButtonAdd" class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
             </span>
@@ -58,8 +58,8 @@
             <tab ng-repeat="recipeStep in recipe.recipeSteps track by $index" ng-init="recipeStepIndex = $index;" active="tabs[$index+1].active">
                 <tab-heading>
                     {{getRecipeStepTabTitle($index)}}
-                    <a ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href="">
-                        <i class="glyphicon glyphicon-minus"></i></a>
+                    <a class="btn btn-danger" ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href="">
+                        <i class="glyphicon glyphicon-trash"></i></a>
                 </tab-heading>
                 <div class="margin-top-sm well">
                     <form name="form.recipeStepForm_{{recipeStepIndex}}">
@@ -165,7 +165,7 @@
                                             <div class="text-right floating-right">
                                                 <button class="btn btn-sm btn-danger" type="button" name="addIngredientButton"
                                                         ng-click="removeIngredient(recipeStepIndex+1, ingredientIndex)">
-                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                    <i class="glyphicon glyphicon-trash"></i>
                                                 </button>
                                             </div>
                                             <div class="clear"></div>

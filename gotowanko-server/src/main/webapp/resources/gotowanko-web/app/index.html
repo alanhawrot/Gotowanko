@@ -65,16 +65,16 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search">Search for recipe</a></li>
-                <li ng-class="{ active: isActive('/users/{{loggedUser.id}}') }" ng-if="isLogged()">
-                    <a href="" ng-href="#/users/{{loggedUser.id}}">Profile</a></li>
+                <li ng-class="{ active: isActive('/search') }"><a href="" ng-href="#/search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search for recipe</a></li>
                 <li ng-class="{ active: isActive('/recipes_create') }" ng-if="isLogged()">
-                    <a href="" ng-href="#/recipes_create">Create recipe</a></li>
+                    <a href="" ng-href="#/recipes_create"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> Create recipe</a></li>
+                <li ng-class="{ active: isActive('/users/{{loggedUser.id}}') }" ng-if="isLogged()">
+                    <a href="" ng-href="#/users/{{loggedUser.id}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Profile</a></li>
             </ul>
             <ul class="nav navbar-nav floating-right">
-                <li ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login">Login</a></li>
-                <li ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register">Register</a></li>
-                <a ng-show="isLogged()" type="button" class="btn btn-default navbar-btn" ng-click="logout()">Wyloguj <b>{{loggedUser.name}}</b></a>
+                <li ng-if="!isLogged()" ng-class="{ active: isActive('/login') }"><a href="" ng-href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li ng-if="!isLogged()" ng-class="{ active: isActive('/register') }"><a href="" ng-href="#/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <a ng-show="isLogged()" type="button" class="btn btn-default navbar-btn" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Wyloguj <b>{{loggedUser.name}}</b></a>
             </ul>
         </div>
     </div>
