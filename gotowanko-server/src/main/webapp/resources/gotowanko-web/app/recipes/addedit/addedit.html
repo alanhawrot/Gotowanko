@@ -2,15 +2,17 @@
     <div>
         <h1 ng-if="isAdded()">Create recipe
             <span>
-                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse">Help</button>
+                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse"
+                        aria-expanded="true" aria-controls="helpCollapse">Help</button>
             </span>
         </h1>
         <h1 ng-if="isModified()">Modify recipe
             <span>
-                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse">Help</button>
+                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse"
+                        aria-expanded="true" aria-controls="helpCollapse">Help</button>
             </span>
         </h1>
-        <div id="helpCollapse" class="collapse pull-right">
+        <div id="helpCollapse" class="collapse in pull-right">
             <div class="well well-lg">
                 1. Fill in forms with information about recipe.<br>
                 2. If you want to add recipe step - click plus button next to last tab.<br>
