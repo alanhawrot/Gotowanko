@@ -2,25 +2,14 @@
     <div>
         <h1 ng-if="isAdded()">Create recipe
             <span>
-                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse"
-                        aria-expanded="true" aria-controls="helpCollapse">Help</button>
+                <button class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
             </span>
         </h1>
         <h1 ng-if="isModified()">Modify recipe
             <span>
-                <button class="btn btn-info pull-right" data-toggle="collapse" data-target="#helpCollapse"
-                        aria-expanded="true" aria-controls="helpCollapse">Help</button>
+                <button class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
             </span>
         </h1>
-        <div id="helpCollapse" class="collapse in pull-right">
-            <div class="well well-lg">
-                1. Fill in forms with information about recipe.<br>
-                2. If you want to add recipe step - click plus button next to last tab.<br>
-                3. If you want to add ingredients to recipe step - choose them from the list below.<br>
-                4. You can quickly filter ingredients using search input box above ingredients list.<br>
-                5. After you have done creating recipe - click save button.
-            </div>
-        </div>
         <tabset id="recipeTab">
             <tab heading="{{getRecipeTabTitle()}}" active="tabs[0].active">
                 <form name="form.recipeForm" class="margin-top-sm well">
