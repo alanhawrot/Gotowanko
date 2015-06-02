@@ -2,12 +2,12 @@
     <div>
         <h1 ng-if="isAdded()">Create recipe
             <span>
-                <button class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
+                <button id="helpButtonAdd" class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
             </span>
         </h1>
         <h1 ng-if="isModified()">Modify recipe
             <span>
-                <button class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
+                <button id="helpButtonEdit" class="btn btn-info pull-right" tooltip="Test" tooltip-placement="left" tooltip-trigger="focus">Help</button>
             </span>
         </h1>
         <tabset id="recipeTab">

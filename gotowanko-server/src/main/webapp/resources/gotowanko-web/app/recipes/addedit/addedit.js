@@ -14,7 +14,7 @@ m.config(['$routeProvider', function ($routeProvider) {
         });
 }]);
 
-m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location', '$routeParams', function ($scope, $http, $log, $location, $routeParams) {
+m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location', '$routeParams', '$timeout', '$window', function ($scope, $http, $log, $location, $routeParams, $timeout, $window) {
     $scope.form = {};
 
     $http.get('/rest/ingredients/list')
@@ -283,5 +283,17 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         }
     };
 
-    $scope.isHelpCollapsed = false;
+    if ($scope.isAdded()) {
+        $timeout(function () {
+            var element = $window.document.getElementById('helpButtonAdd');
+            if (element)
+                element.focus();
+        });
+    } else {
+        $timeout(function () {
+            var element = $window.document.getElementById('helpButtonEdit');
+            if (element)
+                element.focus();
+        });
+    }
 }]);
