@@ -17,8 +17,8 @@ m.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/search'});
 }]);
 
-m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookieStore',
-    function ($scope, $log, $http, $location, $cookieStore) {
+m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookieStore', '$timeout',
+    function ($scope, $log, $http, $location, $cookieStore, $timeout) {
         $scope.loggedUser = $cookieStore.get('current.user');
 
         $scope.isLogged = function () {
@@ -63,15 +63,20 @@ m.controller('RootController', ['$scope', '$log', '$http', '$location', '$cookie
         $scope.setAlert = function (alert) {
             $scope.alerts = [];
             $scope.addAlert(alert);
-
         };
+
         $scope.addAlert = function (alert) {
             $scope.alerts.push(alert);
-
+            $scope.closeAlertAfterTimeout(alert);
         };
 
         $scope.closeAlert = function (index) {
             $scope.alerts.splice(index, 1);
         };
 
+        $scope.closeAlertAfterTimeout = function (alert) {
+            $timeout(function () {
+                $scope.closeAlert($scope.alerts.indexOf(alert));
+            }, 3000);
+        }
     }]);

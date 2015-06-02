@@ -21,7 +21,7 @@ m.directive('validPasswordC', function () {
     }
 });
 
-m.controller('RegistrationController', ['$scope', '$http', '$log', 'base64', function ($scope, $http, $log, base64) {
+m.controller('RegistrationController', ['$scope', '$http', '$log', '$location', 'base64', function ($scope, $http, $log, $location, base64) {
     $scope.gotowankoEmail = undefined;
 
     $scope.register = function () {
@@ -41,6 +41,7 @@ m.controller('RegistrationController', ['$scope', '$http', '$log', 'base64', fun
             success(function (data, status, headers, config) {
                 $scope.setAlert({type: 'success', msg: 'Registration successful'});
                 $log.info(data);
+                $location.path('/login');
             }).
             error(function (data, status, headers, config) {
                 $log.info(data + " " + status);
