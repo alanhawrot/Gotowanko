@@ -61,33 +61,33 @@
 
             <div>
                 <ul class="media-list">
-                    <li ng-repeat="recipe in recipes" class="padding-left-xlg">
-                        <div class="media">
-                            <div class="media-heading">
+                    <li ng-repeat="recipe in recipes" class="panel panel-default">
+                            <div class="panel-heading">
                                 <a href="" ng-href="#/recipes/{{recipe.id}}"><h2>{{recipe.title}}</h2></a>
                             </div>
-                            <div class="media-left media-middle">
-                                <a href="" ng-href="#/recipes/{{recipe.id}}">
-                                    <img class="media-object" ng-src="{{recipe.photoUrl | defaultImageFilter}}" alt="Image">
-                                </a>
+                            <div class="panel-body media" style="margin-left: 50px !important;">
+                                <div class="media-left ">
+                                    <a href="" ng-href="#/recipes/{{recipe.id}}">
+                                        <img class="media-object" ng-src="{{recipe.photoUrl | defaultImageFilter}}" alt="Image">
+                                    </a>
+                                </div>
+                                <div class="padding-left-lg media-body">
+                                    <dl class="dl-horizontal">
+                                        <dt>Date added</dt>
+                                        <dd>{{recipe.dateAdded | date:'dd-MM-yyyy'}}</dd>
+                                        <dt>Last modification</dt>
+                                        <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
+                                        <dt>Likes</dt>
+                                        <dd>{{recipe.numberOfLikes}}</dd>
+                                        <address>
+                                            <dt>Username</dt>
+                                            <dd><a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a></dd>
+                                            <dt>Email</dt>
+                                            <dd><a href="" ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a></a></dd>
+                                        </address>
+                                    </dl>
+                                </div>
                             </div>
-                            <div class="media-body padding-left-lg">
-                                <dl class="dl-horizontal">
-                                    <dt>Date added</dt>
-                                    <dd>{{recipe.dateAdded | date:'dd-MM-yyyy'}}</dd>
-                                    <dt>Last modification</dt>
-                                    <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
-                                    <dt>Likes</dt>
-                                    <dd>{{recipe.numberOfLikes}}</dd>
-                                    <address>
-                                        <dt>Username</dt>
-                                        <dd><a href="" ng-href="#/users/{{recipe.userId}}">{{recipe.userName}}</a></dd>
-                                        <dt>Email</dt>
-                                        <dd><a href="" ng-click="sendEmail(recipe.userEmail)">{{recipe.userEmail}}</a></a></dd>
-                                    </address>
-                                </dl>
-                            </div>
-                        </div>
                     </li>
                 </ul>
             </div>

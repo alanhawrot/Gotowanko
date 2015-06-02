@@ -118,24 +118,26 @@
             <input type="text" class="form-control" placeholder="Filter recipes" ng-model="recipesFilter">
             <ul class="media-list">
                 <li ng-repeat="recipe in user.recipes | filter:recipesFilter">
-                    <div class="media">
-                        <div class="media-heading">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <a href="" ng-href="#/recipes/{{recipe.id}}"><h3>{{recipe.title}}</h3></a>
                         </div>
-                        <div class="media-left media-middle">
-                            <a href="" ng-href="#/recipes/{{recipe.id}}">
-                                <img class="media-object" ng-src="{{recipe.photoUrl | defaultImageFilter}}" alt="Image">
-                            </a>
-                        </div>
-                        <div class="media-body padding-left-lg">
-                            <dl class="dl-horizontal">
-                                <dt>Date added</dt>
-                                <dd>{{recipe.dateAdded | date:'dd-MM-yyyy'}}</dd>
-                                <dt>Last modification</dt>
-                                <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
-                                <dt>Likes</dt>
-                                <dd>{{recipe.likesNumber}}</dd>
-                            </dl>
+                        <div class="panel-body media">
+                            <div class="media-left media-middle">
+                                <a href="" ng-href="#/recipes/{{recipe.id}}">
+                                    <img class="media-object" ng-src="{{recipe.photoUrl | defaultImageFilter}}" alt="Image">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Date added</dt>
+                                    <dd>{{recipe.dateAdded | date:'dd-MM-yyyy'}}</dd>
+                                    <dt>Last modification</dt>
+                                    <dd>{{recipe.lastEdited | date:'dd-MM-yyyy HH:mm:ss'}}</dd>
+                                    <dt>Likes</dt>
+                                    <dd>{{recipe.likesNumber}}</dd>
+                                </dl>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -162,9 +164,11 @@
                 <div class="panel-footer text-right " ng-if="canEditComment(comment.id)">
                     <span>
                         <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#editCommentModal{{comment.id}}">
-                            <span class="glyphicon glyphicon-edit"></span> Edit</button>
+                            <span class="glyphicon glyphicon-edit"></span> Edit
+                        </button>
                         <button type="button" class="btn btn-xs btn-danger" ng-click="deleteComment(comment)">
-                            <span class="glyphicon glyphicon-remove"></span> Delete</button>
+                            <span class="glyphicon glyphicon-remove"></span> Delete
+                        </button>
                     </span>
                 </div>
 
@@ -179,7 +183,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editComment(comment)">
-                                    Save changes
+                                    <span class="glyphicon glyphicon-ok"></span> Save changes
                                 </button>
                             </div>
                         </div>
