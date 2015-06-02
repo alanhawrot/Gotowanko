@@ -3,7 +3,7 @@
         <h1 ng-if="isAdded()">Create recipe</h1>
         <h1 ng-if="isModified()">Modify recipe</h1>
         <tabset id="recipeTab">
-            <tab heading="{{recipe.title}}" active="tabs[0].active">
+            <tab heading="{{getRecipeTabTitle()}}" active="tabs[0].active">
                 <form name="form.recipeForm" class="margin-top-sm well">
                     <div class="form-group">
                         <label for="recipeTitle">Title</label>
@@ -49,7 +49,7 @@
 
             <tab ng-repeat="recipeStep in recipe.recipeSteps track by $index" ng-init="recipeStepIndex = $index;" active="tabs[$index+1].active">
                 <tab-heading>
-                    {{recipeStep.title}}
+                    {{getRecipeStepTabTitle($index)}}
                     <a ng-show="recipeStep.stepNumber > 1" ng-click="removeRecipeStep($index)" href="">
                         <i class="glyphicon glyphicon-minus"></i></a>
                 </tab-heading>

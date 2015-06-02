@@ -61,10 +61,10 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
 
     // Tworzony przez użytkownika Request Body
     $scope.recipe = {
-        title: "Recipe title",
+        title: '',
         recipeSteps: [
             {
-                stepNumber: 1, title: 'First step', description: '', ingredients: []
+                stepNumber: 1, title: '', description: '', ingredients: []
             }
         ]
     };
@@ -98,7 +98,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
                         timerDuration: data.recipeSteps[i].timerDuration / 1000, // ms to seconds
                         realizationTime: data.recipeSteps[i].realizationTime / 1000 / 60, // ms to minutes
                         active: false
-                    }
+                    };
                     recipe.recipeSteps.push(
                         {
                             stepNumber: i + 1,
@@ -153,7 +153,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         $log.info("Adding step");
         var newStepNumber = $scope.recipe.recipeSteps.length + 1;
         $scope.recipe.recipeSteps.push({
-            stepNumber: newStepNumber, title: 'Next step', description: '', ingredients: []
+            stepNumber: newStepNumber, title: '', description: '', ingredients: []
         });
         addNewTab();
         setAllTabsInactive();
@@ -198,7 +198,7 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
         $scope.recipe.cookingTime = $scope.tabs[0].cookingTime * 1000 * 60; // minutes to ms
         for (var i = 0; i < $scope.recipe.recipeSteps.length; i++) {
             $scope.recipe.recipeSteps[i].timerDuration = $scope.tabs[i + 1].timerDuration * 1000;  //seconds to ms
-            $scope.recipe.recipeSteps[i].realizationTime = $scope.tabs[i + 1].realizationTime * 1000 * 60 //minutes to ms
+            $scope.recipe.recipeSteps[i].realizationTime = $scope.tabs[i + 1].realizationTime * 1000 * 60; //minutes to ms
 
         }
         $log.info("recipe to send " + angular.toJson($scope.recipe, true));
@@ -258,11 +258,28 @@ m.controller('AddEditRecipeController', ['$scope', '$http', '$log', '$location',
 
     $scope.isAdded = function () {
         return $routeParams.recipeId == undefined
-    }
+    };
 
     $scope.isModified = function () {
         return $routeParams.recipeId != undefined
-    }
+    };
 
     $scope.ingredientsFilter = '';
+
+    $scope.getRecipeTabTitle = function () {
+        if ($scope.recipe.title !== undefined && $scope.recipe.title.length > 0) {
+            return $scope.recipe.title;
+        } else {
+            return 'Recipe title';
+        }
+    };
+
+    $scope.getRecipeStepTabTitle = function (index) {
+        var recipeStep = $scope.recipe.recipeSteps[index];
+        if (recipeStep !== undefined && recipeStep.title !== undefined && recipeStep.title.length > 0) {
+            return recipeStep.title;
+        } else {
+            return 'Recipe step';
+        }
+    }
 }]);
